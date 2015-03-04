@@ -18,18 +18,21 @@ private:
 	struct Content{
 		string _name;
 		struct Date _date;
-		struct Time _time;
+		struct Time _startTime;
+		struct Time _endTime;
+		string _location;
 	};
 
 	vector<Content> _list;
 
 public:
 	DataStructure ();
-	void createContent(string, Date, Time);
+	void createContent(string, Date, Time, Time, string);
 	Date newDate(int, int, int);
 	Time newTime (int, int);
 	void insertDate(Content&, Date);
-	void insertTime(Content&, Time);
+	void insertStartTime(Content&, Time);
+	void insertEndTime(Content&, Time);
 	void addContent(Content);
 	void display();
 };
