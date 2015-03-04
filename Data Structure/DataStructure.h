@@ -22,7 +22,9 @@ private:
 
 public:
 	DataStructure ();
-	void createContent(string, int, int, int);
+	void createContent(string, Date, int, int);
+	Date newDate(int, int, int);
+	void insertDate(Content&, Date);
 	void addContent(Content);
 	void display();
 };
