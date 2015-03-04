@@ -11,20 +11,25 @@ private:
 		int _month;
 		int _year;
 	};
+	struct Time{
+		int _hour;
+		int _minute;
+	};
 	struct Content{
 		string _name;
 		struct Date _date;
-		int _startTime;
-		int _endTime; 
+		struct Time _time;
 	};
 
 	vector<Content> _list;
 
 public:
 	DataStructure ();
-	void createContent(string, Date, int, int);
+	void createContent(string, Date, Time);
 	Date newDate(int, int, int);
+	Time newTime (int, int);
 	void insertDate(Content&, Date);
+	void insertTime(Content&, Time);
 	void addContent(Content);
 	void display();
 };

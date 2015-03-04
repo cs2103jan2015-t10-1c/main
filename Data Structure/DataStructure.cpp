@@ -16,13 +16,18 @@ DataStructure::Date DataStructure::newDate(int inputDay, int inputMonth, int inp
 	return inputDate;
 }
 
-void DataStructure::createContent(string name, Date newDate, int startTime, int endTime){
-	Content event;
+DataStructure::Time DataStructure::newTime(int inputHour, int inputMinute){
+	Time inputTime;
+	inputTime._hour = inputHour;
+	inputTime._minute = inputMinute;
+	return inputTime;
+}
 
+void DataStructure::createContent(string name, Date newDate, Time newTime){
+	Content event;
 	event._name = name;
 	insertDate(event, newDate);
-	event._startTime = startTime;
-	event._endTime = endTime;
+	insertTime(event, newTime);
 	addContent(event);
 }
 
@@ -30,9 +35,13 @@ void DataStructure::insertDate(Content& event, Date inputDate){
 	event._date._day = inputDate._day;
 	event._date._month = inputDate._month;
 	event._date._year = inputDate._year;
-
 }
 
+void DataStructure::insertTime(Content& event, Time inputTime){
+	event._time._hour = inputTime._hour;
+	event._time._minute = inputTime._minute;
+
+}
 
 void DataStructure::addContent(Content event){
 	_list.push_back(event);
@@ -45,8 +54,8 @@ void DataStructure::display(){
 			<< iter->_date._day << " "
 			<< iter->_date._month << " "
 			<< iter->_date._year << " "
-			<< iter->_startTime << " "
-			<< iter->_endTime << endl;
+			<< iter->_time._hour << " "
+			<< iter->_time._minute << endl;
 	}
 }
 
