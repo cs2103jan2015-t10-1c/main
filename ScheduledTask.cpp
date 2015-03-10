@@ -21,9 +21,9 @@ void ScheduledTask::display(){
 			<< entryStartDate.getYear() << " at "
 			<< entryStartTime.getHour() << "."
 			<< entryStartTime.getMinute() << " to "
-			<< entryEndDate.getDay() << " "
+			/*<< entryEndDate.getDay() << " "
 			<< entryEndDate.getMonth() << " "
-			<< entryEndDate.getYear() << " at "
+			<< entryEndDate.getYear() << " at "*/
 			<< entryEndTime.getHour() << "."
 			<< entryEndTime.getMinute() << ". " 
 			<< iter->getLocation() << endl;

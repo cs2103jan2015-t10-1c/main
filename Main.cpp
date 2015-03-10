@@ -1,40 +1,71 @@
 #include "ScheduledTask.h"
+#include "SeparateTaskComponents.h"
 #include "Date.h"
+#include "TextUI.h"
+
 using namespace std;
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
 
 int main (){
-	int inputStartDay=10; int inputStartMonth=3; int inputStartYear=2014;
-	int inputEndDay=15; int inputEndMonth=12; int inputEndYear=2015;
-	int inputStartHour=10; int inputStartMinute=30;
-	int inputEndHour=16; int inputEndMinute=45;
-	ScheduledTask NewList;
-	//initialise Date
-	Date StartDate;
-	Date EndDate;
-	initialiseDate(StartDate, inputStartDay, inputStartMonth, inputStartYear);
-	initialiseDate(EndDate, inputEndDay, inputEndMonth, inputEndYear);
-	//initialise Time
-	Time StartTime;
-	Time EndTime;
-	initialiseTime(StartTime, inputStartHour, inputStartMinute);
-	initialiseTime(EndTime, inputEndHour, inputEndMinute);
-	//initialise strings
-	string eventName = "Meeting with Bisma";
-	string eventLocation = "UTown";
-	//initialise content
-	Entry Task;
-	Task.insertName(eventName);
-	Task.insertStartDate(StartDate);
-	Task.insertEndDate(EndDate);
-	Task.insertStartTime(StartTime);
-	Task.insertEndTime(EndTime);
-	Task.insertLocation(eventLocation);
-	//initialise list
-	NewList.addEntry(Task);
-	NewList.display();
+	const int END = 0;
+    const int RUNNING = 1;
+    string command, userInput;
+    int flag = RUNNING;
+	string eventName;
+	string eventLocation;
+	string date;
+	string period;
+	int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
+	int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
+	int inputStartHour = 0; int inputStartMinute = 0;
+	int inputEndHour = 0; int inputEndMinute = 0;
+
+	 while(flag){
+            cout << "command: ";
+            getline(cin, userInput);
+            TextUI task(userInput);
+			command = task.findCommand(userInput);
+			userInput = task.removeCommand(userInput);
+			cout<< command << " " << userInput << endl;
+			ScheduledTask NewList;
+			SeparateTaskComponents Parse;
+	if(command == "add")
+		{
+			Parse.dissectCommand(userInput, eventName, period, date, eventLocation);
+			Parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
+			Parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
+			//initialise Date
+			Date StartDate;
+			Date EndDate;
+			initialiseDate(StartDate, inputStartDay, inputStartMonth, inputStartYear);
+			initialiseDate(EndDate, inputEndDay, inputEndMonth, inputEndYear);
+			//initialise Time
+			Time StartTime;
+			Time EndTime;
+			initialiseTime(StartTime, inputStartHour, inputStartMinute);
+			initialiseTime(EndTime, inputEndHour, inputEndMinute);
+			//initialise strings
+	
+			//initialise content
+			Entry Task;
+			Task.insertName(eventName);
+			Task.insertStartDate(StartDate);
+			Task.insertEndDate(EndDate);
+			Task.insertStartTime(StartTime);
+			Task.insertEndTime(EndTime);
+			Task.insertLocation(eventLocation);
+			//initialise list
+			NewList.addEntry(Task);
+		}
+	else if(command == "display"){
+			NewList.display();
+		}
+	else if(command == "exit"){
+		flag = END;
+		}
+	}
 	system("pause");
 	return 0;
 }
