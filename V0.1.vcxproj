@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Date.h" />
     <ClInclude Include="Entry.h" />
+    <ClInclude Include="EntryEditor.h" />
     <ClInclude Include="ScheduledTask.h" />
     <ClInclude Include="SeparateEntryComponents.h" />
     <ClInclude Include="TextUI.h" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="EntryEditor.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ScheduledTask.cpp" />
     <ClCompile Include="SeparateEntryComponents.cpp" />

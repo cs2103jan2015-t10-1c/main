@@ -4,18 +4,18 @@
 EntryEditor::EntryEditor(){
 };
 
-int EntryEditor::getEntryNumber (string entryComponents){
+int EntryEditor::getEntryNumber (string &entryComponents){
 	size_t pos = 0;
-	string numberString= entryComponents.substr(0);
-	entryComponents.erase(0, 1);
+	string numberString= entryComponents.substr(1,1);
+	entryComponents.erase(0, 2);
 	pos = 0;		
 	_taskNumber = convertToNumber(numberString);
 	return _taskNumber;
 }
 
-string EntryEditor::getMarker (string entryComponents){
-	_parameter= entryComponents.substr(0,2);
-	entryComponents.erase(0, 2);
+string EntryEditor::getMarker (string &entryComponents){
+	_parameter= entryComponents.substr(1,2);
+	entryComponents.erase(0, 4);
 	_newInformation = entryComponents;
 	return _parameter;
 }

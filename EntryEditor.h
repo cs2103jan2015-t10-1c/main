@@ -14,8 +14,8 @@ private:
 	string _newInformation;//date or time or location or name
 public:	
 	EntryEditor ();
-	int getEntryNumber (string);
-	string getMarker(string);
+	int getEntryNumber (string&);
+	string getMarker(string&);
 	int convertToNumber(string);
 	string getName ();
 	void getTime (int&, int&, int&, int&);

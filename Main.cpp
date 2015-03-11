@@ -3,7 +3,7 @@
 #include "SeparateEntryComponents.h"
 #include "Date.h"
 #include "TextUI.h"
-
+#include "EntryEditor.h"
 
 using namespace std;
 
@@ -32,10 +32,10 @@ int main (){
 		TextUI task(userInput);
 		command = task.findCommand(userInput);
 		userInput = task.removeCommand(userInput);
-		cout<< command << " " << userInput << endl;
 		SeparateEntryComponents Parse;
-		
-		if(command == "add"){
+
+	if(command == "add")
+		{
 			Parse.dissectCommand(userInput, eventName, period, date, eventLocation);
 			Parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
 			Parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
@@ -63,13 +63,17 @@ int main (){
 			
 			//initialise list
 			NewList.addEntry(Task);
+			cout << "added " << eventName << date << " from " << inputStartHour << "." << inputStartMinute << " to " << inputEndHour << "." << inputEndMinute << " at " << eventLocation << endl; 
 		}
-		
-		else if(command == "display"){
+		else if(command == "edit")
+		{ 		
+			NewList.editEntry(userInput);
+			cout << "edited " << userInput.substr(1, 2) << endl;
+	}
+	else if(command == "display"){
 			NewList.display();
 		}
-
-		else if(command == "delete"){
+	else if(command == "delete"){
 			int indexNumber;
 			istringstream convertIndexNumber(userInput);
 			if (!(convertIndexNumber >> indexNumber)){
@@ -77,14 +81,14 @@ int main (){
 			}
 			NewList.removeEntry(indexNumber);
 		}
-
-		else if(command == "exit"){
-			RUNNING = false;
+	else if(command == "exit"){
+		RUNNING = false;
 		}
 	}
+
 	system("pause");
 	return 0;
-}
+	}
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear){
 	inputDate.insertDay(inputDay);

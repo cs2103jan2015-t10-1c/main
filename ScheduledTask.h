@@ -4,6 +4,7 @@
 #include "Time.h"
 #include "Entry.h"
 #include <vector>
+#include "EntryEditor.h"
 
 class ScheduledTask{
 private:
@@ -14,6 +15,7 @@ public:
 	void display();
 	void displayEntry(int);
 	void removeEntry(int);
+	void editEntry(string);
 };
 
 #endif
