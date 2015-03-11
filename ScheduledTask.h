@@ -13,7 +13,7 @@ public:
 	void addEntry(Entry);
 	void display();
 	void displayEntry(int);
-	void removeTask(int);
+	void removeEntry(int);
 };
 
 #endif
