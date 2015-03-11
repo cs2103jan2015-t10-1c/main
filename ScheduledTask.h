@@ -12,6 +12,8 @@ public:
 	ScheduledTask();
 	void addEntry(Entry);
 	void display();
+	void displayEntry(int);
+	void removeTask(int);
 };
 
 #endif
