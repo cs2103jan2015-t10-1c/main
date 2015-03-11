@@ -27,10 +27,10 @@
     <ClInclude Include="ScheduledTask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SeparateTaskComponents.h">
+    <ClInclude Include="TextUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextUI.h">
+    <ClInclude Include="SeparateEntryComponents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,10 +50,10 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SeparateTaskComponents.cpp">
+    <ClCompile Include="TextUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextUI.cpp">
+    <ClCompile Include="SeparateEntryComponents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
