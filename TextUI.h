@@ -18,8 +18,9 @@ class TextUI{
 		string findCommand(string &inputContent);
         string removeCommand(string &inputContent);
         void displayFeedback(const string infoType);
-		/*string add(string);*/
-		/*void display();
+		/*string add(string);
+		int del(int number);
+		void display();
 		void clear();*/
 		};
 #endif
