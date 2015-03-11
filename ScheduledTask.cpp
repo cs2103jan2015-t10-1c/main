@@ -9,13 +9,15 @@ void ScheduledTask::addEntry(Entry newEntry){
 }
 
 void ScheduledTask::display(){
+	int number = 1;
 	vector<Entry>::iterator iter;
 	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 		Date entryStartDate = iter->getStartDate();
 		Date entryEndDate = iter->getEndDate();
 		Time entryStartTime = iter->getStartTime();
 		Time entryEndTime = iter->getEndTime();
-		cout << iter->getName() << ". "
+		cout << number << ". "
+			<< iter->getName() << ". "
 			<< entryStartDate.getDay() << " "
 			<< entryStartDate.getMonth() << " "
 			<< entryStartDate.getYear() << " at "
@@ -27,6 +29,7 @@ void ScheduledTask::display(){
 			<< entryEndTime.getHour() << "."
 			<< entryEndTime.getMinute() << ". " 
 			<< iter->getLocation() << endl;
+		number++;
 	}
 }
 

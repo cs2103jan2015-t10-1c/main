@@ -1,5 +1,5 @@
 #include "ScheduledTask.h"
-#include "SeparateTaskComponents.h"
+#include "SeparateEntryComponents.h"
 #include "Date.h"
 #include "TextUI.h"
 
@@ -10,9 +10,9 @@ void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
 
 int main (){
 	const int END = 0;
-    const int RUNNING = 1;
-    string command, userInput;
-    int flag = RUNNING;
+    bool RUNNING = true;
+    string command;
+	string userInput;
 	string eventName;
 	string eventLocation;
 	string date;
@@ -22,32 +22,35 @@ int main (){
 	int inputStartHour = 0; int inputStartMinute = 0;
 	int inputEndHour = 0; int inputEndMinute = 0;
 
-	 while(flag){
-            cout << "command: ";
-            getline(cin, userInput);
-            TextUI task(userInput);
-			command = task.findCommand(userInput);
-			userInput = task.removeCommand(userInput);
-			cout<< command << " " << userInput << endl;
-			ScheduledTask NewList;
-			SeparateTaskComponents Parse;
+	ScheduledTask NewList;
+
+	while(RUNNING){
+		cout << "command: ";
+		getline(cin, userInput);
+		TextUI task(userInput);
+		command = task.findCommand(userInput);
+		userInput = task.removeCommand(userInput);
+		cout<< command << " " << userInput << endl;
+		SeparateEntryComponents Parse;
+
 	if(command == "add")
 		{
 			Parse.dissectCommand(userInput, eventName, period, date, eventLocation);
 			Parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
 			Parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
+			
 			//initialise Date
 			Date StartDate;
 			Date EndDate;
 			initialiseDate(StartDate, inputStartDay, inputStartMonth, inputStartYear);
 			initialiseDate(EndDate, inputEndDay, inputEndMonth, inputEndYear);
+			
 			//initialise Time
 			Time StartTime;
 			Time EndTime;
 			initialiseTime(StartTime, inputStartHour, inputStartMinute);
 			initialiseTime(EndTime, inputEndHour, inputEndMinute);
-			//initialise strings
-	
+						
 			//initialise content
 			Entry Task;
 			Task.insertName(eventName);
@@ -56,6 +59,7 @@ int main (){
 			Task.insertStartTime(StartTime);
 			Task.insertEndTime(EndTime);
 			Task.insertLocation(eventLocation);
+			
 			//initialise list
 			NewList.addEntry(Task);
 		}
@@ -63,7 +67,7 @@ int main (){
 			NewList.display();
 		}
 	else if(command == "exit"){
-		flag = END;
+		RUNNING = false;
 		}
 	}
 	system("pause");
