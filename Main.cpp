@@ -1,7 +1,9 @@
+#include <sstream>
 #include "ScheduledTask.h"
 #include "SeparateEntryComponents.h"
 #include "Date.h"
 #include "TextUI.h"
+
 
 using namespace std;
 
@@ -32,9 +34,8 @@ int main (){
 		userInput = task.removeCommand(userInput);
 		cout<< command << " " << userInput << endl;
 		SeparateEntryComponents Parse;
-
-	if(command == "add")
-		{
+		
+		if(command == "add"){
 			Parse.dissectCommand(userInput, eventName, period, date, eventLocation);
 			Parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
 			Parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
@@ -63,11 +64,22 @@ int main (){
 			//initialise list
 			NewList.addEntry(Task);
 		}
-	else if(command == "display"){
+		
+		else if(command == "display"){
 			NewList.display();
 		}
-	else if(command == "exit"){
-		RUNNING = false;
+
+		else if(command == "delete"){
+			int indexNumber;
+			istringstream convertIndexNumber(userInput);
+			if (!(convertIndexNumber >> indexNumber)){
+				indexNumber = 0;
+			}
+			NewList.removeEntry(indexNumber);
+		}
+
+		else if(command == "exit"){
+			RUNNING = false;
 		}
 	}
 	system("pause");

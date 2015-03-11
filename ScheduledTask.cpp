@@ -49,13 +49,10 @@ void ScheduledTask::displayEntry(int index){
 		<< entryEndDate.getYear() << " at "*/
 		<< entryEndTime.getHour() << "."
 		<< entryEndTime.getMinute() << ". " 
-		<< _scheduledList[index-1].getLocation() << endl;
+		<< _scheduledList[index].getLocation() << endl;
 }
 
-void ScheduledTask::removeTask(int index){
-	cout << "Please enter the number of the entry you want to delete" << endl;
-	int index;
-	cin >> index;
+void ScheduledTask::removeEntry(int index){
 	cout << "Are you sure you want to delete the following entry" << endl;
 	index--;
 	displayEntry(index);
