@@ -85,6 +85,8 @@ int main (){
 			//initialise entry
 			Entry newEntry;
 			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation);
+			newEntry.addTag("homework");
+			newEntry.addTag("CS");
 			
 			//add new entry to the list
 			newList.addEntry(newEntry);
@@ -115,7 +117,7 @@ int main (){
 			running = false;
 		}
 	}
-
+	newList.searchTag("CS");
 	system("pause");
 	return 0;
 	}

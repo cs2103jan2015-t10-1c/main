@@ -2,6 +2,7 @@
 #define ENTRY_H
 #include "Date.h"
 #include "Time.h"
+#include <vector>
 
 class Entry{
 private:
@@ -11,6 +12,7 @@ private:
 	Time _startTime;
 	Time _endTime;
 	string _location;
+	vector<string> _tag;
 
 public:
 	Entry();
@@ -39,6 +41,8 @@ public:
 	void insertLocation(string);
 	//return the value of _location
 	string getLocation();
+	void addTag(string);
+	void searchEntryTag(string);
 };
 
 #endif

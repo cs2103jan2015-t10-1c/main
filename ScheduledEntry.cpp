@@ -154,3 +154,11 @@ void ScheduledEntry::editEntry(string userInput){
 	//feedback to users
 	cout << FEEDBACK_EDITED << entryNumber << endl;
 }
+
+void ScheduledEntry::searchTag(string keyword){
+	int count = 1;
+	vector<Entry>::iterator iterEntry;
+	for(iterEntry = _scheduledList.begin(); iterEntry != _scheduledList.end(); iterEntry++){
+		iterEntry->searchEntryTag(keyword);
+	}
+}

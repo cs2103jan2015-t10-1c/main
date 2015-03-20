@@ -1,4 +1,5 @@
 #include "Entry.h"
+#include <iostream>
 
 Entry::Entry(){
 }
@@ -49,4 +50,17 @@ void Entry::insertLocation(string inputLocation){
 
 string Entry::getLocation (){	
 	return _location;
+}
+
+void Entry::addTag(string tag){
+	_tag.push_back(tag);
+}
+
+void Entry::searchEntryTag(string tag){
+	vector<string>::iterator iterTag;
+	for(iterTag = _tag.begin(); iterTag != _tag.end(); iterTag++){
+		if(*iterTag == tag){
+			cout << *iterTag << " " << _name << endl;
+		}
+	}
 }
