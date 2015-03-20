@@ -1,88 +1,118 @@
 #include <sstream>
-#include "ScheduledTask.h"
+#include "ScheduledEntry.h"
 #include "SeparateEntryComponents.h"
-#include "Date.h"
 #include "TextUI.h"
 #include "EntryEditor.h"
 
+#include <assert.h>
+
 using namespace std;
+
+const string COMMAND_PROMPT = "command: ";
+
+//commands
+const string COMMAND_ADD = "add";
+const string COMMAND_EDIT = "edit";
+const string COMMAND_DISPLAY = "display";
+const string COMMAND_DELETE = "delete";
+const string COMMAND_EXIT = "exit";
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation);
+
+/*
+class InvalidInputException: public exception {
+private:
+	string message;
+public:
+	InvalidInputException(string msg){
+		message = msg;
+	}
+
+	virtual constant char* what() const throw(){
+		return message.c_str();
+	}
+};
+*/
 
 int main (){
-	const int END = 0;
-    bool RUNNING = true;
+    bool running = true;
     string command;
 	string userInput;
-	string eventName;
-	string eventLocation;
+	string entryName;
 	string date;
 	string period;
+	string entryLocation;
 	int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
 	int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
 	int inputStartHour = 0; int inputStartMinute = 0;
 	int inputEndHour = 0; int inputEndMinute = 0;
 
-	ScheduledTask NewList;
+	ScheduledEntry newList;
 
-	while(RUNNING){
-		cout << "command: ";
+	while(running){
+		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
 		TextUI task(userInput);
 		command = task.findCommand(userInput);
 		userInput = task.removeCommand(userInput);
-		SeparateEntryComponents Parse;
+		SeparateEntryComponents parse;
+		
+		//add command
+		if(command == COMMAND_ADD){
+			parse.dissectCommand(userInput, entryName, period, date, entryLocation);
+			parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
+			parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
+			
+			assert(inputStartDay >= 0);
+			assert(inputStartMonth >= 0);
+			assert(inputEndDay >= 0);
+			assert(inputEndMonth >= 0);
 
-	if(command == "add")
-		{
-			Parse.dissectCommand(userInput, eventName, period, date, eventLocation);
-			Parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
-			Parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
+			//initialise start and end dates
+			Date startDate;
+			Date endDate;
+			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
+			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
 			
-			//initialise Date
-			Date StartDate;
-			Date EndDate;
-			initialiseDate(StartDate, inputStartDay, inputStartMonth, inputStartYear);
-			initialiseDate(EndDate, inputEndDay, inputEndMonth, inputEndYear);
-			
-			//initialise Time
-			Time StartTime;
-			Time EndTime;
-			initialiseTime(StartTime, inputStartHour, inputStartMinute);
-			initialiseTime(EndTime, inputEndHour, inputEndMinute);
+			//initialise start and end times
+			Time startTime;
+			Time endTime;
+			initialiseTime(startTime, inputStartHour, inputStartMinute);
+			initialiseTime(endTime, inputEndHour, inputEndMinute);
 						
-			//initialise content
-			Entry Task;
-			Task.insertName(eventName);
-			Task.insertStartDate(StartDate);
-			Task.insertEndDate(EndDate);
-			Task.insertStartTime(StartTime);
-			Task.insertEndTime(EndTime);
-			Task.insertLocation(eventLocation);
+			//initialise entry
+			Entry newEntry;
+			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation);
 			
-			//initialise list
-			NewList.addEntry(Task);
-			cout << "added " << eventName << date << " from " << inputStartHour << "." << inputStartMinute << " to " << inputEndHour << "." << inputEndMinute << " at " << eventLocation << endl; 
+			//add new entry to the list
+			newList.addEntry(newEntry);
 		}
-		else if(command == "edit")
-		{ 		
-			NewList.editEntry(userInput);
-			cout << "edited " << userInput.substr(1, 2) << endl;
-	}
-	else if(command == "display"){
-			NewList.display();
+		
+		//edit command
+		else if(command == COMMAND_EDIT){ 		
+			newList.editEntry(userInput);
 		}
-	else if(command == "delete"){
+		
+		//display command
+		else if(command == COMMAND_DISPLAY){
+			newList.display();
+		}
+
+		//delete command
+		else if(command == COMMAND_DELETE){
 			int indexNumber;
 			istringstream convertIndexNumber(userInput);
 			if (!(convertIndexNumber >> indexNumber)){
 				indexNumber = 0;
 			}
-			NewList.removeEntry(indexNumber);
+			newList.removeEntry(indexNumber);
 		}
-	else if(command == "exit"){
-		RUNNING = false;
+
+		//exit command
+		else if(command == COMMAND_EXIT){
+			running = false;
 		}
 	}
 
@@ -90,13 +120,22 @@ int main (){
 	return 0;
 	}
 
-void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear){
+void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
 	inputDate.insertDay(inputDay);
 	inputDate.insertMonth(inputMonth);
 	inputDate.insertYear(inputYear);
 }
 
-void initialiseTime (Time &inputTime, int inputHour, int inputMinute){
+void initialiseTime(Time& inputTime, int inputHour, int inputMinute){
 	inputTime.insertHour(inputHour);
 	inputTime.insertMinute(inputMinute);
+}
+
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation){
+	newEntry.insertName(entryName);
+	newEntry.insertStartDate(startDate);
+	newEntry.insertEndDate(endDate);
+	newEntry.insertStartTime(startTime);
+	newEntry.insertEndTime(endTime);
+	newEntry.insertLocation(entryLocation);
 }

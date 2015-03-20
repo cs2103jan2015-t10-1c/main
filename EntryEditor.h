@@ -9,9 +9,12 @@ using namespace std;
 
 class EntryEditor{
 private:
-	int _taskNumber;
-	string _parameter;//-l -d -t
-	string _newInformation;//date or time or location or name
+	int _entryNumber;
+	//-n, -d, -t, -l
+	string _marker;
+	//new edited information
+	string _newInformation;
+
 public:	
 	EntryEditor ();
 	int getEntryNumber (string&);

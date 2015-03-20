@@ -24,9 +24,6 @@
     <ClInclude Include="Entry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScheduledTask.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,6 +31,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EntryEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduledEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,9 +47,6 @@
     <ClCompile Include="Entry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScheduledTask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EntryEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScheduledEntry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
