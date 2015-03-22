@@ -14,34 +14,32 @@ const string MONTH_OCTOBER = "October";
 const string MONTH_NOVEMBER = "November";
 const string MONTH_DECEMBER = "December";
 
-const string SeparateEntryComponents::TIME_MARKER = "-t";
 const string SeparateEntryComponents::DATE_MARKER = "-d";
+const string SeparateEntryComponents::TIME_MARKER = "-t";
 const string SeparateEntryComponents::LOCATION_MARKER = "-l";
 const string SeparateEntryComponents::END_MARKER = ".";
 const string SeparateEntryComponents::MONTH_ARRAY[12] = {MONTH_JANUARY, MONTH_FEBRUARY, MONTH_MARCH, MONTH_APRIL, MONTH_MAY, MONTH_JUNE,
 	MONTH_JULY, MONTH_AUGUST, MONTH_SEPTEMBER, MONTH_OCTOBER, MONTH_NOVEMBER, MONTH_DECEMBER};
 
-void SeparateEntryComponents::dissectCommand (string entryComponents, string &entryName, string &entryTime,
-							 string &entryDate, string &entryLocation){
+void SeparateEntryComponents::dissectCommand (string entryComponents, string& entryName, string& entryTime,
+							 string& entryDate, string& entryLocation){
 	size_t pos = 0;
 	extractName(entryComponents, pos, entryName);
 	extractTime(entryComponents, pos, entryTime);
 	extractDate(entryComponents, pos, entryDate);
 	extractLocation(entryComponents, pos, entryLocation);
-
-	return;
 }
 
-void SeparateEntryComponents::extractName(string &entryComponents, size_t pos, string &entryName){
+void SeparateEntryComponents::extractName(string& entryComponents, size_t pos, string& entryName){
 	if ((pos = entryComponents.find(TIME_MARKER)) != std::string::npos || (pos = entryComponents.find(DATE_MARKER)) != std::string::npos ||
 		(pos = entryComponents.find(LOCATION_MARKER)) != std::string::npos||(pos = entryComponents.find(END_MARKER)) != std::string::npos) {
-    	entryName = entryComponents.substr(1, pos-1);
+    	entryName = entryComponents.substr(1, pos-2);
     	entryComponents.erase(0, pos);
     	pos = 0;
 	}
 }
 
-void SeparateEntryComponents::extractTime(string &entryComponents, size_t pos, string &entryTime){
+void SeparateEntryComponents::extractTime(string& entryComponents, size_t pos, string& entryTime){
 	if (entryComponents[0] == TIME_MARKER[0] && entryComponents[1] == TIME_MARKER[1]){
 		if ((pos = entryComponents.find(DATE_MARKER)) != std::string::npos ||
 		   (pos = entryComponents.find(LOCATION_MARKER)) != std::string::npos ||(pos = entryComponents.find(END_MARKER)) != std::string::npos) {
@@ -52,7 +50,7 @@ void SeparateEntryComponents::extractTime(string &entryComponents, size_t pos, s
 	}
 }
 
-void SeparateEntryComponents::extractDate(string &entryComponents, size_t pos, string &entryDate){
+void SeparateEntryComponents::extractDate(string& entryComponents, size_t pos, string& entryDate){
 	if (entryComponents[0] == DATE_MARKER[0] && entryComponents[1] == DATE_MARKER[1]){
 		if ((pos = entryComponents.find(TIME_MARKER)) != std::string::npos ||
 		   (pos = entryComponents.find(LOCATION_MARKER)) != std::string::npos||(pos = entryComponents.find(END_MARKER)) != std::string::npos) {
@@ -63,7 +61,7 @@ void SeparateEntryComponents::extractDate(string &entryComponents, size_t pos, s
 	}
 }
 
-void SeparateEntryComponents::extractLocation(string &entryComponents, size_t pos, string &entryLocation){
+void SeparateEntryComponents::extractLocation(string& entryComponents, size_t pos, string& entryLocation){
 	if (entryComponents[0] == LOCATION_MARKER[0] && entryComponents[1] == LOCATION_MARKER[1]){
 		if ((pos = entryComponents.find(TIME_MARKER)) != std::string::npos ||
 		   (pos = entryComponents.find(DATE_MARKER)) != std::string::npos||(pos = entryComponents.find(END_MARKER)) != std::string::npos) {
@@ -74,7 +72,7 @@ void SeparateEntryComponents::extractLocation(string &entryComponents, size_t po
 	}
 }
 
-void SeparateEntryComponents::convertTime(string entryTime, int &startHour, int &startMin, int &endHour, int &endMin){
+void SeparateEntryComponents::convertTime(string entryTime, int& startHour, int& startMin, int& endHour, int& endMin){
 	istringstream iss(entryTime);
 	string start;
 	string end;
@@ -108,7 +106,7 @@ void SeparateEntryComponents::convertTime(string entryTime, int &startHour, int 
 	return;
 }
 
-void SeparateEntryComponents::convertDate(string entryDate, int &day, int &month, int &year){
+void SeparateEntryComponents::convertDate(string entryDate, int& day, int& month, int& year){
 	istringstream iss(entryDate);
 	string dayString;
 	string monthString;
@@ -123,6 +121,7 @@ void SeparateEntryComponents::convertDate(string entryDate, int &day, int &month
 	if (!(convertDay >> day)) {
 		day = 0;  
 	}
+
 	//month
 	bool found = false;
 	int monthCount = 1;
@@ -135,6 +134,7 @@ void SeparateEntryComponents::convertDate(string entryDate, int &day, int &month
 			monthCount++;
 		}
 	}
+
 	//year
 	istringstream convertYear(yearString);
 	if (!(convertYear >> year)) {

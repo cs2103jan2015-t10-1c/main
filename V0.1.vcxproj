@@ -14,7 +14,7 @@
     <ClInclude Include="Date.h" />
     <ClInclude Include="Entry.h" />
     <ClInclude Include="EntryEditor.h" />
-    <ClInclude Include="ScheduledTask.h" />
+    <ClInclude Include="ScheduledEntry.h" />
     <ClInclude Include="SeparateEntryComponents.h" />
     <ClInclude Include="TextUI.h" />
     <ClInclude Include="Time.h" />
@@ -24,7 +24,7 @@
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="EntryEditor.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ScheduledTask.cpp" />
+    <ClCompile Include="ScheduledEntry.cpp" />
     <ClCompile Include="SeparateEntryComponents.cpp" />
     <ClCompile Include="TextUI.cpp" />
     <ClCompile Include="Time.cpp" />
