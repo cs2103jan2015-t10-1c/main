@@ -16,10 +16,11 @@ const string COMMAND_EDIT = "edit";
 const string COMMAND_DISPLAY = "display";
 const string COMMAND_DELETE = "delete";
 const string COMMAND_EXIT = "exit";
+const string COMMAND_SEARCH = "search";
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
-void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation);
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, string tag);
 
 /*
 class InvalidInputException: public exception {
@@ -41,9 +42,13 @@ int main (){
     string command;
 	string userInput;
 	string entryName;
-	string date;
-	string period;
+	string startDate;
+	string endDate;
+	string startTime;
+	string endTime;
 	string entryLocation;
+	string tag;
+	string keyword;
 	int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
 	int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
 	int inputStartHour = 0; int inputStartMinute = 0;
@@ -61,9 +66,11 @@ int main (){
 		
 		//add command
 		if(command == COMMAND_ADD){
-			parse.dissectCommand(userInput, entryName, period, date, entryLocation);
-			parse.convertDate(date, inputStartDay, inputStartMonth, inputStartYear);
-			parse.convertTime(period, inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
+			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tag);
+			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
+			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
+			parse.convertTime(startTime, inputStartHour, inputStartMinute);
+			parse.convertTime(endTime, inputEndHour, inputEndMinute);
 			
 			assert(inputStartDay >= 0);
 			assert(inputStartMonth >= 0);
@@ -84,10 +91,7 @@ int main (){
 						
 			//initialise entry
 			Entry newEntry;
-			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation);
-			newEntry.addTag("homework");
-			newEntry.addTag("CS");
-			
+			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tag);
 			//add new entry to the list
 			newList.addEntry(newEntry);
 		}
@@ -116,8 +120,11 @@ int main (){
 		else if(command == COMMAND_EXIT){
 			running = false;
 		}
+		else if(command == COMMAND_SEARCH){
+			keyword = userInput.substr(1);
+			newList.searchTag(keyword);
 	}
-	newList.searchTag("CS");
+	}
 	system("pause");
 	return 0;
 	}
@@ -133,11 +140,12 @@ void initialiseTime(Time& inputTime, int inputHour, int inputMinute){
 	inputTime.insertMinute(inputMinute);
 }
 
-void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation){
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, string tag){
 	newEntry.insertName(entryName);
 	newEntry.insertStartDate(startDate);
 	newEntry.insertEndDate(endDate);
 	newEntry.insertStartTime(startTime);
 	newEntry.insertEndTime(endTime);
 	newEntry.insertLocation(entryLocation);
+	newEntry.addTag(tag);
 }

@@ -64,3 +64,10 @@ void Entry::searchEntryTag(string tag){
 		}
 	}
 }
+
+void Entry::displayTags(){
+	vector<string>::iterator iterTag;
+	for(iterTag = _tag.begin(); iterTag != _tag.end(); iterTag++){
+		cout << *iterTag << endl;
+	}
+}

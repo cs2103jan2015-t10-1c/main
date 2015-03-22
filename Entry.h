@@ -43,6 +43,7 @@ public:
 	string getLocation();
 	void addTag(string);
 	void searchEntryTag(string);
+	void displayTags();
 };
 
 #endif

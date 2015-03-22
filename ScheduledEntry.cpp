@@ -29,10 +29,11 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 	Time entryEndTime = newEntry.getEndTime();
 	string entryLocation = newEntry.getLocation();
 
-	cout << FEEDBACK_ADDED << entryName << " "
-		<< entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
-		<< FEEDBACK_FROM << entryStartTime.getHour() << "." << entryStartTime.getMinute()
-		<< FEEDBACK_TO << entryEndTime.getHour() << "." << entryEndTime.getMinute()
+	cout << FEEDBACK_ADDED << entryName
+		<< FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear() << " at "
+		<< entryStartTime.getHour() << "." << entryStartTime.getMinute()
+		<< FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear() << " at "
+		<< entryEndTime.getHour() << "." << entryEndTime.getMinute()
 		<< ". " << entryLocation << endl; 
 }
 
