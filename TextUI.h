@@ -14,14 +14,12 @@ class TextUI{
 
 	public:
 		TextUI();
+		void displayWelcomeMessage();
+		void displayHelp();
 		TextUI(string &inputContent);	
 		string findCommand(string &inputContent);
         string removeCommand(string &inputContent);
         void displayFeedback(const string infoType);
-		/*string add(string);
-		int del(int number);
-		void display();
-		void clear();*/
 		};
 #endif
 		

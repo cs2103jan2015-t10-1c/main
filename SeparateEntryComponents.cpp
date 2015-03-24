@@ -71,11 +71,9 @@ void SeparateEntryComponents::extractTag(string& entryComponents, string& entryT
 void SeparateEntryComponents::extractName(string& entryComponents, string& entryName){
 	int endOfName = entryComponents.find(FULLSTOP_MARKER) - 1;
 	entryName = entryComponents.substr(1, endOfName);
-	cout << entryName << endl;
 	int startOfRemainder = endOfName + FULLSTOP_MARKER.size() + BLANK_SPACE_COUNT + 1;
 	int endOfRemainder = entryComponents.size() - 1;
 	entryComponents = entryComponents.substr(startOfRemainder, endOfRemainder);
-	cout << entryComponents << endl;
 }
 
 void SeparateEntryComponents::extractTime(string& entryComponents, string& entryTime){

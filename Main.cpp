@@ -17,6 +17,7 @@ const string COMMAND_DISPLAY = "display";
 const string COMMAND_DELETE = "delete";
 const string COMMAND_EXIT = "exit";
 const string COMMAND_SEARCH = "search";
+const string COMMAND_HELP = "help";
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
@@ -49,23 +50,27 @@ int main (){
 	string entryLocation;
 	string tag;
 	string keyword;
-	int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
-	int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
-	int inputStartHour = 0; int inputStartMinute = 0;
-	int inputEndHour = 0; int inputEndMinute = 0;
+
 
 	ScheduledEntry newList;
+	TextUI task(userInput);
+	task.displayWelcomeMessage();
 
 	while(running){
+		int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
+		int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
+		int inputStartHour = 0; int inputStartMinute = 0;
+		int inputEndHour = 0; int inputEndMinute = 0;
 		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
-		TextUI task(userInput);
+
 		command = task.findCommand(userInput);
 		userInput = task.removeCommand(userInput);
 		SeparateEntryComponents parse;
 		
 		//add command
 		if(command == COMMAND_ADD){
+
 			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tag);
 			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
 			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
@@ -106,6 +111,17 @@ int main (){
 			newList.display();
 		}
 
+		//search command
+		else if(command == COMMAND_SEARCH){
+			keyword = userInput.substr(1);
+			newList.searchTag(keyword);
+		}
+
+		//help command
+		else if(command == COMMAND_HELP){
+			task.displayHelp();
+		}
+
 		//delete command
 		else if(command == COMMAND_DELETE){
 			int indexNumber;
@@ -120,10 +136,6 @@ int main (){
 		else if(command == COMMAND_EXIT){
 			running = false;
 		}
-		else if(command == COMMAND_SEARCH){
-			keyword = userInput.substr(1);
-			newList.searchTag(keyword);
-	}
 	}
 	system("pause");
 	return 0;
