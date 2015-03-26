@@ -15,12 +15,17 @@ void Date::insertYear(int inputYear){
 	_year = inputYear;
 }
 
+void Date::initialiseDate(){
+	_entryDate = date(_year, _month, _day);
+}
+
 int Date::getDay(){
-	return _day;
+	return _entryDate.day();
 }
 
 string Date::getMonth(){
-	switch(_month){
+	int monthNumber = _entryDate.month();
+	switch(monthNumber){
 		case 1:
 			return "Jan";
 		case 2: 
@@ -51,6 +56,6 @@ string Date::getMonth(){
 }
 
 int Date::getYear(){
-	return _year;
+	return _entryDate.year();
 }	
 
