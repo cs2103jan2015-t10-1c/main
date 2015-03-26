@@ -4,6 +4,8 @@
 #include "Time.h"
 #include <vector>
 
+using namespace std;
+
 class Entry{
 private:
 	string _name;

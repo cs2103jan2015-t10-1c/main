@@ -12,10 +12,13 @@ void Time::insertMinute(int inputMinute){
 }
 
 int Time::getHour(){
-	return _hour;
+	return _entryTime.time_of_day().hours();
 }
 
 int Time::getMinute(){
-	return _minute;
+	return _entryTime.time_of_day().minutes();
 }
 
+void Time::initialiseTime(date _entryDate){
+	_entryTime = ptime(_entryDate, hours(_hour) + minutes(_minute));
+}
