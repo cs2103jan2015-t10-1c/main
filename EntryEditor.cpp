@@ -34,12 +34,12 @@ string EntryEditor::getName(){
 }
 
 void EntryEditor::getTime(int& newStartHour, int& newStartMinute, int& newEndHour, int& newEndMinute){
-	SeparateEntryComponents parseTime;
+	StringConvertor parseTime;
 	parseTime.convertTime(_newInformation, newStartHour, newStartMinute);
 }
 
 void EntryEditor::getDate(int& newDay, int& newMonth, int& newYear){
-	SeparateEntryComponents parseDate;
+	StringConvertor parseDate;
 	parseDate.convertDate(_newInformation, newDay, newMonth, newYear);
 }
 

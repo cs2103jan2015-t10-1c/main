@@ -1,6 +1,6 @@
 #ifndef ENTRYEDITOR_H
 #define ENTRYEDITOR_H
-#include "SeparateEntryComponents.h"
+#include "StringConvertor.h"
 
 #include <iostream>
 #include <string>

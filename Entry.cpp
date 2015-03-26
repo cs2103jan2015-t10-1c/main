@@ -14,10 +14,12 @@ string Entry::getName(){
 
 void Entry::insertStartDate(Date inputStartDate){
 	_startDate = inputStartDate;
+	_startDate.initialiseDate();
 }
 
 void Entry::insertEndDate(Date inputEndDate){
 	_endDate = inputEndDate;
+	_endDate.initialiseDate();
 }
 
 Date Entry::getStartDate(){
@@ -30,10 +32,12 @@ Date Entry::getEndDate (){
 
 void Entry::insertStartTime(Time inputStartTime){
 	_startTime = inputStartTime;
+	_startTime.initialiseTime(_startDate.getDate());
 }
 
 void Entry::insertEndTime(Time inputEndTime){
 	_endTime = inputEndTime;
+	_endTime.initialiseTime(_endDate.getDate());
 }
 
 Time Entry::getStartTime(){

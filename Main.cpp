@@ -1,6 +1,6 @@
 #include <sstream>
 #include "ScheduledEntry.h"
-#include "SeparateEntryComponents.h"
+#include "EntryAdd.h"
 #include "TextUI.h"
 #include "EntryEditor.h"
 
@@ -66,11 +66,11 @@ int main (){
 
 		command = task.findCommand(userInput);
 		userInput = task.removeCommand(userInput);
-		SeparateEntryComponents parse;
+	
 		
 		//add command
 		if(command == COMMAND_ADD){
-
+			EntryAdd parse;
 			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tag);
 			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
 			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
@@ -86,7 +86,9 @@ int main (){
 			Date startDate;
 			Date endDate;
 			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
+			if(inputEndDay > 0 && inputEndMonth > 0 && inputEndYear > 0){
+				initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
+			}
 			
 			//initialise start and end times
 			Time startTime;
