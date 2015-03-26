@@ -4,9 +4,12 @@
 #include "TextUI.h"
 #include "EntryEditor.h"
 
+
 #include <assert.h>
 
 using namespace std;
+using namespace boost::gregorian;
+using namespace boost::posix_time;
 
 const string COMMAND_PROMPT = "command: ";
 
@@ -55,6 +58,7 @@ int main (){
 	ScheduledEntry newList;
 	TextUI task(userInput);
 	task.displayWelcomeMessage();
+	task.displayCurrentDateTime();
 
 	while(running){
 		int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;

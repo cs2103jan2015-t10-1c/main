@@ -22,3 +22,7 @@ int Time::getMinute(){
 void Time::initialiseTime(date _entryDate){
 	_entryTime = ptime(_entryDate, hours(_hour) + minutes(_minute));
 }
+
+ptime Time::getTime(){
+	return _entryTime;
+}

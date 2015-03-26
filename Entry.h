@@ -5,6 +5,7 @@
 #include <vector>
 
 using namespace std;
+using namespace boost::gregorian;
 
 class Entry{
 private:
@@ -46,6 +47,7 @@ public:
 	void addTag(string);
 	void searchEntryTag(string);
 	void displayTags();
+	date_duration calculateDifference();
 };
 
 #endif

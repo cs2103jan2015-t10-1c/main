@@ -75,3 +75,9 @@ void Entry::displayTags(){
 		cout << *iterTag << endl;
 	}
 }
+
+date_duration Entry::calculateDifference(){
+	date startDate = _startDate.getDate();
+	date today(day_clock::local_day());
+	return startDate - today;
+}

@@ -52,12 +52,13 @@ void ScheduledEntry::display(){
 			<< entryStartDate.getYear() << " at "
 			<< entryStartTime.getHour() << "."
 			<< entryStartTime.getMinute() << FEEDBACK_TO
-			/*<< entryEndDate.getDay() << " "
+			<< entryEndDate.getDay() << " "
 			<< entryEndDate.getMonth() << " "
-			<< entryEndDate.getYear() << " at "*/
+			<< entryEndDate.getYear() << " at "
 			<< entryEndTime.getHour() << "."
 			<< entryEndTime.getMinute() << ". " 
-			<< iter->getLocation() << endl;
+			<< iter->getLocation() << endl
+			<< "Time left to completion: " << iter->calculateDifference() << " days "<< endl;
 		number++;
 	}
 }
@@ -73,12 +74,13 @@ void ScheduledEntry::displayEntry(int index){
 		<< entryStartDate.getYear() << " at "			
 		<< entryStartTime.getHour() << "."
 		<< entryStartTime.getMinute() <<FEEDBACK_TO
-		/*<< entryEndDate.getDay() << " "
+		<< entryEndDate.getDay() << " "
 		<< entryEndDate.getMonth() << " "
-		<< entryEndDate.getYear() << " at "*/
+		<< entryEndDate.getYear() << " at "
 		<< entryEndTime.getHour() << "."
 		<< entryEndTime.getMinute() << ". " 
-		<< _scheduledList[index].getLocation() << endl;
+		<< _scheduledList[index].getLocation() << endl
+		<< "Time left to completion: " << _scheduledList[index].calculateDifference() << endl;
 }
 
 void ScheduledEntry::removeEntry(int index){

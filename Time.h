@@ -25,6 +25,7 @@ public:
 	int getHour();
 	int getMinute();
 	void initialiseTime(date);
+	ptime getTime();
 };
 
 #endif
