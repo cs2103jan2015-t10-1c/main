@@ -76,7 +76,7 @@ void Entry::displayTags(){
 	}
 }
 
-date_duration Entry::calculateDifference(){
+date_duration Entry::calculateDaysFromToday(){
 	date startDate = _startDate.getDate();
 	date today(day_clock::local_day());
 	return startDate - today;

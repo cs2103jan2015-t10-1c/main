@@ -2,7 +2,7 @@
 #include "ScheduledEntry.h"
 #include "EntryAdd.h"
 #include "TextUI.h"
-#include "EntryEditor.h"
+#include "EntryEdit.h"
 
 
 #include <assert.h>

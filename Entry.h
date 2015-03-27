@@ -47,7 +47,7 @@ public:
 	void addTag(string);
 	void searchEntryTag(string);
 	void displayTags();
-	date_duration calculateDifference();
+	date_duration calculateDaysFromToday();
 };
 
 #endif

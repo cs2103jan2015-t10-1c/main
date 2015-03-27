@@ -1,10 +1,10 @@
 #include <sstream>
-#include "EntryEditor.h"
+#include "EntryEdit.h"
 
-EntryEditor::EntryEditor(){
+EntryEdit::EntryEdit(){
 };
 
-int EntryEditor::getEntryNumber(string& entryComponents){
+int EntryEdit::getEntryNumber(string& entryComponents){
 	size_t pos = 0;
 	string numberString = entryComponents.substr(1, 1);
 	entryComponents.erase(0, 2);
@@ -13,14 +13,14 @@ int EntryEditor::getEntryNumber(string& entryComponents){
 	return _entryNumber;
 }
 
-string EntryEditor::getMarker(string& entryComponents){
+string EntryEdit::getMarker(string& entryComponents){
 	_marker = entryComponents.substr(1, 2);
 	entryComponents.erase(0, 4);
 	_newInformation = entryComponents;
 	return _marker;
 }
 
-int EntryEditor::convertToNumber(string numberString){
+int EntryEdit::convertToNumber(string numberString){
 	int number;
 	istringstream convertString(numberString);
 	if (!(convertString >> number)) {
@@ -29,20 +29,20 @@ int EntryEditor::convertToNumber(string numberString){
 	return number;
 }
 
-string EntryEditor::getName(){
+string EntryEdit::getName(){
 	return _newInformation;
 }
 
-void EntryEditor::getTime(int& newStartHour, int& newStartMinute, int& newEndHour, int& newEndMinute){
+void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour, int& newEndMinute){
 	StringConvertor parseTime;
 	parseTime.convertTime(_newInformation, newStartHour, newStartMinute);
 }
 
-void EntryEditor::getDate(int& newDay, int& newMonth, int& newYear){
+void EntryEdit::getDate(int& newDay, int& newMonth, int& newYear){
 	StringConvertor parseDate;
 	parseDate.convertDate(_newInformation, newDay, newMonth, newYear);
 }
 
-string EntryEditor::getLocation(){
+string EntryEdit::getLocation(){
 	return _newInformation;
 }

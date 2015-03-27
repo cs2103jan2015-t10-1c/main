@@ -1,5 +1,5 @@
-#ifndef ENTRYEDITOR_H
-#define ENTRYEDITOR_H
+#ifndef ENTRYEDIT_H
+#define ENTRYEDIT_H
 #include "StringConvertor.h"
 
 #include <iostream>
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class EntryEditor{
+class EntryEdit{
 private:
 	int _entryNumber;
 	//-n, -d, -t, -l
@@ -16,7 +16,7 @@ private:
 	string _newInformation;
 
 public:	
-	EntryEditor ();
+	EntryEdit ();
 	int getEntryNumber (string&);
 	string getMarker(string&);
 	int convertToNumber(string);

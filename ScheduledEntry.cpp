@@ -58,7 +58,7 @@ void ScheduledEntry::display(){
 			<< entryEndTime.getHour() << "."
 			<< entryEndTime.getMinute() << ". " 
 			<< iter->getLocation() << endl
-			<< "Time left to completion: " << iter->calculateDifference() << " days "<< endl;
+			<< "Time left to completion: " << iter->calculateDaysFromToday() << " days "<< endl;
 		number++;
 	}
 }
@@ -80,7 +80,7 @@ void ScheduledEntry::displayEntry(int index){
 		<< entryEndTime.getHour() << "."
 		<< entryEndTime.getMinute() << ". " 
 		<< _scheduledList[index].getLocation() << endl
-		<< "Time left to completion: " << _scheduledList[index].calculateDifference() << endl;
+		<< "Time left to completion: " << _scheduledList[index].calculateDaysFromToday() << endl;
 }
 
 void ScheduledEntry::removeEntry(int index){
@@ -91,7 +91,7 @@ void ScheduledEntry::removeEntry(int index){
 }
 
 void ScheduledEntry::editEntry(string userInput){
-	EntryEditor editComponent;
+	EntryEdit editComponent;
 	int entryNumber = editComponent.getEntryNumber(userInput);
 	string marker = editComponent.getMarker(userInput);
 			

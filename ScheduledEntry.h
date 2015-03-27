@@ -3,7 +3,7 @@
 #include "Date.h"
 #include "Time.h"
 #include "Entry.h"
-#include "EntryEditor.h"
+#include "EntryEdit.h"
 #include <vector>
 
 class ScheduledEntry{

@@ -43,11 +43,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\ypbisma\Documents\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Christian%27s Folder\Year 2 Sem 2\CS2103\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\ypbisma\Documents\boost_1_57_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Christian%27s Folder\Year 2 Sem 2\CS2103\boost_1_57_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,7 +66,7 @@
   <ItemGroup>
     <ClInclude Include="Date.h" />
     <ClInclude Include="Entry.h" />
-    <ClInclude Include="EntryEditor.h" />
+    <ClInclude Include="EntryEdit.h" />
     <ClInclude Include="ScheduledEntry.h" />
     <ClInclude Include="EntryAdd.h" />
     <ClInclude Include="StringConvertor.h" />
@@ -76,7 +76,7 @@
   <ItemGroup>
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Entry.cpp" />
-    <ClCompile Include="EntryEditor.cpp" />
+    <ClCompile Include="EntryEdit.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ScheduledEntry.cpp" />
     <ClCompile Include="EntryAdd.cpp" />
