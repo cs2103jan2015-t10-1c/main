@@ -100,3 +100,17 @@ date_duration Entry::calculateDaysFromToday(){
 	date today(day_clock::local_day());
 	return startDate - today;
 }
+
+date_duration Entry::calculateEventDurationInDays(){
+	date startDate = _startDate.getDate();
+	date endDate = _endDate.getDate();
+	date_duration dayDifference = endDate - startDate;
+	return dayDifference;
+}
+
+time_duration Entry::calculateEventDurationInHours(){
+	ptime startTime = _startTime.getTime();
+	ptime endTime = _endTime.getTime();
+	time_duration timeDifference = endTime - startTime;
+	return timeDifference;
+}

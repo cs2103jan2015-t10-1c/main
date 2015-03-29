@@ -81,3 +81,7 @@ date Date::getDate(){
 	date toPassToTime = _entryDate;
 	return toPassToTime;
 }
+
+void Date::getDayOfDate(){
+	cout << _entryDate.day_of_week();
+}

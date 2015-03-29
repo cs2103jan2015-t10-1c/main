@@ -125,6 +125,7 @@ int main (){
 		else if (command == COMMAND_EXIT){
 			running = false;
 		}
+	cout << endl;
 	}
 	system("pause");
 	return 0;

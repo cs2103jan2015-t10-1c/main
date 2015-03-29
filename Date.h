@@ -30,7 +30,7 @@ public:
 	int getYear();
 	bool getDateStatus();
 	date getDate();
-
+	void getDayOfDate();
 };
 
 #endif

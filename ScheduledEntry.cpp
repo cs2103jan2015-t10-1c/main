@@ -56,20 +56,30 @@ void ScheduledEntry::displayScheduled(){
 		Date entryEndDate = iter->getEndDate();
 		Time entryStartTime = iter->getStartTime();
 		Time entryEndTime = iter->getEndTime();
-		cout << number << ". "
-			<< iter->getName() << ". "
+		time_duration differenceInHours = iter->calculateEventDurationInHours();
+		cout << endl
+			<< "- - - - - - - - - - - - - - - - -" << endl
+			<< number << ". "
+			<< iter->getName() << endl
+			<< "Start Date & Time: "
 			<< entryStartDate.getDay() << " "
 			<< entryStartDate.getMonth() << " "
 			<< entryStartDate.getYear() << FEEDBACK_AT
 			<< entryStartTime.getHour() << "."
-			<< entryStartTime.getMinute() << FEEDBACK_TO
+			<< entryStartTime.getMinute() << endl
+			<< "End Date & Time: "
 			<< entryEndDate.getDay() << " "
 			<< entryEndDate.getMonth() << " "
 			<< entryEndDate.getYear() << FEEDBACK_AT
 			<< entryEndTime.getHour() << "."
-			<< entryEndTime.getMinute() << ". " 
+			<< entryEndTime.getMinute() << endl
+			<< "Location: "
 			<< iter->getLocation() << endl
-			<< "Time left to completion: " << iter->calculateDaysFromToday() << " days "<< endl;
+			<< "Event duration : "
+			<< /*iter->calculateEventDurationInDays() - days(1) +*/ days(differenceInHours.hours()/24) << " days and "
+			<< differenceInHours.hours()%24 << " hours and " << differenceInHours.minutes() << " minutes" << endl
+			<< "Time left: " << iter->calculateDaysFromToday() << " days "<< endl
+			<< "- - - - - - - - - - - - - - - - -";
 		number++;
 	}
 }

@@ -17,14 +17,16 @@ void TextUI::displayWelcomeMessage(){
 	cout << "Welcome to FastAdd" << endl
 		<< "version v0.2" << endl
 		<< "Please key in your commands"<<endl
-		<< "Type 'help' for information on how to use FastAdd" << endl;
+		<< "Type 'help' for information on how to use FastAdd" << endl
+		<< endl;
 }
 
 void TextUI::displayCurrentDateTime(){
 	date d(day_clock::local_day());
 	ptime t(second_clock::local_time());
 	cout << "The date today is " << t.date() << endl
-		<< "and the time when FastAdd starts was " << t.time_of_day() << endl;
+		<< "and the time when FastAdd starts was " << t.time_of_day() << endl
+		<< endl;
 }
 
 void TextUI::displayHelp(){
