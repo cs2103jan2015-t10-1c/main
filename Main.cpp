@@ -123,7 +123,7 @@ int main (){
 
 		//exit command
 		else if (command == COMMAND_EXIT){
-			running = false;
+			newList.exit(running);
 		}
 	cout << endl;
 	}

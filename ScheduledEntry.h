@@ -1,10 +1,12 @@
 #ifndef SCHEDULEDENTRY_H
 #define SCHEDULEDENTRY_H
+
 #include "Date.h"
 #include "Time.h"
 #include "Entry.h"
 #include "EntryEdit.h"
-#include <vector>
+
+#include <fstream>
 
 class ScheduledEntry{
 private:

@@ -1,8 +1,11 @@
 #ifndef ENTRY_H
 #define ENTRY_H
+
 #include "Date.h"
 #include "Time.h"
+
 #include <vector>
+#include <sstream>
 
 using namespace std;
 using namespace boost::gregorian;
@@ -55,7 +58,7 @@ public:
 	void insertLocation(string);
 	//return the value of _location
 	string getLocation();
-	void display();
+	string getDisplay();
 	void addTag(string);
 	void searchEntryTag(string);
 	void displayTags();

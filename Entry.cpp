@@ -77,18 +77,19 @@ string Entry::getLocation (){
 	return _location;
 }
 
-void Entry::display(){
-	cout << _name << endl
+string Entry::getDisplay(){
+	ostringstream oss;
+	oss << _name << endl
 		<< "Start Date & Time: ";
 	_startDate.printDayOfDate();
-	cout << " " << _startDate.getDay() << " "
+	oss << " " << _startDate.getDay() << " "
 		<< _startDate.getMonth() << " "
 		<< _startDate.getYear() << FEEDBACK_AT
 		<< _startTime.getHour() << "."
 		<< _startTime.getMinute() << endl
 		<< "End Date & Time: ";
 	_endDate.printDayOfDate();
-	cout << " " << _endDate.getDay() << " "
+	oss << " " << _endDate.getDay() << " "
 		<< _endDate.getMonth() << " "
 		<< _endDate.getYear() << FEEDBACK_AT
 		<< _endTime.getHour() << "."
@@ -100,6 +101,8 @@ void Entry::display(){
 		<< calculateEventDurationInHours().hours()%24 << " hours and " 
 		<< calculateEventDurationInHours().minutes() << " minutes" << endl
 		<< "Time left: " << calculateDaysFromToday() << " days "<< endl;
+	
+	return oss.str();
 }
 
 void Entry::addTag(string tag){
@@ -112,8 +115,8 @@ void Entry::searchEntryTag(string tag){
 		if(*iterTag == tag){
 			cout << endl;
 			cout << "- - - - - - - - - - - - - - - -";
-			cout << *iterTag << " ";
-			display();
+			cout << *iterTag << " "
+			<< getDisplay();
 			cout << "- - - - - - - - - - - - - - - -";
 			cout << endl;
 		}

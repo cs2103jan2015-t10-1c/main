@@ -54,9 +54,9 @@ void ScheduledEntry::displayScheduled(){
 	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 		cout << endl
 			<< "- - - - - - - - - - - - - - - - -" << endl
-			<< number << ". ";
-		iter->display();
-		cout<< "- - - - - - - - - - - - - - - - -";
+			<< number << ". "
+		<< iter->getDisplay()
+		<< "- - - - - - - - - - - - - - - - -";
 		number++;
 	}
 }
@@ -64,9 +64,9 @@ void ScheduledEntry::displayScheduled(){
 void ScheduledEntry::displayEntry(int index){
 	cout << endl
 		<< "- - - - - - - - - - - - - - - - -" << endl
-		<< index << ". ";
-	_scheduledList[index-1].display();
-	cout << "- - - - - - - - - - - - - - - - -";
+		<< index << ". "
+	<< _scheduledList[index-1].getDisplay()
+	 << "- - - - - - - - - - - - - - - - -";
 }
 
 void ScheduledEntry::removeEntry(int index){
@@ -153,5 +153,12 @@ void ScheduledEntry::searchTag(string keyword){
 }
 
 void ScheduledEntry::exit(bool& running){
+	ofstream write("FastAddList.txt");
+	vector<Entry>::iterator iter;
+
+	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
+		write << iter->getDisplay() << endl;
+	}
+	write.close();
 	running = false;
 }
