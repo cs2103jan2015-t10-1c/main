@@ -74,6 +74,7 @@ void ScheduledEntry::displayScheduled(){
 	}
 }
 
+//for testing only
 void ScheduledEntry::displayEntry(int index){
 	Date entryStartDate = _scheduledList[index].getStartDate();
 	Date entryEndDate = _scheduledList[index].getEndDate();

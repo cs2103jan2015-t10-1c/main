@@ -45,13 +45,9 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 	}
 
 	else{
+		extractDate(entryComponents, entryStartDate);
 		extractTime(entryComponents, entryStartTime);
 		extractTime(entryComponents, entryEndTime);
-		if (entryComponents[0] == ON_MARKER[0] && entryComponents[1] == ON_MARKER[1]){
-			int datePosition = ON_MARKER.size() + BLANK_SPACE_COUNT;
-			entryComponents.erase(0, datePosition);
-			extractDate(entryComponents, entryStartDate);
-		}
 	}
 
 	if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){
