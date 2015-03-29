@@ -75,9 +75,7 @@ int main (){
 			Date startDate;
 			Date endDate;
 			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			if(inputEndDay > 0 && inputEndMonth > 0 && inputEndYear > 0){
-				initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			}
+			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
 			
 			//initialise start and end times
 			Time startTime;

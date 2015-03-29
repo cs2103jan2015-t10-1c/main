@@ -46,6 +46,8 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 
 	else{
 		extractDate(entryComponents, entryStartDate);
+		//for entry with only one date, the end date is the same as starting date
+		entryEndDate = entryStartDate;
 		extractTime(entryComponents, entryStartTime);
 		extractTime(entryComponents, entryEndTime);
 	}

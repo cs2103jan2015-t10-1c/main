@@ -1,6 +1,9 @@
 #include "Date.h"
 
 Date::Date(){
+	_day = 0;
+	_month = 0;
+	_year = 0;
 	_hasDate = false;
 }
 
