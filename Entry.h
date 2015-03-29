@@ -10,11 +10,17 @@ using namespace boost::gregorian;
 class Entry{
 private:
 	string _name;
+
 	Date _startDate;
+	bool _hasStartDate;
 	Date _endDate;
+	bool _hasEndDate;
+
 	Time _startTime;
 	Time _endTime;
+	
 	string _location;
+	
 	vector<string> _tag;
 
 public:
@@ -30,7 +36,9 @@ public:
 	void insertEndDate(Date);
 	//return the values of Date type private attributes
 	Date getStartDate();
+	bool getStartDateStatus();
 	Date getEndDate();
+	bool getEndDateStatus();
 
 	//Time
 	//input start time and end time into an Entry object

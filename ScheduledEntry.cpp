@@ -1,10 +1,12 @@
 #include "ScheduledEntry.h"
 #include <iostream>
+#include <fstream>
 
 //Static variables that cannot be initialised in the header file
 const string ScheduledEntry::FEEDBACK_ADDED = "added ";
 const string ScheduledEntry::FEEDBACK_FROM = " from ";
 const string ScheduledEntry::FEEDBACK_TO = " to ";
+const string ScheduledEntry::FEEDBACK_AT = " at ";
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
 
@@ -17,7 +19,12 @@ ScheduledEntry::ScheduledEntry(){
 }
 
 void ScheduledEntry::addEntry(Entry newEntry){
-	_scheduledList.push_back(newEntry);
+	if (newEntry.getStartDateStatus()){
+		_scheduledList.push_back(newEntry);
+	}
+	else{
+		_floatingList.push_back(newEntry);
+	}
 	showAddFeedback(newEntry);
 }
 
@@ -29,15 +36,19 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 	Time entryEndTime = newEntry.getEndTime();
 	string entryLocation = newEntry.getLocation();
 
-	cout << FEEDBACK_ADDED << entryName
-		<< FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear() << " at "
-		<< entryStartTime.getHour() << "." << entryStartTime.getMinute()
-		<< FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear() << " at "
-		<< entryEndTime.getHour() << "." << entryEndTime.getMinute()
-		<< ". " << entryLocation << endl; 
+	cout << FEEDBACK_ADDED << entryName;
+	if (newEntry.getStartDateStatus()){
+		cout << FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
+			<< FEEDBACK_AT << entryStartTime.getHour() << "." << entryStartTime.getMinute();
+		if (newEntry.getEndDateStatus()){
+			cout << FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear()
+				<< FEEDBACK_AT << entryEndTime.getHour() << "." << entryEndTime.getMinute();
+		}
+	}
+		cout << ". " << entryLocation << endl; 
 }
 
-void ScheduledEntry::display(){
+void ScheduledEntry::displayScheduled(){
 	int number = 1;
 	vector<Entry>::iterator iter;
 	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
@@ -49,12 +60,12 @@ void ScheduledEntry::display(){
 			<< iter->getName() << ". "
 			<< entryStartDate.getDay() << " "
 			<< entryStartDate.getMonth() << " "
-			<< entryStartDate.getYear() << " at "
+			<< entryStartDate.getYear() << FEEDBACK_AT
 			<< entryStartTime.getHour() << "."
 			<< entryStartTime.getMinute() << FEEDBACK_TO
 			<< entryEndDate.getDay() << " "
 			<< entryEndDate.getMonth() << " "
-			<< entryEndDate.getYear() << " at "
+			<< entryEndDate.getYear() << FEEDBACK_AT
 			<< entryEndTime.getHour() << "."
 			<< entryEndTime.getMinute() << ". " 
 			<< iter->getLocation() << endl
@@ -71,12 +82,12 @@ void ScheduledEntry::displayEntry(int index){
 	cout << _scheduledList[index].getName() << ". "
 		<< entryStartDate.getDay() << " "
 		<< entryStartDate.getMonth() << " "
-		<< entryStartDate.getYear() << " at "			
+		<< entryStartDate.getYear() << FEEDBACK_AT		
 		<< entryStartTime.getHour() << "."
-		<< entryStartTime.getMinute() <<FEEDBACK_TO
+		<< entryStartTime.getMinute() << FEEDBACK_TO
 		<< entryEndDate.getDay() << " "
 		<< entryEndDate.getMonth() << " "
-		<< entryEndDate.getYear() << " at "
+		<< entryEndDate.getYear() << FEEDBACK_AT
 		<< entryEndTime.getHour() << "."
 		<< entryEndTime.getMinute() << ". " 
 		<< _scheduledList[index].getLocation() << endl
@@ -164,4 +175,8 @@ void ScheduledEntry::searchTag(string keyword){
 	for(iterEntry = _scheduledList.begin(); iterEntry != _scheduledList.end(); iterEntry++){
 		iterEntry->searchEntryTag(keyword);
 	}
+}
+
+void ScheduledEntry::exit(bool& running){
+	running = false;
 }

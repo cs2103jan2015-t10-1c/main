@@ -9,11 +9,13 @@
 class ScheduledEntry{
 private:
 	vector<Entry> _scheduledList;
+	vector<Entry> _floatingList;
 
 	//Feedback to the users
 	static const string FEEDBACK_ADDED;
 	static const string FEEDBACK_FROM;
 	static const string FEEDBACK_TO;
+	static const string FEEDBACK_AT;
 	static const string FEEDBACK_EDITED;
 	static const string FEEDBACK_DELETED;
 
@@ -27,11 +29,12 @@ public:
 	ScheduledEntry();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void display();
+	void displayScheduled();
 	void displayEntry(int);
 	void removeEntry(int);
 	void editEntry(string);
 	void searchTag(string);
+	void exit(bool&);
 };
 
 #endif

@@ -13,12 +13,23 @@ string Entry::getName(){
 }
 
 void Entry::insertStartDate(Date inputStartDate){
+	_hasStartDate = inputStartDate.getDateStatus();
+	
 	_startDate = inputStartDate;
 	_startDate.initialiseDate();
 }
 
 void Entry::insertEndDate(Date inputEndDate){
-	_endDate = inputEndDate;
+	_hasEndDate = inputEndDate.getDateStatus();
+
+	//if there is no inputEndDate, then the entry starts and ends on the same day
+	if (!_hasEndDate){
+		_endDate = _startDate;
+	}
+	else{
+		_endDate = inputEndDate;
+	}
+
 	_endDate.initialiseDate();
 }
 
@@ -26,8 +37,16 @@ Date Entry::getStartDate(){
 	return _startDate;
 }
 
-Date Entry::getEndDate (){
+bool Entry::getStartDateStatus(){
+	return _hasStartDate;
+}
+
+Date Entry::getEndDate(){
 	return _endDate;
+}
+
+bool Entry::getEndDateStatus(){
+	return _hasEndDate;
 }
 
 void Entry::insertStartTime(Time inputStartTime){

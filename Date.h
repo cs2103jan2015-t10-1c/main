@@ -11,6 +11,7 @@ private:
 	int _day;
 	int _month;
 	int _year;
+	bool _hasDate;
 	date _entryDate;
 
 public:
@@ -27,6 +28,7 @@ public:
 	string getMonth();
 	int getMonthNumber();
 	int getYear();
+	bool getDateStatus();
 	date getDate();
 
 };

@@ -1,6 +1,7 @@
 #include "Date.h"
 
 Date::Date(){
+	_hasDate = false;
 }
 
 void Date::insertDay(int inputDay){
@@ -9,6 +10,11 @@ void Date::insertDay(int inputDay){
 
 void Date::insertMonth(int inputMonth){
 	_month = inputMonth;
+
+	//an entry with day and month can be considered as having date, year is inconsequential
+	if (_day != 0 && _month != 0){
+		_hasDate = true;
+	}
 }
 
 void Date::insertYear(int inputYear){
@@ -62,6 +68,11 @@ int Date::getMonthNumber(){
 int Date::getYear(){
 	return _entryDate.year();
 }	
+
+//check whether the entry has date
+bool Date::getDateStatus(){
+	return _hasDate;
+}
 
 date Date::getDate(){
 	date toPassToTime = _entryDate;

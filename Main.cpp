@@ -26,21 +26,6 @@ void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYea
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
 void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, string tag);
 
-/*
-class InvalidInputException: public exception {
-private:
-	string message;
-public:
-	InvalidInputException(string msg){
-		message = msg;
-	}
-
-	virtual constant char* what() const throw(){
-		return message.c_str();
-	}
-};
-*/
-
 int main (){
     bool running = true;
     string command;
@@ -108,28 +93,28 @@ int main (){
 		}
 		
 		//edit command
-		else if(command == COMMAND_EDIT){ 		
+		else if (command == COMMAND_EDIT){ 		
 			newList.editEntry(userInput);
 		}
 		
 		//display command
-		else if(command == COMMAND_DISPLAY){
-			newList.display();
+		else if (command == COMMAND_DISPLAY){
+			newList.displayScheduled();
 		}
 
 		//search command
-		else if(command == COMMAND_SEARCH){
+		else if (command == COMMAND_SEARCH){
 			keyword = userInput.substr(1);
 			newList.searchTag(keyword);
 		}
 
 		//help command
-		else if(command == COMMAND_HELP){
+		else if (command == COMMAND_HELP){
 			task.displayHelp();
 		}
 
 		//delete command
-		else if(command == COMMAND_DELETE){
+		else if (command == COMMAND_DELETE){
 			int indexNumber;
 			istringstream convertIndexNumber(userInput);
 			if (!(convertIndexNumber >> indexNumber)){
@@ -139,7 +124,7 @@ int main (){
 		}
 
 		//exit command
-		else if(command == COMMAND_EXIT){
+		else if (command == COMMAND_EXIT){
 			running = false;
 		}
 	}
