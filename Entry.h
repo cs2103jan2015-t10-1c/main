@@ -6,9 +6,12 @@
 
 using namespace std;
 using namespace boost::gregorian;
+using namespace boost::posix_time;
 
 class Entry{
 private:
+	static const string FEEDBACK_AT;
+
 	string _name;
 
 	Date _startDate;
@@ -52,10 +55,13 @@ public:
 	void insertLocation(string);
 	//return the value of _location
 	string getLocation();
+	void display();
 	void addTag(string);
 	void searchEntryTag(string);
 	void displayTags();
 	date_duration calculateDaysFromToday();
+	date_duration calculateEventDurationInDays();
+	time_duration calculateEventDurationInHours();
 };
 
 #endif

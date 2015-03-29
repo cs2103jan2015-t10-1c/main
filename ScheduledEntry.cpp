@@ -52,57 +52,21 @@ void ScheduledEntry::displayScheduled(){
 	int number = 1;
 	vector<Entry>::iterator iter;
 	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-		Date entryStartDate = iter->getStartDate();
-		Date entryEndDate = iter->getEndDate();
-		Time entryStartTime = iter->getStartTime();
-		Time entryEndTime = iter->getEndTime();
-		time_duration differenceInHours = iter->calculateEventDurationInHours();
 		cout << endl
 			<< "- - - - - - - - - - - - - - - - -" << endl
-			<< number << ". "
-			<< iter->getName() << endl
-			<< "Start Date & Time: "
-			<< entryStartDate.getDay() << " "
-			<< entryStartDate.getMonth() << " "
-			<< entryStartDate.getYear() << FEEDBACK_AT
-			<< entryStartTime.getHour() << "."
-			<< entryStartTime.getMinute() << endl
-			<< "End Date & Time: "
-			<< entryEndDate.getDay() << " "
-			<< entryEndDate.getMonth() << " "
-			<< entryEndDate.getYear() << FEEDBACK_AT
-			<< entryEndTime.getHour() << "."
-			<< entryEndTime.getMinute() << endl
-			<< "Location: "
-			<< iter->getLocation() << endl
-			<< "Event duration : "
-			<< /*iter->calculateEventDurationInDays() - days(1) +*/ days(differenceInHours.hours()/24) << " days and "
-			<< differenceInHours.hours()%24 << " hours and " << differenceInHours.minutes() << " minutes" << endl
-			<< "Time left: " << iter->calculateDaysFromToday() << " days "<< endl
-			<< "- - - - - - - - - - - - - - - - -";
+			<< number << ". ";
+		iter->display();
+		cout<< "- - - - - - - - - - - - - - - - -";
 		number++;
 	}
 }
 
-//for testing only
 void ScheduledEntry::displayEntry(int index){
-	Date entryStartDate = _scheduledList[index].getStartDate();
-	Date entryEndDate = _scheduledList[index].getEndDate();
-	Time entryStartTime = _scheduledList[index].getStartTime();
-	Time entryEndTime = _scheduledList[index].getEndTime();
-	cout << _scheduledList[index].getName() << ". "
-		<< entryStartDate.getDay() << " "
-		<< entryStartDate.getMonth() << " "
-		<< entryStartDate.getYear() << FEEDBACK_AT		
-		<< entryStartTime.getHour() << "."
-		<< entryStartTime.getMinute() << FEEDBACK_TO
-		<< entryEndDate.getDay() << " "
-		<< entryEndDate.getMonth() << " "
-		<< entryEndDate.getYear() << FEEDBACK_AT
-		<< entryEndTime.getHour() << "."
-		<< entryEndTime.getMinute() << ". " 
-		<< _scheduledList[index].getLocation() << endl
-		<< "Time left to completion: " << _scheduledList[index].calculateDaysFromToday() << endl;
+	cout << endl
+		<< "- - - - - - - - - - - - - - - - -" << endl
+		<< index << ". ";
+	_scheduledList[index-1].display();
+	cout << "- - - - - - - - - - - - - - - - -";
 }
 
 void ScheduledEntry::removeEntry(int index){

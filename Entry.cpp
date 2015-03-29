@@ -1,6 +1,8 @@
 #include "Entry.h"
 #include <iostream>
 
+const string Entry::FEEDBACK_AT = " at ";
+
 Entry::Entry(){
 }
 
@@ -75,6 +77,31 @@ string Entry::getLocation (){
 	return _location;
 }
 
+void Entry::display(){
+	cout << _name << endl
+		<< "Start Date & Time: ";
+	_startDate.printDayOfDate();
+	cout << " " << _startDate.getDay() << " "
+		<< _startDate.getMonth() << " "
+		<< _startDate.getYear() << FEEDBACK_AT
+		<< _startTime.getHour() << "."
+		<< _startTime.getMinute() << endl
+		<< "End Date & Time: ";
+	_endDate.printDayOfDate();
+	cout << " " << _endDate.getDay() << " "
+		<< _endDate.getMonth() << " "
+		<< _endDate.getYear() << FEEDBACK_AT
+		<< _endTime.getHour() << "."
+		<< _endTime.getMinute() << endl
+		<< "Location: "
+		<< _location << endl
+		<< "Event duration : "
+		<< days(calculateEventDurationInHours().hours()/24) << " days and "
+		<< calculateEventDurationInHours().hours()%24 << " hours and " 
+		<< calculateEventDurationInHours().minutes() << " minutes" << endl
+		<< "Time left: " << calculateDaysFromToday() << " days "<< endl;
+}
+
 void Entry::addTag(string tag){
 	_tag.push_back(tag);
 }
@@ -83,7 +110,12 @@ void Entry::searchEntryTag(string tag){
 	vector<string>::iterator iterTag;
 	for(iterTag = _tag.begin(); iterTag != _tag.end(); iterTag++){
 		if(*iterTag == tag){
-			cout << *iterTag << " " << _name << endl;
+			cout << endl;
+			cout << "- - - - - - - - - - - - - - - -";
+			cout << *iterTag << " ";
+			display();
+			cout << "- - - - - - - - - - - - - - - -";
+			cout << endl;
 		}
 	}
 }

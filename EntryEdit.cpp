@@ -35,7 +35,12 @@ string EntryEdit::getName(){
 
 void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour, int& newEndMinute){
 	StringConvertor parseTime;
-	parseTime.convertTime(_newInformation, newStartHour, newStartMinute);
+	string newStartTime;
+	string newEndTime;
+	parseTime.extractStringTime(_newInformation, newStartTime);
+	parseTime.extractStringTime(_newInformation, newEndTime);
+	parseTime.convertTime(newStartTime, newStartHour, newStartMinute);
+	parseTime.convertTime(newEndTime, newEndHour, newEndMinute);
 }
 
 void EntryEdit::getDate(int& newDay, int& newMonth, int& newYear){

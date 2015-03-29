@@ -49,6 +49,9 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		//for entry with only one date, the end date is the same as starting date
 		entryEndDate = entryStartDate;
 		extractTime(entryComponents, entryStartTime);
+		int endTimePosition = TO_MARKER.size() + BLANK_SPACE_COUNT;
+		int endOfLine = entryComponents.size() - 1;
+		entryComponents = entryComponents.substr(endTimePosition, endOfLine);
 		extractTime(entryComponents, entryEndTime);
 	}
 
@@ -76,17 +79,13 @@ void EntryAdd::extractName(string& entryComponents, string& entryName){
 }
 
 void EntryAdd::extractTime(string& entryComponents, string& entryTime){
-	int endOfTime = entryComponents.find(BLANK_SPACE);
-	entryTime = entryComponents.substr(0, endOfTime);
-    entryComponents.erase(0, endOfTime + BLANK_SPACE_COUNT);
+	StringConvertor timeExtractor;
+	timeExtractor.extractStringTime(entryComponents, entryTime);
 }
 
 void EntryAdd::extractDate(string& entryComponents, string& entryDate){
-    int endOfDay = entryComponents.find(BLANK_SPACE);
-	int endOfMonth = entryComponents.find(BLANK_SPACE, endOfDay + BLANK_SPACE_COUNT);
-	int endOfYear = entryComponents.find(BLANK_SPACE, endOfMonth + BLANK_SPACE_COUNT);
-	entryDate = entryComponents.substr(0, endOfYear);
-	entryComponents.erase(0, endOfYear + BLANK_SPACE_COUNT);
+	StringConvertor dateExtractor;
+	dateExtractor.extractStringDate(entryComponents, entryDate);
 }
 
 void EntryAdd::extractLocation(string& entryComponents, string& entryLocation){

@@ -8,10 +8,14 @@ using namespace std;
 
 class StringConvertor{
 private:
-	static const string FULLSTOP_MARKER;
 	static const string MONTH_ARRAY[12];
+	static const int BLANK_SPACE_COUNT;
+	static const string BLANK_SPACE;
+	static const string FULLSTOP_MARKER;
 
 public:
+	void extractStringDate(string&, string&);
+	void extractStringTime(string&, string&);
 	void convertDate(string, int&, int&, int&);
 	void convertTime(string, int&, int&);
 };

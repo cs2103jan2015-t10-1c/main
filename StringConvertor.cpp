@@ -1,5 +1,7 @@
 #include "StringConvertor.h"
 
+const int StringConvertor::BLANK_SPACE_COUNT = 1;
+const string StringConvertor::BLANK_SPACE = " ";
 const string StringConvertor::FULLSTOP_MARKER = ".";
 
 const string MONTH_JANUARY = "January";
@@ -18,6 +20,19 @@ const string MONTH_DECEMBER = "December";
 const string StringConvertor::MONTH_ARRAY[12] = {MONTH_JANUARY, MONTH_FEBRUARY, MONTH_MARCH, MONTH_APRIL, MONTH_MAY, MONTH_JUNE,
 	MONTH_JULY, MONTH_AUGUST, MONTH_SEPTEMBER, MONTH_OCTOBER, MONTH_NOVEMBER, MONTH_DECEMBER};
 
+void StringConvertor::extractStringTime(string& inputString, string& timeString){
+	int endOfTime = inputString.find(BLANK_SPACE);
+	timeString = inputString.substr(0, endOfTime);
+	inputString.erase(0, endOfTime + BLANK_SPACE_COUNT);
+}
+
+void StringConvertor::extractStringDate(string& inputString, string& dateString){
+	int endOfDay = inputString.find(BLANK_SPACE);
+	int endOfMonth = inputString.find(BLANK_SPACE, endOfDay + BLANK_SPACE_COUNT);
+	int endOfYear = inputString.find(BLANK_SPACE, endOfMonth + BLANK_SPACE_COUNT);
+	dateString = inputString.substr(0, endOfYear);
+	inputString.erase(0, endOfYear + BLANK_SPACE_COUNT);
+}
 
 void StringConvertor::convertTime(string entryTime, int& entryHour, int& entryMin){
 	istringstream iss(entryTime);
