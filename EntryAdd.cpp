@@ -29,7 +29,7 @@ const string EntryAdd::TO_MARKER = "to";
 
 
 void EntryAdd::dissectCommand (string entryComponents, string& entryName, string& entryStartTime, string& entryEndTime,
-				                              string& entryStartDate, string& entryEndDate, string& entryLocation, string& tag){
+				                              string& entryStartDate, string& entryEndDate, string& entryLocation, vector<string>& tag){
 	extractName(entryComponents, entryName);
 
 	if (entryComponents[0] == FROM_MARKER[0] && entryComponents[1] == FROM_MARKER[1]){
@@ -64,28 +64,27 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 	}
 }
 
-void EntryAdd::extractTag(string& entryComponents, string& entryTag){
+void EntryAdd::extractTag(string& entryComponents, vector<string>& entryTag){
 	int endOfTag = entryComponents.size();
-	Entry tag;
+	string tag;
 	int tracker;
 	for (tracker = 0; tracker <= endOfTag; tracker++){
-		if (entryComponents[tracker] == ' '){
-			entryTag = entryComponents.substr(0, tracker - 1);
+		if (entryComponents[tracker] == ' ' || tracker == endOfTag){
+			tag = entryComponents.substr(0, tracker);
 			entryComponents = entryComponents.erase(0, tracker + 1);
 			tracker = 0;
 			endOfTag = entryComponents.size();
-			cout << "Tag: " << entryTag << endl;
-			tag.addTag(entryTag);
+			entryTag.push_back(tag);
 		}
 
-		else if (tracker == endOfTag){
+		/*else if (tracker == endOfTag){
 			entryTag = entryComponents.substr(0, tracker);
 			entryComponents = entryComponents.erase(0, tracker + 1);
 			tracker = 0;
 			endOfTag = entryComponents.size();
 			cout << "Tag: " << entryTag << endl;
 			tag.addTag(entryTag);
-		}
+		}*/
 	}
 }
 	

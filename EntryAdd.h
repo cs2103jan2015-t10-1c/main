@@ -22,12 +22,12 @@ private:
 	static const string TO_MARKER;
 	
 public:
-	 void dissectCommand(string, string&, string&, string&, string&, string&, string&, string&);
+	 void dissectCommand(string, string&, string&, string&, string&, string&, string&, vector<string>&);
 	 void extractName(string&, string&);
 	 void extractTime(string&, string&);
 	 void extractDate(string&, string&);
 	 void extractLocation(string&, string&);
-	 void extractTag(string&, string&);
+	 void extractTag(string&, vector<string>&);
 	 void convertTime(string, int&, int&);
 	 void convertDate(string, int&, int&, int&);
 };
