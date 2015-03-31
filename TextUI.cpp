@@ -4,6 +4,8 @@
 #include<string>
 #include "TextUI.h"
 
+// Hello Christian, how are you doing today? When do you intend to get a girlfriend? 
+
 
 
 TextUI::TextUI(){
