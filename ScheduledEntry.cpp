@@ -74,8 +74,8 @@ void ScheduledEntry::displayEntry(int index){
 
 void ScheduledEntry::removeEntry(int index){
 	cout << FEEDBACK_DELETED << endl;
-	index--;
 	displayEntry(index);
+	index--;
 	_scheduledList.erase(_scheduledList.begin()+index);
 }
 
