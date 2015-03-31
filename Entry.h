@@ -59,7 +59,7 @@ public:
 	//return the value of _location
 	string getLocation();
 	string getDisplay();
-	void addTag(vector<string>&);
+	void addTag(string);
 	void searchEntryTag(string);
 	void displayTags();
 	date_duration calculateDaysFromToday();
