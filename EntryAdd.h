@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "StringConvertor.h"
+#include "Entry.h"
 
 using namespace std;
 

@@ -66,8 +66,27 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 
 void EntryAdd::extractTag(string& entryComponents, string& entryTag){
 	int endOfTag = entryComponents.size();
-	entryTag = entryComponents.substr(0, endOfTag);
-	entryComponents.erase(0, endOfTag);
+	Entry tag;
+	int tracker;
+	for (tracker = 0; tracker <= endOfTag; tracker++){
+		if (entryComponents[tracker] == ' '){
+			entryTag = entryComponents.substr(0, tracker - 1);
+			entryComponents = entryComponents.erase(0, tracker + 1);
+			tracker = 0;
+			endOfTag = entryComponents.size();
+			cout << "Tag: " << entryTag << endl;
+			tag.addTag(entryTag);
+		}
+
+		else if (tracker == endOfTag){
+			entryTag = entryComponents.substr(0, tracker);
+			entryComponents = entryComponents.erase(0, tracker + 1);
+			tracker = 0;
+			endOfTag = entryComponents.size();
+			cout << "Tag: " << entryTag << endl;
+			tag.addTag(entryTag);
+		}
+	}
 }
 	
 void EntryAdd::extractName(string& entryComponents, string& entryName){
