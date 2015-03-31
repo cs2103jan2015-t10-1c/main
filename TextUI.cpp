@@ -4,13 +4,6 @@
 #include<string>
 #include "TextUI.h"
 
-<<<<<<< HEAD
-//hai nguyen, yes I have a girlfriend ;)
-=======
-// Hello Christian, how are you doing today? When do you intend to get a girlfriend? 
-
-
->>>>>>> 978c72dca29419b759722fcd25a33c50150e967e
 
 TextUI::TextUI(){
 }
