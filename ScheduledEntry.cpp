@@ -1,4 +1,5 @@
 #include "ScheduledEntry.h"
+#include "ClashInspector.h"
 #include <iostream>
 #include <fstream>
 
@@ -49,14 +50,16 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 }
 
 void ScheduledEntry::displayScheduled(){
-	int number = 1;
+	int number = 0;
 	vector<Entry>::iterator iter;
 	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 		cout << endl
 			<< "- - - - - - - - - - - - - - - - -" << endl
-			<< number << ". "
-		<< iter->getDisplay()
-		<< "- - - - - - - - - - - - - - - - -";
+			<< (number + 1) << ". "
+		<< iter->getDisplay() << endl;
+		ClashInspector inspect(_scheduledList);
+		inspect.compareEntry(*iter, number);
+		cout << "- - - - - - - - - - - - - - - - -";
 		number++;
 	}
 }
@@ -71,8 +74,8 @@ void ScheduledEntry::displayEntry(int index){
 
 void ScheduledEntry::removeEntry(int index){
 	cout << FEEDBACK_DELETED << endl;
-	index--;
 	displayEntry(index);
+	index--;
 	_scheduledList.erase(_scheduledList.begin()+index);
 }
 

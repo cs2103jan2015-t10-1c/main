@@ -81,15 +81,17 @@ string Entry::getDisplay(){
 	ostringstream oss;
 	oss << _name << endl
 		<< "Start Date & Time: ";
-	_startDate.printDayOfDate();
-	oss << " " << _startDate.getDay() << " "
+	greg_weekday startDateToString = _startDate.getDate().day_of_week();
+	oss << " " << startDateToString.as_long_string()
+		<< " " << _startDate.getDay() << " "
 		<< _startDate.getMonth() << " "
 		<< _startDate.getYear() << FEEDBACK_AT
 		<< _startTime.getHour() << "."
 		<< _startTime.getMinute() << endl
 		<< "End Date & Time: ";
-	_endDate.printDayOfDate();
-	oss << " " << _endDate.getDay() << " "
+	greg_weekday endDateToString = _endDate.getDate().day_of_week();
+	oss << " " << endDateToString.as_long_string() 
+		<< " " << _endDate.getDay() << " "
 		<< _endDate.getMonth() << " "
 		<< _endDate.getYear() << FEEDBACK_AT
 		<< _endTime.getHour() << "."
