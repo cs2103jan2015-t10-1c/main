@@ -4,18 +4,18 @@ const int StringConvertor::BLANK_SPACE_COUNT = 1;
 const string StringConvertor::BLANK_SPACE = " ";
 const string StringConvertor::FULLSTOP_MARKER = ".";
 
-const string MONTH_JANUARY = "January";
-const string MONTH_FEBRUARY = "February";
-const string MONTH_MARCH = "March";
-const string MONTH_APRIL = "April";
+const string MONTH_JANUARY = "Jan";
+const string MONTH_FEBRUARY = "Feb";
+const string MONTH_MARCH = "Mar";
+const string MONTH_APRIL = "Apr";
 const string MONTH_MAY = "May";
-const string MONTH_JUNE = "June";
-const string MONTH_JULY = "July";
-const string MONTH_AUGUST = "August";
-const string MONTH_SEPTEMBER = "September";
-const string MONTH_OCTOBER = "October";
-const string MONTH_NOVEMBER = "November";
-const string MONTH_DECEMBER = "December";
+const string MONTH_JUNE = "Jun";
+const string MONTH_JULY = "Jul";
+const string MONTH_AUGUST = "Aug";
+const string MONTH_SEPTEMBER = "Sep";
+const string MONTH_OCTOBER = "Oct";
+const string MONTH_NOVEMBER = "Nov";
+const string MONTH_DECEMBER = "Dec";
 
 const string StringConvertor::MONTH_ARRAY[12] = {MONTH_JANUARY, MONTH_FEBRUARY, MONTH_MARCH, MONTH_APRIL, MONTH_MAY, MONTH_JUNE,
 	MONTH_JULY, MONTH_AUGUST, MONTH_SEPTEMBER, MONTH_OCTOBER, MONTH_NOVEMBER, MONTH_DECEMBER};
