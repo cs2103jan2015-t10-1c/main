@@ -36,7 +36,7 @@ int main (){
 	string startTime;
 	string endTime;
 	string entryLocation;
-	string tag;
+	vector<string> tag;
 	string keyword;
 
 
@@ -142,7 +142,7 @@ void initialiseTime(Time& inputTime, int inputHour, int inputMinute){
 	inputTime.insertMinute(inputMinute);
 }
 
-void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, string tag){
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tag){
 	newEntry.insertName(entryName);
 	newEntry.insertStartDate(startDate);
 	newEntry.insertEndDate(endDate);
