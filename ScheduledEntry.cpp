@@ -19,10 +19,10 @@ ScheduledEntry::ScheduledEntry(){
 }
 
 void ScheduledEntry::addEntry(Entry newEntry){
-	if (newEntry.getStartDateStatus()){
+	if (newEntry.getDateStatus()){
 		_scheduledList.push_back(newEntry);
 	}
-	else{
+	else {
 		_floatingList.push_back(newEntry);
 	}
 	showAddFeedback(newEntry);
@@ -37,13 +37,11 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 	string entryLocation = newEntry.getLocation();
 
 	cout << FEEDBACK_ADDED << entryName;
-	if (newEntry.getStartDateStatus()){
+	if (newEntry.getDateStatus()){
 		cout << FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
-			<< FEEDBACK_AT << entryStartTime.getHour() << "." << entryStartTime.getMinute();
-		if (newEntry.getEndDateStatus()){
-			cout << FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear()
-				<< FEEDBACK_AT << entryEndTime.getHour() << "." << entryEndTime.getMinute();
-		}
+			<< FEEDBACK_AT << entryStartTime.getHour() << "." << entryStartTime.getMinute()
+			<< FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear()
+			<< FEEDBACK_AT << entryEndTime.getHour() << "." << entryEndTime.getMinute();
 	}
 		cout << ". " << entryLocation << endl; 
 }
@@ -58,6 +56,19 @@ void ScheduledEntry::displayScheduled(){
 		<< iter->getDisplay() << endl;
 		ClashInspector inspect(_scheduledList);
 		inspect.compareEntry(*iter, number);
+		cout << "- - - - - - - - - - - - - - - - -";
+		number++;
+	}
+}
+
+void ScheduledEntry::displayFloating(){
+	int number = 0;
+	vector<Entry>::iterator iter;
+	for (iter = _floatingList.begin(); iter != _floatingList.end(); iter++){
+		cout << endl
+			<< "- - - - - - - - - - - - - - - - -" << endl
+			<< (number + 1) << ". "
+		<< iter->getDisplay() << endl;
 		cout << "- - - - - - - - - - - - - - - - -";
 		number++;
 	}

@@ -16,7 +16,8 @@ const string COMMAND_PROMPT = "command: ";
 //commands
 const string COMMAND_ADD = "add";
 const string COMMAND_EDIT = "edit";
-const string COMMAND_DISPLAY = "display";
+const string COMMAND_DISPLAY_SCHEDULED = "displaysch";
+const string COMMAND_DISPLAY_FLOATING = "displayflo";
 const string COMMAND_DELETE = "delete";
 const string COMMAND_EXIT = "exit";
 const string COMMAND_SEARCH = "search";
@@ -28,15 +29,15 @@ void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date end
 
 int main (){
     bool running = true;
-    string command;
-	string userInput;
-	string entryName;
-	string startDate;
-	string endDate;
-	string startTime;
-	string endTime;
-	string entryLocation;
-	string keyword;
+    string command = "";
+	string userInput = "";
+	string entryName = "";
+	string stringStartDate = "";
+	string stringStartTime = "";
+	string stringEndDate = "";
+	string stringEndTime = "";
+	string entryLocation = "";
+	string keyword = "";
 
 	TextUI task(userInput);
 	task.displayWelcomeMessage();
@@ -52,36 +53,36 @@ int main (){
 		vector<string> tags;
 		if (userInput != ""){
 			entryName = userInput;
-			getline(readFile, startDate);
-			getline(readFile, startTime);
-			getline(readFile, endDate);
-			getline(readFile, endTime);
+			getline(readFile, stringStartDate);
+			getline(readFile, stringStartTime);
+			getline(readFile, stringEndDate);
+			getline(readFile, stringEndTime);
 			getline(readFile, entryLocation);
-			getline(readFile, stringTags); 
+			getline(readFile, stringTags);
 
-			int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
-			int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
-			int inputStartHour = 0; int inputStartMinute = 0;
-			int inputEndHour = 0; int inputEndMinute = 0;
+			int intStartDay = 0; int intStartMonth = 0; int intStartYear = 0;
+			int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
+			int intStartHour = 0; int intStartMinute = 0;
+			int intEndHour = 0; int intEndMinute = 0;
 			
 			EntryAdd parse;
-			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			parse.convertTime(startTime, inputStartHour, inputStartMinute);	
-			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			parse.convertTime(endTime, inputEndHour, inputEndMinute);
+			parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
+			parse.convertTime(stringStartTime, intStartHour, intStartMinute);	
+			parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
+			parse.convertTime(stringEndTime, intEndHour, intEndMinute);
 			parse.extractTag(stringTags, tags);
 
 			//initialise start and end dates
 			Date startDate;
 			Date endDate;
-			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			
+			initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+			initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+
 			//initialise start and end times
 			Time startTime;
 			Time endTime;
-			initialiseTime(startTime, inputStartHour, inputStartMinute);
-			initialiseTime(endTime, inputEndHour, inputEndMinute);
+			initialiseTime(startTime, intStartHour, intStartMinute);
+			initialiseTime(endTime, intEndHour, intEndMinute);
 						
 			//initialise entry
 			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
@@ -90,11 +91,21 @@ int main (){
 	}
 	readFile.close();
 
+	command = "";
+	userInput = "";
+	entryName = "";
+	stringStartDate = "";
+	stringStartTime = "";
+	stringEndDate = "";
+	stringEndTime = "";
+	entryLocation = "";
+	keyword = "";
+
 	while(running){
-		int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
-		int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
-		int inputStartHour = 0; int inputStartMinute = 0;
-		int inputEndHour = 0; int inputEndMinute = 0;
+		int intStartDay = 0; int intStartMonth = 0; int intStartYear = 0;
+		int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
+		int intStartHour = 0; int intStartMinute = 0;
+		int intEndHour = 0; int intEndMinute = 0;
 		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
 
@@ -105,36 +116,36 @@ int main (){
 		if(command == COMMAND_ADD){
 			EntryAdd parse;
 			vector<string> tags;
-			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tags);
+			parse.dissectCommand(userInput, entryName, stringStartDate, stringStartTime, stringEndDate, stringEndTime, entryLocation, tags);
 			
-			//if (startTime != 0){
-				//cout << "no date!" << endl;
-				parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-				parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-				parse.convertTime(startTime, inputStartHour, inputStartMinute);
-				parse.convertTime(endTime, inputEndHour, inputEndMinute);
-			//}
+			if (stringStartDate != ""){
+				parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
+				parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
+				parse.convertTime(stringStartTime, intStartHour, intStartMinute);
+				parse.convertTime(stringEndTime, intEndHour, intEndMinute);
+			}
 			
-			assert(inputStartDay >= 0);
-			assert(inputStartMonth >= 0);
-			assert(inputEndDay >= 0);
-			assert(inputEndMonth >= 0);
+			assert(intStartDay >= 0);
+			assert(intStartMonth >= 0);
+			assert(intEndDay >= 0);
+			assert(intEndMonth >= 0);
 
 			//initialise start and end dates
 			Date startDate;
 			Date endDate;
-			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			
+			initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+			initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+
 			//initialise start and end times
 			Time startTime;
 			Time endTime;
-			initialiseTime(startTime, inputStartHour, inputStartMinute);
-			initialiseTime(endTime, inputEndHour, inputEndMinute);
-						
+			initialiseTime(startTime, intStartHour, intStartMinute);
+			initialiseTime(endTime, intEndHour, intEndMinute);
+
 			//initialise entry
 			Entry newEntry;
 			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
+
 			//add new entry to the list
 			newList.addEntry(newEntry);
 		}
@@ -144,9 +155,14 @@ int main (){
 			newList.editEntry(userInput);
 		}
 		
-		//display command
-		else if (command == COMMAND_DISPLAY){
+		//display scheduled command
+		else if (command == COMMAND_DISPLAY_SCHEDULED){
 			newList.displayScheduled();
+		}
+
+		//display floating command
+		else if (command == COMMAND_DISPLAY_FLOATING){
+			newList.displayFloating();
 		}
 
 		//search command

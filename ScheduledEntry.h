@@ -33,6 +33,7 @@ public:
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
 	void displayScheduled();
+	void displayFloating();
 	void displayEntry(int);
 	void removeEntry(int);
 	void editEntry(string);

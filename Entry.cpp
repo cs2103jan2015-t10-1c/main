@@ -15,50 +15,49 @@ string Entry::getName(){
 }
 
 void Entry::insertStartDate(Date inputStartDate){
-	_hasStartDate = inputStartDate.getDateStatus();
+	_hasDate = inputStartDate.getDateStatus();
 	
 	_startDate = inputStartDate;
-	_startDate.initialiseDate();
+	
+	if (_hasDate){
+		_startDate.initialiseDate();
+	}
 }
 
 void Entry::insertEndDate(Date inputEndDate){
-	_hasEndDate = inputEndDate.getDateStatus();
-
-	//if there is no inputEndDate, then the entry starts and ends on the same day
-	if (!_hasEndDate){
-		_endDate = _startDate;
+	_endDate = inputEndDate;
+	
+	if (_hasDate){
+		_endDate.initialiseDate();
 	}
-	else{
-		_endDate = inputEndDate;
-	}
-
-	_endDate.initialiseDate();
 }
 
 Date Entry::getStartDate(){
 	return _startDate;
 }
 
-bool Entry::getStartDateStatus(){
-	return _hasStartDate;
-}
-
 Date Entry::getEndDate(){
 	return _endDate;
 }
 
-bool Entry::getEndDateStatus(){
-	return _hasEndDate;
+bool Entry::getDateStatus(){
+	return _hasDate;
 }
 
 void Entry::insertStartTime(Time inputStartTime){
 	_startTime = inputStartTime;
-	_startTime.initialiseTime(_startDate.getDate());
+	
+	if (_hasDate) {
+		_startTime.initialiseTime(_startDate.getDate());
+	}
 }
 
 void Entry::insertEndTime(Time inputEndTime){
 	_endTime = inputEndTime;
-	_endTime.initialiseTime(_endDate.getDate());
+	
+	if (_hasDate) {
+		_endTime.initialiseTime(_endDate.getDate());
+	}
 }
 
 Time Entry::getStartTime(){
@@ -128,30 +127,35 @@ time_duration Entry::calculateEventDurationInHours(){
 string Entry::getDisplay(){
 	ostringstream oss;
 	
-	oss << _name << endl
-		<< "Start Date & Time: ";
-	greg_weekday startDateToString = _startDate.getDate().day_of_week();
-	oss << " " << startDateToString.as_long_string()
+	oss << _name << endl;
+	if (_hasDate){
+		oss	<< "Start Date & Time: ";
+		greg_weekday startDateToString = _startDate.getDate().day_of_week();
+		oss << " " << startDateToString.as_long_string()
 		<< " " << _startDate.getDay() << " "
 		<< _startDate.getMonth() << " "
 		<< _startDate.getYear() << FEEDBACK_AT
 		<< _startTime.getHour() << "."
 		<< _startTime.getMinute() << endl
 		<< "End Date & Time: ";
-	greg_weekday endDateToString = _endDate.getDate().day_of_week();
-	oss << " " << endDateToString.as_long_string() 
+		greg_weekday endDateToString = _endDate.getDate().day_of_week();
+		oss << " " << endDateToString.as_long_string() 
 		<< " " << _endDate.getDay() << " "
 		<< _endDate.getMonth() << " "
 		<< _endDate.getYear() << FEEDBACK_AT
 		<< _endTime.getHour() << "."
-		<< _endTime.getMinute() << endl
-		<< "Location: "
-		<< _location << endl
-		<< "Event duration : "
+		<< _endTime.getMinute() << endl;
+	}
+	
+	oss << "Location: " << _location << endl;
+	
+	if (_hasDate){
+	oss	<< "Event duration : "
 		<< days(calculateEventDurationInHours().hours()/24) << " days and "
 		<< calculateEventDurationInHours().hours()%24 << " hours and " 
 		<< calculateEventDurationInHours().minutes() << " minutes" << endl
 		<< "Time left: " << calculateDaysFromToday() << " days "<< endl;
+	}
 	
 	return oss.str();
 }
