@@ -166,3 +166,16 @@ void ScheduledEntry::exit(bool& running){
 	writeFile.close();
 	running = false;
 }
+
+/*void ScheduledEntry::sort(){
+	vector<Entry>::iterator firstIter;
+	vector<Entry>::iterator secondIter;
+	for (firstIter = _scheduledList.begin(); firstIter != _scheduledList.end(); firstIter++){
+		for(secondIter = _scheduledList.begin()+1; secondIter != _scheduledList.end()-1; secondIter++){
+			if((secondIter - 1)->getStartTime().getTime() < (secondIter)->getStartTime().getTime()){
+				Entry tempEntry = *(secondIter-1);;
+				*(secondIter-1) = *(secondIter);
+			}
+		}
+	}
+	*/

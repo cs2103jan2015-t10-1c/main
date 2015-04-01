@@ -36,7 +36,6 @@ int main (){
 	string startTime;
 	string endTime;
 	string entryLocation;
-	vector<string> tags;
 	string keyword;
 
 	TextUI task(userInput);
@@ -50,7 +49,7 @@ int main (){
 	while (getline(readFile, userInput)){
 		Entry newEntry;
 		string stringTags;
-		
+		vector<string> tags;
 		if (userInput != ""){
 			entryName = userInput;
 			getline(readFile, startDate);
@@ -105,6 +104,7 @@ int main (){
 		//add command
 		if(command == COMMAND_ADD){
 			EntryAdd parse;
+			vector<string> tags;
 			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tags);
 			
 			//if (startTime != 0){

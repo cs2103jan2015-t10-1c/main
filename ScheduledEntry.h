@@ -38,6 +38,7 @@ public:
 	void editEntry(string);
 	void searchTag(string);
 	void exit(bool&);
+	/*void sort();*/
 };
 
 #endif
