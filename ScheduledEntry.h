@@ -5,6 +5,7 @@
 #include "Time.h"
 #include "Entry.h"
 #include "EntryEdit.h"
+#include "ClashInspector.h"
 
 #include <fstream>
 

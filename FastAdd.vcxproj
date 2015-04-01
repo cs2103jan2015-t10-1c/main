@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClashInspector.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="Entry.h" />
     <ClInclude Include="EntryEdit.h" />
@@ -74,6 +75,7 @@
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClashInspector.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="EntryEdit.cpp" />

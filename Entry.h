@@ -27,7 +27,7 @@ private:
 	
 	string _location;
 	
-	vector<string> _tag;
+	vector<string> _tags;
 
 public:
 	Entry();
@@ -58,13 +58,16 @@ public:
 	void insertLocation(string);
 	//return the value of _location
 	string getLocation();
-	string getDisplay();
-	void addTag(vector<string>&);
+	
+	void addTags(vector<string>&);
 	void searchEntryTag(string, int);
-	void displayTags();
+	string getTags();
 	date_duration calculateDaysFromToday();
 	date_duration calculateEventDurationInDays();
 	time_duration calculateEventDurationInHours();
+
+	string storeEntry();
+	string getDisplay();
 };
 
 #endif

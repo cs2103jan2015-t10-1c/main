@@ -1,5 +1,4 @@
 #include "ScheduledEntry.h"
-#include "ClashInspector.h"
 #include <iostream>
 #include <fstream>
 
@@ -157,12 +156,13 @@ void ScheduledEntry::searchTag(string keyword){
 }
 
 void ScheduledEntry::exit(bool& running){
-	ofstream write("FastAddList.txt");
+	ofstream writeFile;
+	writeFile.open("FastAddList.txt");
 	vector<Entry>::iterator iter;
 
 	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-		write << iter->getDisplay() << endl;
+		writeFile << iter->storeEntry() << endl;
 	}
-	write.close();
+	writeFile.close();
 	running = false;
 }

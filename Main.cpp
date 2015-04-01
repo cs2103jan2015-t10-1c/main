@@ -24,7 +24,7 @@ const string COMMAND_HELP = "help";
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
-void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tag);
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tags);
 
 int main (){
     bool running = true;
@@ -36,14 +36,60 @@ int main (){
 	string startTime;
 	string endTime;
 	string entryLocation;
-	vector<string> tag;
+	vector<string> tags;
 	string keyword;
 
-
-	ScheduledEntry newList;
 	TextUI task(userInput);
 	task.displayWelcomeMessage();
 	task.displayCurrentDateTime();
+	
+	ScheduledEntry newList;
+
+	//load existing entries
+	ifstream readFile("FastAddList.txt");
+	while (getline(readFile, userInput)){
+		Entry newEntry;
+		string stringTags;
+		
+		if (userInput != ""){
+			entryName = userInput;
+			getline(readFile, startDate);
+			getline(readFile, startTime);
+			getline(readFile, endDate);
+			getline(readFile, endTime);
+			getline(readFile, entryLocation);
+			getline(readFile, stringTags); 
+
+			int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
+			int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
+			int inputStartHour = 0; int inputStartMinute = 0;
+			int inputEndHour = 0; int inputEndMinute = 0;
+			
+			EntryAdd parse;
+			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
+			parse.convertTime(startTime, inputStartHour, inputStartMinute);	
+			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
+			parse.convertTime(endTime, inputEndHour, inputEndMinute);
+			parse.extractTag(stringTags, tags);
+
+			//initialise start and end dates
+			Date startDate;
+			Date endDate;
+			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
+			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
+			
+			//initialise start and end times
+			Time startTime;
+			Time endTime;
+			initialiseTime(startTime, inputStartHour, inputStartMinute);
+			initialiseTime(endTime, inputEndHour, inputEndMinute);
+						
+			//initialise entry
+			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
+			newList.addEntry(newEntry);
+		}
+	}
+	readFile.close();
 
 	while(running){
 		int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
@@ -56,15 +102,18 @@ int main (){
 		command = task.findCommand(userInput);
 		userInput = task.removeCommand(userInput);
 	
-		
 		//add command
 		if(command == COMMAND_ADD){
 			EntryAdd parse;
-			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tag);
-			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			parse.convertTime(startTime, inputStartHour, inputStartMinute);
-			parse.convertTime(endTime, inputEndHour, inputEndMinute);
+			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tags);
+			
+			//if (startTime != 0){
+				//cout << "no date!" << endl;
+				parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
+				parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
+				parse.convertTime(startTime, inputStartHour, inputStartMinute);
+				parse.convertTime(endTime, inputEndHour, inputEndMinute);
+			//}
 			
 			assert(inputStartDay >= 0);
 			assert(inputStartMonth >= 0);
@@ -85,7 +134,7 @@ int main (){
 						
 			//initialise entry
 			Entry newEntry;
-			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tag);
+			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
 			//add new entry to the list
 			newList.addEntry(newEntry);
 		}
@@ -145,12 +194,12 @@ void initialiseTime(Time& inputTime, int inputHour, int inputMinute){
 	inputTime.insertMinute(inputMinute);
 }
 
-void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tag){
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tags){
 	newEntry.insertName(entryName);
 	newEntry.insertStartDate(startDate);
 	newEntry.insertEndDate(endDate);
 	newEntry.insertStartTime(startTime);
 	newEntry.insertEndTime(endTime);
 	newEntry.insertLocation(entryLocation);
-	newEntry.addTag(tag);
+	newEntry.addTags(tags);
 }

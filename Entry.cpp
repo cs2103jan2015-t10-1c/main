@@ -77,8 +77,57 @@ string Entry::getLocation (){
 	return _location;
 }
 
+void Entry::addTags(vector<string>& tags){
+	_tags = tags;
+}
+
+void Entry::searchEntryTag(string tag, int count){
+	vector<string>::iterator iterTag;
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+		if(*iterTag == tag){
+			cout << endl;
+			cout << "- - - - - - - - - - - - - - - -";
+			cout << *iterTag << " " << endl
+			<< count << ". " << getDisplay();
+			cout << "- - - - - - - - - - - - - - - -";
+			cout << endl;
+		}
+	}
+}
+
+string Entry::getTags(){
+	ostringstream oss;
+	vector<string>::iterator iterTag;
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+		oss << *iterTag << " ";
+	}
+
+	return oss.str();
+}
+
+date_duration Entry::calculateDaysFromToday(){
+	date startDate = _startDate.getDate();
+	date today(day_clock::local_day());
+	return startDate - today;
+}
+
+date_duration Entry::calculateEventDurationInDays(){
+	date startDate = _startDate.getDate();
+	date endDate = _endDate.getDate();
+	date_duration dayDifference = endDate - startDate;
+	return dayDifference;
+}
+
+time_duration Entry::calculateEventDurationInHours(){
+	ptime startTime = _startTime.getTime();
+	ptime endTime = _endTime.getTime();
+	time_duration timeDifference = endTime - startTime;
+	return timeDifference;
+}
+
 string Entry::getDisplay(){
 	ostringstream oss;
+	
 	oss << _name << endl
 		<< "Start Date & Time: ";
 	greg_weekday startDateToString = _startDate.getDate().day_of_week();
@@ -107,47 +156,28 @@ string Entry::getDisplay(){
 	return oss.str();
 }
 
-void Entry::addTag(vector<string>& tag){
-	_tag = tag;
-}
+string Entry::storeEntry(){
+	ostringstream oss;
+	
+	oss << _name << endl
 
-void Entry::searchEntryTag(string tag, int count){
-	vector<string>::iterator iterTag;
-	for(iterTag = _tag.begin(); iterTag != _tag.end(); iterTag++){
-		if(*iterTag == tag){
-			cout << endl;
-			cout << "- - - - - - - - - - - - - - - -";
-			cout << *iterTag << " " << endl
-			<< count << ". " << getDisplay();
-			cout << "- - - - - - - - - - - - - - - -";
-			cout << endl;
-		}
-	}
-}
+		<< _startDate.getDay() << " "
+		<< _startDate.getMonth() << " "
+		<< _startDate.getYear() << endl
+		
+		<< _startTime.getHour() << "."
+		<< _startTime.getMinute() << endl 
+		
+		<< _endDate.getDay() << " "
+		<< _endDate.getMonth() << " "
+		<< _endDate.getYear() << endl
+		
+		<< _endTime.getHour() << "."
+		<< _endTime.getMinute() << endl
 
-void Entry::displayTags(){
-	vector<string>::iterator iterTag;
-	for(iterTag = _tag.begin(); iterTag != _tag.end(); iterTag++){
-		cout << *iterTag << endl;
-	}
-}
+		<< _location << endl
 
-date_duration Entry::calculateDaysFromToday(){
-	date startDate = _startDate.getDate();
-	date today(day_clock::local_day());
-	return startDate - today;
-}
-
-date_duration Entry::calculateEventDurationInDays(){
-	date startDate = _startDate.getDate();
-	date endDate = _endDate.getDate();
-	date_duration dayDifference = endDate - startDate;
-	return dayDifference;
-}
-
-time_duration Entry::calculateEventDurationInHours(){
-	ptime startTime = _startTime.getTime();
-	ptime endTime = _endTime.getTime();
-	time_duration timeDifference = endTime - startTime;
-	return timeDifference;
+		<< getTags() << endl;
+	
+	return oss.str();
 }
