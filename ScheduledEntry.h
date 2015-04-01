@@ -21,6 +21,7 @@ private:
 	static const string FEEDBACK_AT;
 	static const string FEEDBACK_EDITED;
 	static const string FEEDBACK_DELETED;
+	static const string FEEDBACK_INVALID_TYPE;
 
 	//markers
 	static const string NAME_MARKER;
@@ -29,11 +30,17 @@ private:
 	static const string LOCATION_MARKER;
 	static const string STATUS_MARKER;
 
+	//type of list
+	static const string TYPE_SCHEDULED;
+	static const string TYPE_FLOATING;
+
 public:
 	ScheduledEntry();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
+	void display();
 	void displayScheduled();
+	void displayFloating();
 	void displayEntry(int);
 	void removeEntry(int);
 	void editEntry(string);

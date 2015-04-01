@@ -3,7 +3,7 @@
 #include "EntryAdd.h"
 #include "TextUI.h"
 #include "EntryEdit.h"
-
+#include "DateTimeInspector.h"
 
 #include <assert.h>
 
@@ -22,21 +22,24 @@ const string COMMAND_EXIT = "exit";
 const string COMMAND_SEARCH = "search";
 const string COMMAND_HELP = "help";
 
+void convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
+					 string stringStartTime, int& intStartHour, int& intStartMinute,
+					 string stringEndDate, int& intEndDay, int& intEndMonth, int& intEndYear,
+					 string stringEndTime, int& intEndHour, int& intEndMinute);
+void initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
+						Date& endDate, int intEndDay, int intEndMonth, int intEndYear, Time& endTime, int intEndHour, int intEndMinute);
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
 void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tags);
 
 int main (){
-    bool running = true;
-    string command;
-	string userInput;
-	string entryName;
-	string startDate;
-	string endDate;
-	string startTime;
-	string endTime;
-	string entryLocation;
-	string keyword;
+	string userInput = "";
+	string entryName = "";
+	string stringStartDate = "";
+	string stringStartTime = "";
+	string stringEndDate = "";
+	string stringEndTime = "";
+	string entryLocation = "";
 
 	TextUI task(userInput);
 	task.displayWelcomeMessage();
@@ -44,57 +47,105 @@ int main (){
 	
 	ScheduledEntry newList;
 
-	//load existing entries
-	ifstream readFile("FastAddList.txt");
-	while (getline(readFile, userInput)){
+	cout << "Loading existing entries..." << endl << endl;
+	
+	//load existing scheduled entries
+	ifstream readSched("FastAddSched.txt");
+	while (getline(readSched, userInput)){
 		Entry newEntry;
 		string stringTags;
 		vector<string> tags;
 		if (userInput != ""){
 			entryName = userInput;
-			getline(readFile, startDate);
-			getline(readFile, startTime);
-			getline(readFile, endDate);
-			getline(readFile, endTime);
-			getline(readFile, entryLocation);
-			getline(readFile, stringTags); 
+			getline(readSched, stringStartDate);
+			getline(readSched, stringStartTime);
+			getline(readSched, stringEndDate);
+			getline(readSched, stringEndTime);
+			getline(readSched, entryLocation);
+			getline(readSched, stringTags);
 
-			int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
-			int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
-			int inputStartHour = 0; int inputStartMinute = 0;
-			int inputEndHour = 0; int inputEndMinute = 0;
+			int intStartDay = 0; int intStartMonth = 0; int intStartYear = 0;
+			int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
+			int intStartHour = 0; int intStartMinute = 0;
+			int intEndHour = 0; int intEndMinute = 0;
 			
 			EntryAdd parse;
-			parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			parse.convertTime(startTime, inputStartHour, inputStartMinute);	
-			parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			parse.convertTime(endTime, inputEndHour, inputEndMinute);
+			convertDateTime(parse, stringStartDate, intStartDay, intStartMonth, intStartYear, stringStartTime, intStartHour, intStartMinute,	
+				stringEndDate, intEndDay, intEndMonth, intEndYear, stringEndTime, intEndHour, intEndMinute);
 			parse.extractTag(stringTags, tags);
 
-			//initialise start and end dates
+			//initialise start and end dates, start and end times
 			Date startDate;
 			Date endDate;
-			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			
-			//initialise start and end times
 			Time startTime;
 			Time endTime;
-			initialiseTime(startTime, inputStartHour, inputStartMinute);
-			initialiseTime(endTime, inputEndHour, inputEndMinute);
+			initialiseDateTime(startDate, intStartDay, intStartMonth, intStartYear, startTime, intStartHour, intStartMinute,
+				endDate, intEndDay, intEndMonth, intEndYear, endTime, intEndHour, intEndMinute);
 						
 			//initialise entry
 			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
 			newList.addEntry(newEntry);
 		}
 	}
-	readFile.close();
+	readSched.close();
+
+	//reset the values of temporary variables
+	userInput = "";
+	entryName = "";
+	stringStartDate = "";
+	stringStartTime = "";
+	stringEndDate = "";
+	stringEndTime = "";
+	entryLocation = "";
+
+	//load existing floating entries
+	ifstream readFloat("FastAddFloat.txt");
+	while (getline(readFloat, userInput)){
+		Entry newEntry;
+		string stringTags;
+		vector<string> tags;
+		if (userInput != ""){
+			entryName = userInput;
+			getline(readFloat, entryLocation);
+			getline(readFloat, stringTags);
+
+			EntryAdd parse;
+			parse.extractTag(stringTags, tags);
+
+			//initialise start and end dates, start and end times
+			Date startDate;
+			Date endDate;
+			Time startTime;
+			Time endTime;
+			initialiseDateTime(startDate, 0, 0, 0, startTime, 0, 0, endDate, 0, 0, 0, endTime, 0, 0);
+						
+			//initialise entry
+			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
+			newList.addEntry(newEntry);
+		}
+	}
+	readFloat.close();
+	
+	cout << endl << "Loading done..." << endl << endl;
+
+	bool running = true;
+	string command = "";
+	string keyword = "";
+
+	//reset the values of temporary variables
+	userInput = "";
+	entryName = "";
+	stringStartDate = "";
+	stringStartTime = "";
+	stringEndDate = "";
+	stringEndTime = "";
+	entryLocation = "";
 
 	while(running){
-		int inputStartDay = 0; int inputStartMonth = 0; int inputStartYear = 0;
-		int inputEndDay = 0; int inputEndMonth = 0; int inputEndYear = 0;
-		int inputStartHour = 0; int inputStartMinute = 0;
-		int inputEndHour = 0; int inputEndMinute = 0;
+		int intStartDay = 0; int intStartMonth = 0; int intStartYear = 0;
+		int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
+		int intStartHour = 0; int intStartMinute = 0;
+		int intEndHour = 0; int intEndMinute = 0;
 		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
 
@@ -105,38 +156,71 @@ int main (){
 		if(command == COMMAND_ADD){
 			EntryAdd parse;
 			vector<string> tags;
-			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tags);
-			
-			//if (startTime != 0){
-				//cout << "no date!" << endl;
-				parse.convertDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-				parse.convertDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-				parse.convertTime(startTime, inputStartHour, inputStartMinute);
-				parse.convertTime(endTime, inputEndHour, inputEndMinute);
-			//}
-			
-			assert(inputStartDay >= 0);
-			assert(inputStartMonth >= 0);
-			assert(inputEndDay >= 0);
-			assert(inputEndMonth >= 0);
+			bool dateIsOkay = true;
+			bool timeIsOkay = true;
 
-			//initialise start and end dates
+			parse.dissectCommand(userInput, entryName, stringStartDate, stringStartTime, stringEndDate, stringEndTime, entryLocation, tags);
+			
+			if (stringStartDate != ""){
+				convertDateTime(parse, stringStartDate, intStartDay, intStartMonth, intStartYear, stringStartTime, intStartHour, intStartMinute,
+					stringEndDate, intEndDay, intEndMonth, intEndYear, stringEndTime, intEndHour, intEndMinute);
+			}
+			
+			assert(intStartDay >= 0);
+			assert(intStartMonth >= 0);
+			assert(intEndDay >= 0);
+			assert(intEndMonth >= 0);
+
+			//initialise start and end dates, start and end times
 			Date startDate;
 			Date endDate;
-			initialiseDate(startDate, inputStartDay, inputStartMonth, inputStartYear);
-			initialiseDate(endDate, inputEndDay, inputEndMonth, inputEndYear);
-			
-			//initialise start and end times
 			Time startTime;
 			Time endTime;
-			initialiseTime(startTime, inputStartHour, inputStartMinute);
-			initialiseTime(endTime, inputEndHour, inputEndMinute);
-						
-			//initialise entry
-			Entry newEntry;
-			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
-			//add new entry to the list
-			newList.addEntry(newEntry);
+
+			//initialise start and end dates
+			DateTimeInspector DateInspector;
+			if(!DateInspector.dateIsValid(intStartDay, intStartMonth, intStartYear)){
+				cout << "Start Date is invalid!" << endl << endl;
+				dateIsOkay = false;
+			}
+			else{
+				initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+			}
+			if(!DateInspector.dateIsValid(intEndDay, intEndMonth, intEndYear)){
+				cout << "End Date is invalid!" << endl << endl;
+				dateIsOkay = false;
+			}
+			else{
+				initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+			}
+			//only when date is ok
+			if(dateIsOkay){
+			//initialise start and end times
+				DateTimeInspector TimeInspector;
+				if(!TimeInspector.timeIsValid(intStartHour, intStartMinute)){
+					cout << "Start Time is invalid!" << endl << endl;
+					timeIsOkay = false;
+				}
+				else{
+					initialiseTime(startTime, intStartHour, intStartMinute);
+				}
+				if(!DateInspector.timeIsValid(intEndHour, intEndMinute)){
+					cout << "End Time is invalid!" << endl << endl;
+					timeIsOkay = false;
+				}
+				else{
+					initialiseTime(endTime, intEndHour, intEndMinute);
+				}
+			}
+			//only when time is okay
+			if(timeIsOkay){
+				//initialise entry
+				Entry newEntry;
+				initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
+
+				//add new entry to the list
+				newList.addEntry(newEntry);
+			}
 		}
 		
 		//edit command
@@ -144,9 +228,9 @@ int main (){
 			newList.editEntry(userInput);
 		}
 		
-		//display command
+		//display scheduled command
 		else if (command == COMMAND_DISPLAY){
-			newList.displayScheduled();
+			newList.display();
 		}
 
 		//search command
@@ -186,7 +270,25 @@ int main (){
 	}
 	system("pause");
 	return 0;
-	}
+}
+
+void convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
+					 string stringStartTime, int& intStartHour, int& intStartMinute,
+					 string stringEndDate, int& intEndDay, int& intEndMonth, int& intEndYear,
+					 string stringEndTime, int& intEndHour, int& intEndMinute){
+	parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
+	parse.convertTime(stringStartTime, intStartHour, intStartMinute);
+	parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
+	parse.convertTime(stringEndTime, intEndHour, intEndMinute);
+}
+
+void initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
+						Date& endDate, int intEndDay, int intEndMonth, int intEndYear, Time& endTime, int intEndHour, int intEndMinute){
+	initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+	initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+	initialiseTime(startTime, intStartHour, intStartMinute);
+	initialiseTime(endTime, intEndHour, intEndMinute);
+}
 
 void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
 	int year = inputYear;
@@ -219,3 +321,4 @@ void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date end
 	newEntry.insertLocation(entryLocation);
 	newEntry.addTags(tags);
 }
+

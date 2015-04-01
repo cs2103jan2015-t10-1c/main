@@ -43,10 +43,12 @@ const string EntryAdd::TAG_MARKER = "#";
 const string EntryAdd::TO_MARKER = "to";
 
 
-void EntryAdd::dissectCommand (string entryComponents, string& entryName, string& entryStartTime, string& entryEndTime,
-				                              string& entryStartDate, string& entryEndDate, string& entryLocation, vector<string>& tag){
+void EntryAdd::dissectCommand (string entryComponents, string& entryName, string& entryStartDate, string& entryStartTime,
+							   string& entryEndDate, string& entryEndTime, string& entryLocation, vector<string>& tag){
+	//extract name of event
 	extractName(entryComponents, entryName);
 
+	//extract dates and time (2 dates)
 	if (entryComponents[0] == FROM_MARKER[0] && entryComponents[1] == FROM_MARKER[1]){
 		int startDatePosition = FROM_MARKER.size() + BLANK_SPACE_COUNT;
 		entryComponents.erase(0, startDatePosition);
@@ -59,6 +61,22 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		extractTime(entryComponents, entryEndTime);
 	}
 
+	//only name and location, and maybe tags
+	else if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){
+		extractLocation(entryComponents, entryLocation);
+		if (entryComponents[0] == TAG_MARKER[0]){
+			extractTag(entryComponents, tag);
+		}
+		return;
+	}
+
+	//only name and tags
+	else if (entryComponents[0] == TAG_MARKER[0]){
+		extractTag(entryComponents, tag);
+		return;
+	}
+
+	//extract date and time (1 date)
 	else{
 		extractDate(entryComponents, entryStartDate);
 		//for entry with only one date, the end date is the same as starting date
@@ -114,7 +132,7 @@ void EntryAdd::extractDate(string& entryComponents, string& entryDate){
 
 void EntryAdd::extractLocation(string& entryComponents, string& entryLocation){
 	int startOfLocation = entryComponents.find(BLANK_SPACE) + BLANK_SPACE_COUNT;
-	int endOfLocation = entryComponents.find(BLANK_SPACE, startOfLocation);
+	int endOfLocation = entryComponents.find(TAG_MARKER, startOfLocation);
 	entryLocation = entryComponents.substr(startOfLocation, endOfLocation - startOfLocation);
     entryComponents.erase(0, endOfLocation + BLANK_SPACE_COUNT);
 }
