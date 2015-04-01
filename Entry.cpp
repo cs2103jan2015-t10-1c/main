@@ -195,11 +195,12 @@ string Entry::getDisplay(){
 string Entry::storeEntry(){
 	ostringstream oss;
 	
-	oss << _name << endl
+	oss << _name << endl;
 
-		<< _startDate.getDay() << " "
-		<< _startDate.getMonth() << " "
-		<< _startDate.getYear() << endl
+	if (_hasDate){
+		oss	<< _startDate.getDay() << " "
+			<< _startDate.getMonth() << " "
+			<< _startDate.getYear() << endl
 		
 		<< _startTime.getHour() << "."
 		<< _startTime.getMinute() << endl 
@@ -209,9 +210,10 @@ string Entry::storeEntry(){
 		<< _endDate.getYear() << endl
 		
 		<< _endTime.getHour() << "."
-		<< _endTime.getMinute() << endl
+		<< _endTime.getMinute() << endl;
+	}
 
-		<< _location << endl
+	oss	<< _location << endl
 
 		<< getTags() << endl;
 	

@@ -16,20 +16,23 @@ const string COMMAND_PROMPT = "command: ";
 //commands
 const string COMMAND_ADD = "add";
 const string COMMAND_EDIT = "edit";
-const string COMMAND_DISPLAY_SCHEDULED = "displaysch";
-const string COMMAND_DISPLAY_FLOATING = "displayflo";
+const string COMMAND_DISPLAY = "display";
 const string COMMAND_DELETE = "delete";
 const string COMMAND_EXIT = "exit";
 const string COMMAND_SEARCH = "search";
 const string COMMAND_HELP = "help";
 
+void convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
+					 string stringStartTime, int& intStartHour, int& intStartMinute,
+					 string stringEndDate, int& intEndDay, int& intEndMonth, int& intEndYear,
+					 string stringEndTime, int& intEndHour, int& intEndMinute);
+void initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
+						Date& endDate, int intEndDay, int intEndMonth, int intEndYear, Time& endTime, int intEndHour, int intEndMinute);
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
 void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tags);
 
 int main (){
-    bool running = true;
-    string command = "";
 	string userInput = "";
 	string entryName = "";
 	string stringStartDate = "";
@@ -37,7 +40,6 @@ int main (){
 	string stringEndDate = "";
 	string stringEndTime = "";
 	string entryLocation = "";
-	string keyword = "";
 
 	TextUI task(userInput);
 	task.displayWelcomeMessage();
@@ -45,20 +47,20 @@ int main (){
 	
 	ScheduledEntry newList;
 
-	//load existing entries
-	ifstream readFile("FastAddList.txt");
-	while (getline(readFile, userInput)){
+	//load existing scheduled entries
+	ifstream readSched("FastAddSched.txt");
+	while (getline(readSched, userInput)){
 		Entry newEntry;
 		string stringTags;
 		vector<string> tags;
 		if (userInput != ""){
 			entryName = userInput;
-			getline(readFile, stringStartDate);
-			getline(readFile, stringStartTime);
-			getline(readFile, stringEndDate);
-			getline(readFile, stringEndTime);
-			getline(readFile, entryLocation);
-			getline(readFile, stringTags);
+			getline(readSched, stringStartDate);
+			getline(readSched, stringStartTime);
+			getline(readSched, stringEndDate);
+			getline(readSched, stringEndTime);
+			getline(readSched, entryLocation);
+			getline(readSched, stringTags);
 
 			int intStartDay = 0; int intStartMonth = 0; int intStartYear = 0;
 			int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
@@ -66,32 +68,26 @@ int main (){
 			int intEndHour = 0; int intEndMinute = 0;
 			
 			EntryAdd parse;
-			parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
-			parse.convertTime(stringStartTime, intStartHour, intStartMinute);	
-			parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
-			parse.convertTime(stringEndTime, intEndHour, intEndMinute);
+			convertDateTime(parse, stringStartDate, intStartDay, intStartMonth, intStartYear, stringStartTime, intStartHour, intStartMinute,	
+				stringEndDate, intEndDay, intEndMonth, intEndYear, stringEndTime, intEndHour, intEndMinute);
 			parse.extractTag(stringTags, tags);
 
-			//initialise start and end dates
+			//initialise start and end dates, start and end times
 			Date startDate;
 			Date endDate;
-			initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
-			initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
-
-			//initialise start and end times
 			Time startTime;
 			Time endTime;
-			initialiseTime(startTime, intStartHour, intStartMinute);
-			initialiseTime(endTime, intEndHour, intEndMinute);
+			initialiseDateTime(startDate, intStartDay, intStartMonth, intStartYear, startTime, intStartHour, intStartMinute,
+				endDate, intEndDay, intEndMonth, intEndYear, endTime, intEndHour, intEndMinute);
 						
 			//initialise entry
 			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
 			newList.addEntry(newEntry);
 		}
 	}
-	readFile.close();
+	readSched.close();
 
-	command = "";
+	//reset the values of temporary variables
 	userInput = "";
 	entryName = "";
 	stringStartDate = "";
@@ -99,7 +95,47 @@ int main (){
 	stringEndDate = "";
 	stringEndTime = "";
 	entryLocation = "";
-	keyword = "";
+
+	//load existing floating entries
+	ifstream readFloat("FastAddFloat.txt");
+	while (getline(readFloat, userInput)){
+		Entry newEntry;
+		string stringTags;
+		vector<string> tags;
+		if (userInput != ""){
+			entryName = userInput;
+			getline(readFloat, entryLocation);
+			getline(readFloat, stringTags);
+
+			EntryAdd parse;
+			parse.extractTag(stringTags, tags);
+
+			//initialise start and end dates, start and end times
+			Date startDate;
+			Date endDate;
+			Time startTime;
+			Time endTime;
+			initialiseDateTime(startDate, 0, 0, 0, startTime, 0, 0, endDate, 0, 0, 0, endTime, 0, 0);
+						
+			//initialise entry
+			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
+			newList.addEntry(newEntry);
+		}
+	}
+	readFloat.close();
+
+	bool running = true;
+	string command = "";
+	string keyword = "";
+
+	//reset the values of temporary variables
+	userInput = "";
+	entryName = "";
+	stringStartDate = "";
+	stringStartTime = "";
+	stringEndDate = "";
+	stringEndTime = "";
+	entryLocation = "";
 
 	while(running){
 		int intStartDay = 0; int intStartMonth = 0; int intStartYear = 0;
@@ -119,10 +155,8 @@ int main (){
 			parse.dissectCommand(userInput, entryName, stringStartDate, stringStartTime, stringEndDate, stringEndTime, entryLocation, tags);
 			
 			if (stringStartDate != ""){
-				parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
-				parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
-				parse.convertTime(stringStartTime, intStartHour, intStartMinute);
-				parse.convertTime(stringEndTime, intEndHour, intEndMinute);
+				convertDateTime(parse, stringStartDate, intStartDay, intStartMonth, intStartYear, stringStartTime, intStartHour, intStartMinute,
+					stringEndDate, intEndDay, intEndMonth, intEndYear, stringEndTime, intEndHour, intEndMinute);
 			}
 			
 			assert(intStartDay >= 0);
@@ -130,17 +164,13 @@ int main (){
 			assert(intEndDay >= 0);
 			assert(intEndMonth >= 0);
 
-			//initialise start and end dates
+			//initialise start and end dates, start and end times
 			Date startDate;
 			Date endDate;
-			initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
-			initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
-
-			//initialise start and end times
 			Time startTime;
 			Time endTime;
-			initialiseTime(startTime, intStartHour, intStartMinute);
-			initialiseTime(endTime, intEndHour, intEndMinute);
+			initialiseDateTime(startDate, intStartDay, intStartMonth, intStartYear, startTime, intStartHour, intStartMinute,
+				endDate, intEndDay, intEndMonth, intEndYear, endTime, intEndHour, intEndMinute);
 
 			//initialise entry
 			Entry newEntry;
@@ -156,13 +186,8 @@ int main (){
 		}
 		
 		//display scheduled command
-		else if (command == COMMAND_DISPLAY_SCHEDULED){
-			newList.displayScheduled();
-		}
-
-		//display floating command
-		else if (command == COMMAND_DISPLAY_FLOATING){
-			newList.displayFloating();
+		else if (command == COMMAND_DISPLAY){
+			newList.display();
 		}
 
 		//search command
@@ -202,7 +227,25 @@ int main (){
 	}
 	system("pause");
 	return 0;
-	}
+}
+
+void convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
+					 string stringStartTime, int& intStartHour, int& intStartMinute,
+					 string stringEndDate, int& intEndDay, int& intEndMonth, int& intEndYear,
+					 string stringEndTime, int& intEndHour, int& intEndMinute){
+	parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
+	parse.convertTime(stringStartTime, intStartHour, intStartMinute);
+	parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
+	parse.convertTime(stringEndTime, intEndHour, intEndMinute);
+}
+
+void initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
+						Date& endDate, int intEndDay, int intEndMonth, int intEndYear, Time& endTime, int intEndHour, int intEndMinute){
+	initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+	initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+	initialiseTime(startTime, intStartHour, intStartMinute);
+	initialiseTime(endTime, intEndHour, intEndMinute);
+}
 
 void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
 	int year = inputYear;

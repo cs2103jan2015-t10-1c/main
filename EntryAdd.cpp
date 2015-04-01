@@ -141,7 +141,7 @@ void EntryAdd::extractDate(string& entryComponents, string& entryDate){
 
 void EntryAdd::extractLocation(string& entryComponents, string& entryLocation){
 	int startOfLocation = entryComponents.find(BLANK_SPACE) + BLANK_SPACE_COUNT;
-	int endOfLocation = entryComponents.find(BLANK_SPACE, startOfLocation);
+	int endOfLocation = entryComponents.find(TAG_MARKER, startOfLocation);
 	entryLocation = entryComponents.substr(startOfLocation, endOfLocation - startOfLocation);
     entryComponents.erase(0, endOfLocation + BLANK_SPACE_COUNT);
 }

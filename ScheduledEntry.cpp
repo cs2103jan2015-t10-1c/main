@@ -9,11 +9,15 @@ const string ScheduledEntry::FEEDBACK_TO = " to ";
 const string ScheduledEntry::FEEDBACK_AT = " at ";
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
+const string ScheduledEntry::FEEDBACK_INVALID_TYPE = "Invalid Type!";
 
 const string ScheduledEntry::NAME_MARKER = "-n";
 const string ScheduledEntry::DATE_MARKER = "-d";
 const string ScheduledEntry::TIME_MARKER = "-t";
 const string ScheduledEntry::LOCATION_MARKER = "-l";
+
+const string ScheduledEntry::TYPE_SCHEDULED = "scheduled";
+const string ScheduledEntry::TYPE_FLOATING = "floating";
 
 ScheduledEntry::ScheduledEntry(){
 }
@@ -45,6 +49,20 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 			<< FEEDBACK_AT << entryEndTime.getHour() << "." << entryEndTime.getMinute();
 	}
 		cout << ". " << entryLocation << endl; 
+}
+
+void ScheduledEntry::display(){
+	string listType;
+	getline(cin, listType);
+	if (listType == TYPE_SCHEDULED){
+		displayScheduled();
+	}
+	else if (listType == TYPE_FLOATING){
+		displayFloating();
+	}
+	else {
+		cout << FEEDBACK_INVALID_TYPE << endl;
+	}
 }
 
 void ScheduledEntry::displayScheduled(){
@@ -168,14 +186,26 @@ void ScheduledEntry::searchTag(string keyword){
 }
 
 void ScheduledEntry::exit(bool& running){
-	ofstream writeFile;
-	writeFile.open("FastAddList.txt");
-	vector<Entry>::iterator iter;
+	//write scheduled
+	ofstream writeSched;
+	writeSched.open("FastAddSched.txt");
+	vector<Entry>::iterator iterSched;
 
-	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-		writeFile << iter->storeEntry() << endl;
+	for (iterSched = _scheduledList.begin(); iterSched != _scheduledList.end(); iterSched++){
+		writeSched << iterSched->storeEntry() << endl;
 	}
-	writeFile.close();
+	writeSched.close();
+
+	//write floating
+	ofstream writeFloat;
+	writeFloat.open("FastAddFloat.txt");
+	vector<Entry>::iterator iterFloat;
+
+	for (iterFloat = _floatingList.begin(); iterFloat != _floatingList.end(); iterFloat++){
+		writeFloat << iterFloat->storeEntry() << endl;
+	}
+	writeFloat.close();
+
 	running = false;
 }
 
