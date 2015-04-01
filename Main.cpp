@@ -3,7 +3,7 @@
 #include "EntryAdd.h"
 #include "TextUI.h"
 #include "EntryEdit.h"
-
+#include "DateTimeInspector.h"
 
 #include <assert.h>
 
@@ -47,6 +47,8 @@ int main (){
 	
 	ScheduledEntry newList;
 
+	cout << "Loading existing entries..." << endl << endl;
+	
 	//load existing scheduled entries
 	ifstream readSched("FastAddSched.txt");
 	while (getline(readSched, userInput)){
@@ -123,6 +125,8 @@ int main (){
 		}
 	}
 	readFloat.close();
+	
+	cout << endl << "Loading done..." << endl << endl;
 
 	bool running = true;
 	string command = "";
@@ -152,6 +156,9 @@ int main (){
 		if(command == COMMAND_ADD){
 			EntryAdd parse;
 			vector<string> tags;
+			bool dateIsOkay = true;
+			bool timeIsOkay = true;
+
 			parse.dissectCommand(userInput, entryName, stringStartDate, stringStartTime, stringEndDate, stringEndTime, entryLocation, tags);
 			
 			if (stringStartDate != ""){
@@ -169,15 +176,51 @@ int main (){
 			Date endDate;
 			Time startTime;
 			Time endTime;
-			initialiseDateTime(startDate, intStartDay, intStartMonth, intStartYear, startTime, intStartHour, intStartMinute,
-				endDate, intEndDay, intEndMonth, intEndYear, endTime, intEndHour, intEndMinute);
 
-			//initialise entry
-			Entry newEntry;
-			initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
+			//initialise start and end dates
+			DateTimeInspector DateInspector;
+			if(!DateInspector.dateIsValid(intStartDay, intStartMonth, intStartYear)){
+				cout << "Start Date is invalid!" << endl << endl;
+				dateIsOkay = false;
+			}
+			else{
+				initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+			}
+			if(!DateInspector.dateIsValid(intEndDay, intEndMonth, intEndYear)){
+				cout << "End Date is invalid!" << endl << endl;
+				dateIsOkay = false;
+			}
+			else{
+				initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+			}
+			//only when date is ok
+			if(dateIsOkay){
+			//initialise start and end times
+				DateTimeInspector TimeInspector;
+				if(!TimeInspector.timeIsValid(intStartHour, intStartMinute)){
+					cout << "Start Time is invalid!" << endl << endl;
+					timeIsOkay = false;
+				}
+				else{
+					initialiseTime(startTime, intStartHour, intStartMinute);
+				}
+				if(!DateInspector.timeIsValid(intEndHour, intEndMinute)){
+					cout << "End Time is invalid!" << endl << endl;
+					timeIsOkay = false;
+				}
+				else{
+					initialiseTime(endTime, intEndHour, intEndMinute);
+				}
+			}
+			//only when time is okay
+			if(timeIsOkay){
+				//initialise entry
+				Entry newEntry;
+				initialiseEntry(newEntry, entryName, startDate, endDate, startTime, endTime, entryLocation, tags);
 
-			//add new entry to the list
-			newList.addEntry(newEntry);
+				//add new entry to the list
+				newList.addEntry(newEntry);
+			}
 		}
 		
 		//edit command
@@ -278,3 +321,4 @@ void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date end
 	newEntry.insertLocation(entryLocation);
 	newEntry.addTags(tags);
 }
+

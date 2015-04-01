@@ -25,8 +25,24 @@ void Date::insertYear(int inputYear){
 }
 
 void Date::initialiseDate(){
-	_entryDate = date(_year, _month, _day);
+	bool inThePast = true;
+	date today(day_clock::local_day());
+	if(greg_year(_year) >= today.year()){
+		if(greg_month(_month) >= today.month()){
+			if(greg_day(_day) >= today.day()){
+				inThePast = false;
+			}
+		}
+	}
+	if (inThePast){
+		cout << endl << "Warning! Date is in the past" << endl;
+		_entryDate = date(_year, _month, _day);
+		return;
+	} else{
+		_entryDate = date(_year, _month, _day);
+	}
 }
+	
 
 int Date::getDay(){
 	return _entryDate.day();
