@@ -168,7 +168,12 @@ int main (){
 		//search command
 		else if (command == COMMAND_SEARCH){
 			keyword = userInput.substr(1);
-			newList.searchTag(keyword);
+			if (keyword[0] == '#'){
+				newList.searchTag(keyword);
+			}
+			else {
+				newList.searchEntry(keyword);
+			}
 		}
 
 		//help command
@@ -200,6 +205,17 @@ int main (){
 	}
 
 void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
+	int year = inputYear;
+	int month = inputMonth;
+	int day = inputDay;
+	/*try{
+		date d(year, month, day);
+		throw 20;
+	}
+	catch(int error){
+		cout << "error! date does not exist " << error << endl;
+		return;
+	}*/
 	inputDate.insertDay(inputDay);
 	inputDate.insertMonth(inputMonth);
 	inputDate.insertYear(inputYear);

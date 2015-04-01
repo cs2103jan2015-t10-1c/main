@@ -21,6 +21,7 @@ ScheduledEntry::ScheduledEntry(){
 void ScheduledEntry::addEntry(Entry newEntry){
 	if (newEntry.getDateStatus()){
 		_scheduledList.push_back(newEntry);
+		sort();
 	}
 	else {
 		_floatingList.push_back(newEntry);
@@ -178,15 +179,61 @@ void ScheduledEntry::exit(bool& running){
 	running = false;
 }
 
-/*void ScheduledEntry::sort(){
-	vector<Entry>::iterator firstIter;
-	vector<Entry>::iterator secondIter;
-	for (firstIter = _scheduledList.begin(); firstIter != _scheduledList.end(); firstIter++){
-		for(secondIter = _scheduledList.begin()+1; secondIter != _scheduledList.end()-1; secondIter++){
-			if((secondIter - 1)->getStartTime().getTime() < (secondIter)->getStartTime().getTime()){
-				Entry tempEntry = *(secondIter-1);;
-				*(secondIter-1) = *(secondIter);
+void ScheduledEntry::searchEntry(string userInput){
+	string marker = userInput.substr(0,2);
+	userInput = userInput.erase(0, 3);
+			
+	if (marker == NAME_MARKER){
+		vector<Entry>::iterator iter;
+		int count = 0;
+		cout << "Search result(s) with keyword " << userInput << ":" << endl;
+		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
+			if (iter->getName() == userInput){
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << endl;
 			}
+			count++;
 		}
 	}
-	*/
+	
+	/*if (marker == TIME_MARKER){
+		
+	}
+	
+	if (marker == DATE_MARKER){
+		
+	}*/
+			
+	if (marker == LOCATION_MARKER){
+		vector<Entry>::iterator iter;
+		int count = 1;
+		cout << "Search result(s) with keyword " << userInput << ":" << endl;
+		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
+			if (iter->getLocation() == userInput){
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;				
+				cout << endl;
+			}
+			count++;
+		}
+	}
+}
+
+void ScheduledEntry::sort(){
+	vector<Entry>::iterator firstIter;
+	vector<Entry>::iterator secondIter;
+	int count = 0;
+	for (firstIter = _scheduledList.begin(); firstIter != _scheduledList.end(); firstIter++){
+		for(secondIter = _scheduledList.begin()+1; secondIter != _scheduledList.end() - count; secondIter++){
+			if((secondIter - 1)->getStartTime().getTime() > (secondIter)->getStartTime().getTime()){
+				Entry tempEntry = *(secondIter-1);
+				*(secondIter-1) = *(secondIter);
+				*(secondIter) = tempEntry;
+			}
+		}
+	count++;
+	}
+}
