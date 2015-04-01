@@ -21,6 +21,7 @@ ScheduledEntry::ScheduledEntry(){
 void ScheduledEntry::addEntry(Entry newEntry){
 	if (newEntry.getStartDateStatus()){
 		_scheduledList.push_back(newEntry);
+		sort();
 	}
 	else{
 		_floatingList.push_back(newEntry);
@@ -167,15 +168,18 @@ void ScheduledEntry::exit(bool& running){
 	running = false;
 }
 
-/*void ScheduledEntry::sort(){
+void ScheduledEntry::sort(){
 	vector<Entry>::iterator firstIter;
 	vector<Entry>::iterator secondIter;
+	int count = 0;
 	for (firstIter = _scheduledList.begin(); firstIter != _scheduledList.end(); firstIter++){
-		for(secondIter = _scheduledList.begin()+1; secondIter != _scheduledList.end()-1; secondIter++){
-			if((secondIter - 1)->getStartTime().getTime() < (secondIter)->getStartTime().getTime()){
-				Entry tempEntry = *(secondIter-1);;
+		for(secondIter = _scheduledList.begin()+1; secondIter != _scheduledList.end() - count; secondIter++){
+			if((secondIter - 1)->getStartTime().getTime() > (secondIter)->getStartTime().getTime()){
+				Entry tempEntry = *(secondIter-1);
 				*(secondIter-1) = *(secondIter);
+				*(secondIter) = tempEntry;
 			}
 		}
+	count++;
 	}
-	*/
+}

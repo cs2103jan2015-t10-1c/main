@@ -184,6 +184,17 @@ int main (){
 	}
 
 void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
+	int year = inputYear;
+	int month = inputMonth;
+	int day = inputDay;
+	/*try{
+		date d(year, month, day);
+		throw 20;
+	}
+	catch(int error){
+		cout << "error! date does not exist " << error << endl;
+		return;
+	}*/
 	inputDate.insertDay(inputDay);
 	inputDate.insertMonth(inputMonth);
 	inputDate.insertYear(inputYear);

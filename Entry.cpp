@@ -16,8 +16,14 @@ string Entry::getName(){
 
 void Entry::insertStartDate(Date inputStartDate){
 	_hasStartDate = inputStartDate.getDateStatus();
-	
 	_startDate = inputStartDate;
+	/*try{
+		date d(_startDate.getYear(), _startDate.getMonthNumber(), _startDate.getDay());
+		throw "date does not exist";
+	}
+	catch(string error){
+		cout << "error! Start " << error << endl;
+	}*/
 	_startDate.initialiseDate();
 }
 
@@ -31,7 +37,13 @@ void Entry::insertEndDate(Date inputEndDate){
 	else{
 		_endDate = inputEndDate;
 	}
-
+	/*try{
+		date d(_endDate.getYear(), _endDate.getMonthNumber(), _endDate.getDay());
+		throw "date does not exist";
+	}
+	catch(string error){
+		cout << "error! Start " << error << endl;
+	}*/
 	_endDate.initialiseDate();
 }
 
@@ -53,11 +65,25 @@ bool Entry::getEndDateStatus(){
 
 void Entry::insertStartTime(Time inputStartTime){
 	_startTime = inputStartTime;
+	/*try{
+		ptime p(_startDate.getDate(), hours( _startTime.getHour()) + minutes(_startTime.getMinute()));
+		throw "time does not exist";
+	}
+	catch(string error){
+		cout << "error! Start " << error << endl;
+	}*/
 	_startTime.initialiseTime(_startDate.getDate());
 }
 
 void Entry::insertEndTime(Time inputEndTime){
 	_endTime = inputEndTime;
+	/*try{
+		ptime p(_endDate.getDate(), hours( _endTime.getHour()) + minutes(_endTime.getMinute()));
+		throw "time does not exist";
+	}
+	catch(string error){
+		cout << "error! End " << error << endl;
+	}*/
 	_endTime.initialiseTime(_endDate.getDate());
 }
 
