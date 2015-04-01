@@ -168,6 +168,41 @@ void ScheduledEntry::exit(bool& running){
 	running = false;
 }
 
+void ScheduledEntry::searchEntry(string userInput){
+	string marker = userInput.substr(0,2);
+	userInput = userInput.erase(0, 3);
+			
+	if (marker == NAME_MARKER){
+		vector<Entry>::iterator iter;
+		cout << "Search result(s) with keyword " << userInput << ":" << endl;
+		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
+			if (iter->getName() == userInput){
+				cout << iter->getDisplay();
+				cout << endl;
+			}
+		}
+	}
+	
+	/*if (marker == TIME_MARKER){
+		
+	}
+	
+	if (marker == DATE_MARKER){
+		
+	}*/
+			
+	if (marker == LOCATION_MARKER){
+		vector<Entry>::iterator iter;
+		cout << "Search result(s) with keyword " << userInput << ":" << endl;
+		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
+			if (iter->getLocation() == userInput){
+				cout << iter->getDisplay();
+				cout << endl;
+			}
+		}
+	}
+}
+
 void ScheduledEntry::sort(){
 	vector<Entry>::iterator firstIter;
 	vector<Entry>::iterator secondIter;
