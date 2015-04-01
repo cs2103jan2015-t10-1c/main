@@ -60,7 +60,7 @@ public:
 	string getLocation();
 	string getDisplay();
 	void addTag(vector<string>&);
-	void searchEntryTag(string);
+	void searchEntryTag(string, int);
 	void displayTags();
 	date_duration calculateDaysFromToday();
 	date_duration calculateEventDurationInDays();

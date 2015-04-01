@@ -24,7 +24,7 @@ const string COMMAND_HELP = "help";
 
 void initialiseDate (Date &inputDate, int inputDay, int inputMonth, int inputYear);
 void initialiseTime (Time &inputTime, int inputHour, int inputMinute);
-void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, string tag);
+void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tag);
 
 int main (){
     bool running = true;
@@ -124,6 +124,9 @@ int main (){
 		//exit command
 		else if (command == COMMAND_EXIT){
 			newList.exit(running);
+		}
+		else {
+			cout << "Wrong command word. Try again" << endl ;
 		}
 	cout << endl;
 	}

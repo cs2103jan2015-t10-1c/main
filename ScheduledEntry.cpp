@@ -151,7 +151,8 @@ void ScheduledEntry::searchTag(string keyword){
 	int count = 1;
 	vector<Entry>::iterator iterEntry;
 	for(iterEntry = _scheduledList.begin(); iterEntry != _scheduledList.end(); iterEntry++){
-		iterEntry->searchEntryTag(keyword);
+		iterEntry->searchEntryTag(keyword, count);
+		count ++;
 	}
 }
 

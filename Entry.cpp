@@ -111,26 +111,14 @@ void Entry::addTag(vector<string>& tag){
 	_tag = tag;
 }
 
-void Entry::searchEntryTag(string tag){
-	/*
+void Entry::searchEntryTag(string tag, int count){
+	vector<string>::iterator iterTag;
 	for(iterTag = _tag.begin(); iterTag != _tag.end(); iterTag++){
 		if(*iterTag == tag){
 			cout << endl;
 			cout << "- - - - - - - - - - - - - - - -";
-			cout << *iterTag << " "
-			<< getDisplay();
-			cout << "- - - - - - - - - - - - - - - -";
-			cout << endl;
-		}
-	}*/
-	cout << "This is the tag vector from searchTag function: " << endl;
-	displayTags();
-	for (int i = 0; i < _tag.size(); i++){
-		if(_tag[i] == tag){
-			cout << endl;
-			cout << "- - - - - - - - - - - - - - - -";
-			cout << _tag[i] << " "
-			<< getDisplay();
+			cout << *iterTag << " " << endl
+			<< count << ". " << getDisplay();
 			cout << "- - - - - - - - - - - - - - - -";
 			cout << endl;
 		}
