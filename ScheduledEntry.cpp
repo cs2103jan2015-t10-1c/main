@@ -174,12 +174,16 @@ void ScheduledEntry::searchEntry(string userInput){
 			
 	if (marker == NAME_MARKER){
 		vector<Entry>::iterator iter;
+		int count = 0;
 		cout << "Search result(s) with keyword " << userInput << ":" << endl;
 		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 			if (iter->getName() == userInput){
-				cout << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << endl;
 			}
+			count++;
 		}
 	}
 	
@@ -193,12 +197,16 @@ void ScheduledEntry::searchEntry(string userInput){
 			
 	if (marker == LOCATION_MARKER){
 		vector<Entry>::iterator iter;
+		int count = 1;
 		cout << "Search result(s) with keyword " << userInput << ":" << endl;
 		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 			if (iter->getLocation() == userInput){
-				cout << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;				
 				cout << endl;
 			}
+			count++;
 		}
 	}
 }
