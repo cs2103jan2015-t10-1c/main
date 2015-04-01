@@ -37,6 +37,7 @@ public:
 	void removeEntry(int);
 	void editEntry(string);
 	void searchTag(string);
+	void searchEntry(string);
 	void exit(bool&);
 };
 

@@ -152,7 +152,12 @@ int main (){
 		//search command
 		else if (command == COMMAND_SEARCH){
 			keyword = userInput.substr(1);
-			newList.searchTag(keyword);
+			if (keyword[0] == '#'){
+				newList.searchTag(keyword);
+			}
+			else {
+				newList.searchEntry(keyword);
+			}
 		}
 
 		//help command
