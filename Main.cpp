@@ -36,7 +36,6 @@ int main (){
 	string startTime;
 	string endTime;
 	string entryLocation;
-	vector<string> tags;
 	string keyword;
 
 	TextUI task(userInput);
@@ -50,7 +49,7 @@ int main (){
 	while (getline(readFile, userInput)){
 		Entry newEntry;
 		string stringTags;
-		
+		vector<string> tags;
 		if (userInput != ""){
 			entryName = userInput;
 			getline(readFile, startDate);
@@ -105,6 +104,7 @@ int main (){
 		//add command
 		if(command == COMMAND_ADD){
 			EntryAdd parse;
+			vector<string> tags;
 			parse.dissectCommand(userInput, entryName, startTime, endTime, startDate, endDate, entryLocation, tags);
 			
 			//if (startTime != 0){
@@ -189,6 +189,17 @@ int main (){
 	}
 
 void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
+	int year = inputYear;
+	int month = inputMonth;
+	int day = inputDay;
+	/*try{
+		date d(year, month, day);
+		throw 20;
+	}
+	catch(int error){
+		cout << "error! date does not exist " << error << endl;
+		return;
+	}*/
 	inputDate.insertDay(inputDay);
 	inputDate.insertMonth(inputMonth);
 	inputDate.insertYear(inputYear);

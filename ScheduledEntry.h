@@ -39,6 +39,7 @@ public:
 	void searchTag(string);
 	void searchEntry(string);
 	void exit(bool&);
+	void sort();
 };
 
 #endif
