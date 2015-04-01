@@ -91,15 +91,6 @@ void EntryAdd::extractTag(string& entryComponents, vector<string>& entryTag){
 			endOfTag = entryComponents.size();
 			entryTag.push_back(tag);
 		}
-
-		/*else if (tracker == endOfTag){
-			entryTag = entryComponents.substr(0, tracker);
-			entryComponents = entryComponents.erase(0, tracker + 1);
-			tracker = 0;
-			endOfTag = entryComponents.size();
-			cout << "Tag: " << entryTag << endl;
-			tag.addTag(entryTag);
-		}*/
 	}
 }
 	

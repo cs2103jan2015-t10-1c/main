@@ -4,6 +4,7 @@
 const string Entry::FEEDBACK_AT = " at ";
 
 Entry::Entry(){
+	initialiseStatus();
 }
 
 void Entry::insertName(string inputName){
@@ -95,6 +96,25 @@ Time Entry::getEndTime(){
 	return _endTime;
 }
 
+void Entry::initialiseStatus(){
+	_status = false;
+}
+
+void Entry::changeStatus(){
+	_status = true;
+}
+
+string Entry::getStatus(){
+	string printStatus;
+	if (_status == true){
+		printStatus = "Done!";
+	}
+	if (_status == false){
+		printStatus = "Undone";
+	}
+	return printStatus;
+}
+
 void Entry::insertLocation(string inputLocation){
 	_location = inputLocation;
 }
@@ -177,7 +197,8 @@ string Entry::getDisplay(){
 		<< days(calculateEventDurationInHours().hours()/24) << " days and "
 		<< calculateEventDurationInHours().hours()%24 << " hours and " 
 		<< calculateEventDurationInHours().minutes() << " minutes" << endl
-		<< "Time left: " << calculateDaysFromToday() << " days "<< endl;
+		<< "Time left: " << calculateDaysFromToday() << " days "<< endl
+		<< "Status: " << getStatus() << endl;
 	
 	return oss.str();
 }

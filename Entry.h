@@ -29,6 +29,9 @@ private:
 	
 	vector<string> _tags;
 
+	bool _status;
+	
+
 public:
 	Entry();
 	//input name of entry into an Entry object
@@ -53,6 +56,10 @@ public:
 	//return the values of Time type private attributes
 	Time getStartTime();
 	Time getEndTime();
+
+	void initialiseStatus();
+	void changeStatus();
+	string getStatus();
 	
 	//input location into an Entry object
 	void insertLocation(string);

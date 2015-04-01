@@ -22,11 +22,12 @@ private:
 	static const string FEEDBACK_EDITED;
 	static const string FEEDBACK_DELETED;
 
-	//marker
+	//markers
 	static const string NAME_MARKER;
 	static const string DATE_MARKER;
 	static const string TIME_MARKER;
 	static const string LOCATION_MARKER;
+	static const string STATUS_MARKER;
 
 public:
 	ScheduledEntry();

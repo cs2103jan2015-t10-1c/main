@@ -24,6 +24,7 @@ public:
 	void getTime (int&, int&, int&, int&);
 	void getDate (int&, int&, int&);
 	string getLocation ();
+	string getStatus();
 };
 
 #endif

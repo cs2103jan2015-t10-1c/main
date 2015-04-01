@@ -5,17 +5,17 @@ EntryEdit::EntryEdit(){
 };
 
 int EntryEdit::getEntryNumber(string& entryComponents){
-	size_t pos = 0;
-	string numberString = entryComponents.substr(1, 1);
-	entryComponents.erase(0, 2);
-	pos = 0;
+	entryComponents = entryComponents.substr(1);
+	int pos = entryComponents.find(' ');
+	string numberString = entryComponents.substr(0, pos);
+	entryComponents.erase(0, pos+1);
 	_entryNumber = convertToNumber(numberString);
 	return _entryNumber;
 }
 
 string EntryEdit::getMarker(string& entryComponents){
-	_marker = entryComponents.substr(1, 2);
-	entryComponents.erase(0, 4);
+	_marker = entryComponents.substr(0, 2);
+	entryComponents = entryComponents.substr(3);
 	_newInformation = entryComponents;
 	return _marker;
 }
@@ -30,6 +30,10 @@ int EntryEdit::convertToNumber(string numberString){
 }
 
 string EntryEdit::getName(){
+	return _newInformation;
+}
+
+string EntryEdit::getStatus(){
 	return _newInformation;
 }
 

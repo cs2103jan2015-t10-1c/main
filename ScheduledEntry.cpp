@@ -14,6 +14,7 @@ const string ScheduledEntry::NAME_MARKER = "-n";
 const string ScheduledEntry::DATE_MARKER = "-d";
 const string ScheduledEntry::TIME_MARKER = "-t";
 const string ScheduledEntry::LOCATION_MARKER = "-l";
+const string ScheduledEntry::STATUS_MARKER = "-s";
 
 ScheduledEntry::ScheduledEntry(){
 }
@@ -142,6 +143,24 @@ void ScheduledEntry::editEntry(string userInput){
 		}
 		iter->insertLocation(newLocation);
 	}
+
+	if (marker == STATUS_MARKER){
+		string status = editComponent.getStatus();
+		vector<Entry>::iterator iter = _scheduledList.begin();
+		for(int i = 1; i < entryNumber; i++){
+			iter++;
+		}
+
+		if (status == "done"){
+			iter->changeStatus();
+			iter->getStatus();
+		}
+		else if (status == "undone"){
+			iter->initialiseStatus();
+			iter->getStatus();
+		}
+	}
+
 
 	//feedback to users
 	cout << FEEDBACK_EDITED << entryNumber << endl;
