@@ -17,8 +17,8 @@ const string ScheduledEntry::TIME_MARKER = "-t";
 const string ScheduledEntry::LOCATION_MARKER = "-l";
 const string ScheduledEntry::STATUS_MARKER = "-s";
 
-const string ScheduledEntry::TYPE_SCHEDULED = "scheduled";
-const string ScheduledEntry::TYPE_FLOATING = "floating";
+const string ScheduledEntry::TYPE_SCHEDULED = " scheduled";
+const string ScheduledEntry::TYPE_FLOATING = " floating";
 
 ScheduledEntry::ScheduledEntry(){
 }
@@ -31,7 +31,6 @@ void ScheduledEntry::addEntry(Entry newEntry){
 	else {
 		_floatingList.push_back(newEntry);
 	}
-	showAddFeedback(newEntry);
 }
 
 void ScheduledEntry::showAddFeedback(Entry newEntry){
@@ -45,20 +44,26 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 	cout << FEEDBACK_ADDED << entryName;
 	if (newEntry.getDateStatus()){
 		cout << FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
-			<< FEEDBACK_AT << entryStartTime.getHour() << "." << entryStartTime.getMinute()
+			<< FEEDBACK_AT << entryStartTime.getHour() << ".";
+		if (entryStartTime.getMinute() < 10){
+			cout << '0';
+		}
+		cout << entryStartTime.getMinute()
 			<< FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear()
-			<< FEEDBACK_AT << entryEndTime.getHour() << "." << entryEndTime.getMinute();
+			<< FEEDBACK_AT << entryEndTime.getHour() << ".";
+		if (entryEndTime.getMinute() < 10){
+			cout << '0';
+		}
+		cout << entryEndTime.getMinute();
 	}
 		cout << ". " << entryLocation << endl; 
 }
 
-void ScheduledEntry::display(){
-	string listType;
-	getline(cin, listType);
-	if (listType == TYPE_SCHEDULED){
+void ScheduledEntry::display(string userInput){
+	if (userInput == TYPE_SCHEDULED){
 		displayScheduled();
 	}
-	else if (listType == TYPE_FLOATING){
+	else if (userInput == TYPE_FLOATING){
 		displayFloating();
 	}
 	else {

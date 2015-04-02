@@ -184,19 +184,25 @@ string Entry::getDisplay(){
 		oss	<< "Start Date & Time: ";
 		greg_weekday startDateToString = _startDate.getDate().day_of_week();
 		oss << " " << startDateToString.as_long_string()
-		<< " " << _startDate.getDay() << " "
-		<< _startDate.getMonth() << " "
-		<< _startDate.getYear() << FEEDBACK_AT
-		<< _startTime.getHour() << "."
-		<< _startTime.getMinute() << endl
+			<< " " << _startDate.getDay() << " "
+			<< _startDate.getMonth() << " "
+			<< _startDate.getYear() << FEEDBACK_AT
+			<< _startTime.getHour() << ".";
+		if (_startTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss	<< _startTime.getMinute() << endl
 		<< "End Date & Time: ";
 		greg_weekday endDateToString = _endDate.getDate().day_of_week();
 		oss << " " << endDateToString.as_long_string() 
 		<< " " << _endDate.getDay() << " "
 		<< _endDate.getMonth() << " "
 		<< _endDate.getYear() << FEEDBACK_AT
-		<< _endTime.getHour() << "."
-		<< _endTime.getMinute() << endl;
+		<< _endTime.getHour() << ".";
+		if (_endTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss << _endTime.getMinute() << endl;
 	}
 	
 	oss << "Location: " << _location << endl;
@@ -222,16 +228,22 @@ string Entry::storeEntry(){
 		oss	<< _startDate.getDay() << " "
 			<< _startDate.getMonth() << " "
 			<< _startDate.getYear() << endl
+			
+			<< _startTime.getHour() << ".";
+		if (_startTime.getMinute() < 10){
+			oss << '0';
+		}	
+		oss	<< _startTime.getMinute() << endl 
 		
-		<< _startTime.getHour() << "."
-		<< _startTime.getMinute() << endl 
+			<< _endDate.getDay() << " "
+			<< _endDate.getMonth() << " "
+			<< _endDate.getYear() << endl
 		
-		<< _endDate.getDay() << " "
-		<< _endDate.getMonth() << " "
-		<< _endDate.getYear() << endl
-		
-		<< _endTime.getHour() << "."
-		<< _endTime.getMinute() << endl;
+			<< _endTime.getHour() << ".";
+		if (_endTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss << _endTime.getMinute() << endl;
 	}
 
 	oss	<< _location << endl

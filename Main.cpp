@@ -132,6 +132,9 @@ int main (){
 	string command = "";
 	string keyword = "";
 
+	//switch between scheduled and floating list. only for EDIT, DISPLAY, DELETE, SEARCH
+	bool isScheduled = true;
+
 	//reset the values of temporary variables
 	userInput = "";
 	entryName = "";
@@ -220,6 +223,7 @@ int main (){
 
 				//add new entry to the list
 				newList.addEntry(newEntry);
+				newList.showAddFeedback(newEntry);
 			}
 		}
 		
@@ -230,7 +234,7 @@ int main (){
 		
 		//display scheduled command
 		else if (command == COMMAND_DISPLAY){
-			newList.display();
+			newList.display(userInput);
 		}
 
 		//search command
@@ -264,10 +268,12 @@ int main (){
 			newList.exit(running);
 		}
 		else {
-			cout << "Wrong command word. Try again" << endl ;
+			task.displayErrorFeedback();
 		}
-	cout << endl;
+	
+		cout << endl;
 	}
+	
 	system("pause");
 	return 0;
 }

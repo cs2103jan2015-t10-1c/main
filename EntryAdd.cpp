@@ -134,7 +134,7 @@ void EntryAdd::extractLocation(string& entryComponents, string& entryLocation){
 	int startOfLocation = entryComponents.find(BLANK_SPACE) + BLANK_SPACE_COUNT;
 	int endOfLocation = entryComponents.find(TAG_MARKER, startOfLocation);
 	entryLocation = entryComponents.substr(startOfLocation, endOfLocation - startOfLocation);
-    entryComponents.erase(0, endOfLocation + BLANK_SPACE_COUNT);
+    entryComponents.erase(0, endOfLocation);
 }
 
 void EntryAdd::convertTime(string entryTime, int& entryHour, int& entryMin){

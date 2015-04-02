@@ -6,19 +6,23 @@
 #include<string>
 #include "TextUI.h"
 
+const string TextUI::WELCOME_TO_FASTADD = "Welcome to FastAdd";
+const string TextUI::CURRENT_VERSION = "version v0.2";
+const string TextUI::KEY_IN_COMMANDS = "Please key in your commands";
+const string TextUI::HELP_FOR_INFORMATION = "Type 'help' for information on how to use FastAdd";
 
 TextUI::TextUI(){
 }
 
-TextUI::TextUI(string &inputContent){
-	_content=inputContent;
+TextUI::TextUI(string& inputContent){
+	_content = inputContent;
 }
 
 void TextUI::displayWelcomeMessage(){
-	cout << "Welcome to FastAdd" << endl
-		<< "version v0.2" << endl
-		<< "Please key in your commands"<<endl
-		<< "Type 'help' for information on how to use FastAdd" << endl
+	cout << WELCOME_TO_FASTADD << endl
+		<< CURRENT_VERSION << endl
+		<< KEY_IN_COMMANDS << endl
+		<< HELP_FOR_INFORMATION << endl
 		<< endl;
 }
 
@@ -74,21 +78,19 @@ void TextUI::displayHelp(){
 	}
 }
 
-string TextUI::findCommand(string &inputContent){
+string TextUI::findCommand(string& inputContent){
     string commandWord;
     commandWord = inputContent.substr(0,inputContent.find_first_of(' '));
     return commandWord;
 }
 
-string TextUI::removeCommand(string &inputContent){
+string TextUI::removeCommand(string& inputContent){
     inputContent=inputContent.erase(0,inputContent.find_first_of(' '));
     return inputContent;
 }
     
-void TextUI::displayFeedback(const string infoType){
-     if(infoType == "ERROR MESSAGE_1"){
-        cout << "WARNING: Input command not identified."<< endl;
-    }
+void TextUI::displayErrorFeedback(){
+	cout << "Input command not identified. Please try again."<< endl;
 }
 
 

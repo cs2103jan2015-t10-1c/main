@@ -12,6 +12,7 @@ private:
 	int _month;
 	int _year;
 	bool _hasDate;
+	bool _inThePast;
 	date _entryDate;
 
 public:
