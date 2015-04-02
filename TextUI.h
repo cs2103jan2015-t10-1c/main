@@ -16,15 +16,21 @@ class TextUI{
 		string _commandWord;
 		string _content;
 
+		static const string WELCOME_TO_FASTADD;
+		static const string CURRENT_VERSION;
+		static const string KEY_IN_COMMANDS;
+		static const string HELP_FOR_INFORMATION;
+
+
 	public:
 		TextUI();
 		void displayWelcomeMessage();
 		void displayCurrentDateTime();
 		void displayHelp();
 		TextUI(string &inputContent);	
-		string findCommand(string &inputContent);
-        string removeCommand(string &inputContent);
-        void displayFeedback(const string infoType);
+		string findCommand(string&);
+        string removeCommand(string&);
+        void displayErrorFeedback();
 		};
 #endif
 		

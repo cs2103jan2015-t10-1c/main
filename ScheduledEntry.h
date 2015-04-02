@@ -38,7 +38,7 @@ public:
 	ScheduledEntry();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void display();
+	void display(string);
 	void displayScheduled();
 	void displayFloating();
 	void displayEntry(int);

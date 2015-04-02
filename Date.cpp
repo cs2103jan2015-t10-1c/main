@@ -36,11 +36,8 @@ void Date::initialiseDate(){
 	}
 	if (inThePast){
 		cout << endl << "Warning! Date is in the past" << endl;
-		_entryDate = date(_year, _month, _day);
-		return;
-	} else{
-		_entryDate = date(_year, _month, _day);
 	}
+		_entryDate = date(_year, _month, _day);
 }
 	
 
