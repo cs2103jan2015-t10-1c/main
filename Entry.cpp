@@ -112,10 +112,10 @@ void Entry::changeStatus(){
 string Entry::getStatus(){
 	string printStatus;
 	if (_status == true){
-		printStatus = "Done!";
+		printStatus = "done";
 	}
 	if (_status == false){
-		printStatus = "Undone";
+		printStatus = "undone";
 	}
 	return printStatus;
 }

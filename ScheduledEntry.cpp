@@ -269,6 +269,21 @@ void ScheduledEntry::searchEntry(string userInput){
 			count++;
 		}
 	}
+
+	if (marker == STATUS_MARKER){
+		vector<Entry>::iterator iter;
+		int count = 1;
+		cout << "The task(s) that is/are " << userInput << ":" << endl;
+		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
+			if (iter->getStatus() == userInput){
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iter->getDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;				
+				cout << endl;
+			}
+			count++;
+		}
+	}
 }
 
 void ScheduledEntry::sort(){
