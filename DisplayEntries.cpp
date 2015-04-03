@@ -1,11 +1,12 @@
 #include "DisplayEntries.h"
 #include "StringConvertor.h"
+#include "ClashInspector.h"
 
 const string DisplayEntries::TYPE_SCHEDULED = " scheduled";
 const string DisplayEntries::TYPE_FLOATING = " floating";
 const string DisplayEntries::TYPE_NEXT = " next";
 const string DisplayEntries::TYPE_PREV = " prev";
-
+const string DisplayEntries::TYPE_CLASH = " clashes";
 
 
 DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, int pageNumber){
@@ -20,22 +21,38 @@ void DisplayEntries::execute(string command){
 	StringConvertor convert;
 
 	if (_userInput == TYPE_SCHEDULED){
+		if(_scheduledList.empty()){
+			cout << "Scheduled List is empty!" << endl << endl;
+			return;
+		}
 		displayScheduledEntryShort(_pageNumber);
 		cout << endl << "You are currently viewing your SCHEDULED entries" << endl
 			<< "No. of Entries: " << _scheduledList.size() << endl;
 		_viewingScheduledList = true;
 	}
 	else if (_userInput == TYPE_FLOATING){
+		if(_scheduledList.empty()){
+			cout << "Scheduled List is empty!" << endl << endl;
+			return;
+		}
 		displayFloatingEntries();
 		cout << endl << "You are currently viewing your FLOATING entries" << endl
 			<< "No. of Entries: " << _floatingList.size() << endl;
 		_viewingScheduledList = false;
 	}
 	else if (_userInput == TYPE_NEXT){
+		if(_scheduledList.empty()){
+			cout << "Scheduled List is empty!" << endl << endl;
+			return;
+		}
 		_pageNumber++;
 		displayScheduledEntryShort(_pageNumber);
 	}
 	else if (_userInput == TYPE_PREV){
+		if(_scheduledList.empty()){
+			cout << "Scheduled List is empty!" << endl << endl;
+			return;
+		}
 		_pageNumber--;
 		if(_pageNumber < 1){
 			_pageNumber = 1;
@@ -43,10 +60,12 @@ void DisplayEntries::execute(string command){
 		}
 		displayScheduledEntryShort(_pageNumber);
 	}
+	else if (_userInput == TYPE_CLASH){
+		displayClashes();
+	}
 	else if (_userInput[1] > '0'){
 		int entryNumber;
 		convert.convertStringToNumber(_userInput, entryNumber);
-		cout << _viewingScheduledList << endl;
 		if(_viewingScheduledList){
 			cout << "Scheduled Entry" << endl;
 			displayOneScheduledEntry(entryNumber);
@@ -103,6 +122,18 @@ void DisplayEntries::displayOneFloatingEntry(int index){
 		<< index << ". "
 		<< _floatingList[index-1].getFullDisplay()
 	 << "- - - - - - - - - - - - - - - - -";
+}
+
+void DisplayEntries::displayClashes(){
+	ClashInspector checkEntries(_scheduledList);
+	vector<Entry>::iterator thisEntry;
+	int count = 0;
+	for(thisEntry = _scheduledList.begin(); thisEntry != _scheduledList.end(); thisEntry++){
+		cout << count + 1 << ". " << thisEntry->getName() << endl;
+		checkEntries.compareEntry(*thisEntry, count);
+		cout << endl;
+		count++;
+	}
 }
 
 int DisplayEntries::returnPageNumber(){
