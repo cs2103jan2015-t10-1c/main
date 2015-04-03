@@ -89,7 +89,7 @@ int main (){
 		}
 	}
 	readSched.close();
-
+	
 	//reset the values of temporary variables
 	userInput = "";
 	entryName = "";
@@ -135,6 +135,8 @@ int main (){
 
 	//switch between scheduled and floating list. only for EDIT, DISPLAY, DELETE, SEARCH
 	bool isScheduled = true;
+	//page count for display
+	int pageNumber = 1;
 
 	//reset the values of temporary variables
 	userInput = "";
@@ -150,7 +152,7 @@ int main (){
 		int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
 		int intStartHour = 0; int intStartMinute = 0;
 		int intEndHour = 0; int intEndMinute = 0;
-		DisplayEntries display(newList.getScheduledList(), newList.getFloatingList());
+		DisplayEntries display(newList.getScheduledList(), newList.getFloatingList(), pageNumber);
 
 		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
@@ -273,7 +275,7 @@ int main (){
 		else {
 			task.displayErrorFeedback();
 		}
-	
+		pageNumber = display.returnPageNumber();
 		cout << endl;
 	}
 	
