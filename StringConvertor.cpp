@@ -35,6 +35,10 @@ const string StringConvertor::MONTHSHORT_ARRAY[12] = {MONTHSHORT_JANUARY, MONTHS
 const string StringConvertor::MONTHLONG_ARRAY[12] = {MONTHLONG_JANUARY, MONTHLONG_FEBRUARY, MONTHLONG_MARCH, MONTHLONG_APRIL, MONTHLONG_MAY, MONTHLONG_JUNE,
 	MONTHLONG_JULY, MONTHLONG_AUGUST, MONTHLONG_SEPTEMBER, MONTHLONG_OCTOBER, MONTHLONG_NOVEMBER, MONTHLONG_DECEMBER};
 
+
+StringConvertor::StringConvertor(){
+}
+
 void StringConvertor::extractStringTime(string& inputString, string& timeString){
 	int endOfTime = inputString.find(BLANK_SPACE);
 	timeString = inputString.substr(0, endOfTime);
@@ -105,4 +109,10 @@ void StringConvertor::convertDate(string entryDate, int& entryDay, int& entryMon
 	}
 }
 
+void StringConvertor::convertStringToNumber(string input, int& number){
+	istringstream convertToNumber(input);
+	if (!(convertToNumber >> number)) {
+		number = 0;  
+	}
+}
 

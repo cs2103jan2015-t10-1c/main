@@ -4,6 +4,7 @@
 #include "TextUI.h"
 #include "EntryEdit.h"
 #include "DateTimeInspector.h"
+#include "DisplayEntries.h"
 
 #include <assert.h>
 
@@ -149,6 +150,8 @@ int main (){
 		int intEndDay = 0; int intEndMonth = 0; int intEndYear = 0;
 		int intStartHour = 0; int intStartMinute = 0;
 		int intEndHour = 0; int intEndMinute = 0;
+		DisplayEntries display(newList.getScheduledList(), newList.getFloatingList());
+
 		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
 
@@ -234,7 +237,7 @@ int main (){
 		
 		//display scheduled command
 		else if (command == COMMAND_DISPLAY){
-			newList.display(userInput);
+			display.execute(userInput);
 		}
 
 		//search command
@@ -300,14 +303,7 @@ void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear
 	int year = inputYear;
 	int month = inputMonth;
 	int day = inputDay;
-	/*try{
-		date d(year, month, day);
-		throw 20;
-	}
-	catch(int error){
-		cout << "error! date does not exist " << error << endl;
-		return;
-	}*/
+	
 	inputDate.insertDay(inputDay);
 	inputDate.insertMonth(inputMonth);
 	inputDate.insertYear(inputYear);

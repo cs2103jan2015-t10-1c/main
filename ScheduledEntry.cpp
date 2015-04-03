@@ -23,6 +23,7 @@ const string ScheduledEntry::TYPE_FLOATING = " floating";
 ScheduledEntry::ScheduledEntry(){
 }
 
+
 void ScheduledEntry::addEntry(Entry newEntry){
 	if (newEntry.getDateStatus()){
 		_scheduledList.push_back(newEntry);
@@ -59,51 +60,12 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 		cout << ". " << entryLocation << endl; 
 }
 
-void ScheduledEntry::display(string userInput){
-	if (userInput == TYPE_SCHEDULED){
-		displayScheduled();
-	}
-	else if (userInput == TYPE_FLOATING){
-		displayFloating();
-	}
-	else {
-		cout << FEEDBACK_INVALID_TYPE << endl;
-	}
-}
-
-void ScheduledEntry::displayScheduled(){
-	int number = 0;
-	vector<Entry>::iterator iter;
-	for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-		cout << endl
-			<< "- - - - - - - - - - - - - - - - -" << endl
-			<< (number + 1) << ". "
-		<< iter->getDisplay() << endl;
-		ClashInspector inspect(_scheduledList);
-		inspect.compareEntry(*iter, number);
-		cout << "- - - - - - - - - - - - - - - - -";
-		number++;
-	}
-}
-
-void ScheduledEntry::displayFloating(){
-	int number = 0;
-	vector<Entry>::iterator iter;
-	for (iter = _floatingList.begin(); iter != _floatingList.end(); iter++){
-		cout << endl
-			<< "- - - - - - - - - - - - - - - - -" << endl
-			<< (number + 1) << ". "
-		<< iter->getDisplay() << endl;
-		cout << "- - - - - - - - - - - - - - - - -";
-		number++;
-	}
-}
 
 void ScheduledEntry::displayEntry(int index){
 	cout << endl
 		<< "- - - - - - - - - - - - - - - - -" << endl
 		<< index << ". "
-	<< _scheduledList[index-1].getDisplay()
+		<< _scheduledList[index-1].getFullDisplay()
 	 << "- - - - - - - - - - - - - - - - -";
 }
 
@@ -244,7 +206,7 @@ void ScheduledEntry::searchEntry(string userInput){
 		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 			if (iter->getName() == userInput){
 				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iter->getDisplay();
+				cout << count << ". " << iter->getFullDisplay();
 				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << endl;
 			}
@@ -267,7 +229,7 @@ void ScheduledEntry::searchEntry(string userInput){
 		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 			if (iter->getLocation() == userInput){
 				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iter->getDisplay();
+				cout << count << ". " << iter->getFullDisplay();
 				cout << "- - - - - - - - - - - - - - -" << endl;				
 				cout << endl;
 			}
@@ -282,7 +244,7 @@ void ScheduledEntry::searchEntry(string userInput){
 		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
 			if (iter->getStatus() == userInput){
 				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iter->getDisplay();
+				cout << count << ". " << iter->getFullDisplay();
 				cout << "- - - - - - - - - - - - - - -" << endl;				
 				cout << endl;
 			}
@@ -306,3 +268,14 @@ void ScheduledEntry::sort(){
 	count++;
 	}
 }
+
+vector<Entry> ScheduledEntry::getScheduledList(){
+	vector<Entry> ScheduledEntries = _scheduledList;
+	return ScheduledEntries;
+}
+
+vector<Entry> ScheduledEntry::getFloatingList(){
+	vector<Entry> FloatingEntries = _floatingList;
+	return FloatingEntries;
+}
+

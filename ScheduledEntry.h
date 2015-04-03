@@ -38,16 +38,16 @@ public:
 	ScheduledEntry();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void display(string);
-	void displayScheduled();
-	void displayFloating();
-	void displayEntry(int);
+	void displayEntry(int index);
 	void removeEntry(int);
 	void editEntry(string);
 	void searchTag(string);
 	void searchEntry(string);
 	void exit(bool&);
 	void sort();
+	//list accessors
+	vector<Entry> getScheduledList();
+	vector<Entry> getFloatingList();
 };
 
 #endif

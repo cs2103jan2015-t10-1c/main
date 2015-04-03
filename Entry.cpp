@@ -23,14 +23,6 @@ void Entry::insertStartDate(Date inputStartDate){
 	if (_hasDate){
 		_startDate.initialiseDate();
 	}
-
-	/*try{
-		date d(_startDate.getYear(), _startDate.getMonthNumber(), _startDate.getDay());
-		throw "date does not exist";
-	}
-	catch(string error){
-		cout << "error! Start " << error << endl;
-	}*/
 }
 
 void Entry::insertEndDate(Date inputEndDate){
@@ -39,14 +31,6 @@ void Entry::insertEndDate(Date inputEndDate){
 	if (_hasDate){
 		_endDate.initialiseDate();
 	}
-
-	/*try{
-		date d(_endDate.getYear(), _endDate.getMonthNumber(), _endDate.getDay());
-		throw "date does not exist";
-	}
-	catch(string error){
-		cout << "error! Start " << error << endl;
-	}*/
 }
 
 Date Entry::getStartDate(){
@@ -67,14 +51,6 @@ void Entry::insertStartTime(Time inputStartTime){
 	if (_hasDate) {
 		_startTime.initialiseTime(_startDate.getDate());
 	}
-
-	/*try{
-		ptime p(_startDate.getDate(), hours( _startTime.getHour()) + minutes(_startTime.getMinute()));
-		throw "time does not exist";
-	}
-	catch(string error){
-		cout << "error! Start " << error << endl;
-	}*/
 }
 
 void Entry::insertEndTime(Time inputEndTime){
@@ -83,14 +59,6 @@ void Entry::insertEndTime(Time inputEndTime){
 	if (_hasDate) {
 		_endTime.initialiseTime(_endDate.getDate());
 	}
-
-	/*try{
-		ptime p(_endDate.getDate(), hours( _endTime.getHour()) + minutes(_endTime.getMinute()));
-		throw "time does not exist";
-	}
-	catch(string error){
-		cout << "error! End " << error << endl;
-	}*/
 }
 
 Time Entry::getStartTime(){
@@ -139,7 +107,7 @@ void Entry::searchEntryTag(string tag, int count){
 			cout << endl;
 			cout << "- - - - - - - - - - - - - - - -";
 			cout << *iterTag << " " << endl
-			<< count << ". " << getDisplay();
+				<< count << ". " << getFullDisplay();
 			cout << "- - - - - - - - - - - - - - - -";
 			cout << endl;
 		}
@@ -176,7 +144,7 @@ time_duration Entry::calculateEventDurationInHours(){
 	return timeDifference;
 }
 
-string Entry::getDisplay(){
+string Entry::getFullDisplay(){
 	ostringstream oss;
 	
 	oss << _name << endl;
@@ -216,6 +184,37 @@ string Entry::getDisplay(){
 		<< "Status: " << getStatus() << endl;
 	}
 	
+	return oss.str();
+}
+
+string Entry::getShortDisplay(){
+	ostringstream oss;
+	
+	oss << _name << endl;
+	if (_hasDate){
+		oss	<< "Start Date & Time: ";
+		greg_weekday startDateToString = _startDate.getDate().day_of_week();
+		oss << " " << startDateToString.as_long_string()
+			<< " " << _startDate.getDay() << " "
+			<< _startDate.getMonth() << " "
+			<< _startDate.getYear() << FEEDBACK_AT
+			<< _startTime.getHour() << ".";
+		if (_startTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss	<< _startTime.getMinute() << endl
+		<< "End Date & Time: ";
+		greg_weekday endDateToString = _endDate.getDate().day_of_week();
+		oss << " " << endDateToString.as_long_string() 
+		<< " " << _endDate.getDay() << " "
+		<< _endDate.getMonth() << " "
+		<< _endDate.getYear() << FEEDBACK_AT
+		<< _endTime.getHour() << ".";
+		if (_endTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss << _endTime.getMinute() << endl;
+	}
 	return oss.str();
 }
 

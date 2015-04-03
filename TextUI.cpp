@@ -7,7 +7,7 @@
 #include "TextUI.h"
 
 const string TextUI::WELCOME_TO_FASTADD = "Welcome to FastAdd";
-const string TextUI::CURRENT_VERSION = "version v0.2";
+const string TextUI::CURRENT_VERSION = "version v0.3";
 const string TextUI::KEY_IN_COMMANDS = "Please key in your commands";
 const string TextUI::HELP_FOR_INFORMATION = "Type 'help' for information on how to use FastAdd";
 
@@ -58,7 +58,7 @@ void TextUI::displayHelp(){
 	case 1:
 		cout << "1. Add - add <event name>. from <DD Month YYYY> <HH.MM> to <DD Month YYYY> "<< endl
 			<< "<HH.MM> at <location> #<tag>" << endl
-			<< "or - add <even name>. <HH.MM> <HH.MM> on <DD Month YYYY> at <location> #<tag>" << endl;
+			<< "or - add <even name>. <DD Month YYYY> <HH.MM> to <HH.MM>  at <location> #<tag>" << endl;
 		break;
 	case 2:
 		cout << "2. Display - display" << endl;
@@ -67,10 +67,17 @@ void TextUI::displayHelp(){
 		cout << "3. Delete - delete <entry number>" << endl;
 		break;
 	case 4:
-		cout << "4. Edit - edit <entry number> -n <new name> or -t <HH.MM> <HH.MM> or -d <DD Month YYYY> or -l <new location>" << endl;
+		cout << "4. Edit - these edit functions are enabled: " << endl
+			<< "edit <entry number> -n <new name> " << endl
+			<< "edit <entry number> -t <HH.MM> <HH.MM> " << endl
+			<< "edit <entry number> -d <DD Month YYYY>" << endl
+			<< "edit <entry number> -l <new location>" << endl;
 		break;
 	case 5:
-		cout << "5. Search - search <keyword>" << endl;
+		cout << "5. Search - these search functions are enabled "
+			<< "search <#keyword>" << endl
+			<< "search -n <name> " << endl
+			<< "search -l <location>" << endl;
 		break;
 	default:
 		cout << "Wrong input. Try again";

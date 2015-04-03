@@ -72,7 +72,8 @@ public:
 	time_duration calculateEventDurationInHours();
 
 	string storeEntry();
-	string getDisplay();
+	string getFullDisplay();
+	string getShortDisplay();
 };
 
 #endif

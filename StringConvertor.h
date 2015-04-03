@@ -15,10 +15,12 @@ private:
 	static const string FULLSTOP_MARKER;
 
 public:
+	StringConvertor();
 	void extractStringDate(string&, string&);
 	void extractStringTime(string&, string&);
 	void convertDate(string, int&, int&, int&);
 	void convertTime(string, int&, int&);
+	void convertStringToNumber(string input, int& number);
 };
 
 #endif
