@@ -69,7 +69,7 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		entryEndDate = entryStartDate;
 		extractTime(entryComponents, entryStartTime);
 		entryEndTime = entryStartTime;
-		entryComponents = entryComponents.substr(1);
+		cout << entryComponents << endl;
 	}
 	//only name and location, and maybe tags
 	else if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){

@@ -41,7 +41,6 @@ public:
 	void displayEntry(int index);
 	void removeEntry(int);
 	void editEntry(string);
-	void searchTag(string);
 	void searchEntry(string);
 	void exit(bool&);
 	void sort();

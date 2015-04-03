@@ -5,7 +5,7 @@
 #include "EntryEdit.h"
 #include "DateTimeInspector.h"
 #include "DisplayEntries.h"
-
+#include "SearchEntries.h"
 #include <assert.h>
 
 using namespace std;
@@ -153,6 +153,7 @@ int main (){
 		int intStartHour = 0; int intStartMinute = 0;
 		int intEndHour = 0; int intEndMinute = 0;
 		DisplayEntries display(newList.getScheduledList(), newList.getFloatingList(), pageNumber);
+		SearchEntries search(newList.getScheduledList(), newList.getFloatingList());
 
 		cout << COMMAND_PROMPT;
 		getline(cin, userInput);
@@ -244,13 +245,7 @@ int main (){
 
 		//search command
 		else if (command == COMMAND_SEARCH){
-			keyword = userInput.substr(1);
-			if (keyword[0] == '#'){
-				newList.searchTag(keyword);
-			}
-			else {
-				newList.searchEntry(keyword);
-			}
+			search.execute(userInput);
 		}
 
 		//help command

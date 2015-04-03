@@ -1,5 +1,5 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef DISPLAYENTRIES_H
+#define DISPLAYENTRIES_H
 
 #include <string>
 #include <boost\date_time\gregorian\gregorian.hpp>

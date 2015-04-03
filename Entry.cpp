@@ -181,7 +181,13 @@ string Entry::getFullDisplay(){
 		<< calculateEventDurationInHours().hours()%24 << " hours and " 
 		<< calculateEventDurationInHours().minutes() << " minutes" << endl
 		<< "Time left: " << calculateDaysFromToday() << " days "<< endl
-		<< "Status: " << getStatus() << endl;
+		<< "Status: " << getStatus() << endl
+		<< "Tags: ";
+	vector<string>::iterator tagIter;
+	for(tagIter = _tags.begin(); tagIter != _tags.end(); tagIter++){
+		oss << *tagIter << " ";
+	}
+	oss << endl;
 	}
 	
 	return oss.str();
