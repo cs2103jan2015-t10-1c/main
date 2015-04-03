@@ -11,11 +11,11 @@ const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
 const string ScheduledEntry::FEEDBACK_INVALID_TYPE = "Invalid Type!";
 
-const string ScheduledEntry::NAME_MARKER = "-n";
-const string ScheduledEntry::DATE_MARKER = "-d";
-const string ScheduledEntry::TIME_MARKER = "-t";
-const string ScheduledEntry::LOCATION_MARKER = "-l";
-const string ScheduledEntry::STATUS_MARKER = "-s";
+const string ScheduledEntry::NAME_MARKER = "name";
+const string ScheduledEntry::DATE_MARKER = "date";
+const string ScheduledEntry::TIME_MARKER = "time";
+const string ScheduledEntry::LOCATION_MARKER = "place";
+const string ScheduledEntry::STATUS_MARKER = "status";
 
 const string ScheduledEntry::TYPE_SCHEDULED = " scheduled";
 const string ScheduledEntry::TYPE_FLOATING = " floating";
@@ -185,64 +185,6 @@ void ScheduledEntry::exit(bool& running){
 	writeFloat.close();
 
 	running = false;
-}
-
-void ScheduledEntry::searchEntry(string userInput){
-	string marker = userInput.substr(0,2);
-	userInput = userInput.erase(0, 3);
-			
-	if (marker == NAME_MARKER){
-		vector<Entry>::iterator iter;
-		int count = 0;
-		cout << "Search result(s) with keyword " << userInput << ":" << endl;
-		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-			if (iter->getName() == userInput){
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iter->getFullDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << endl;
-			}
-			count++;
-		}
-	}
-	
-	/*if (marker == TIME_MARKER){
-		
-	}
-	
-	if (marker == DATE_MARKER){
-		
-	}*/
-			
-	if (marker == LOCATION_MARKER){
-		vector<Entry>::iterator iter;
-		int count = 1;
-		cout << "Search result(s) with keyword " << userInput << ":" << endl;
-		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-			if (iter->getLocation() == userInput){
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iter->getFullDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;				
-				cout << endl;
-			}
-			count++;
-		}
-	}
-
-	if (marker == STATUS_MARKER){
-		vector<Entry>::iterator iter;
-		int count = 1;
-		cout << "The task(s) that is/are " << userInput << ":" << endl;
-		for (iter = _scheduledList.begin(); iter != _scheduledList.end(); iter++){
-			if (iter->getStatus() == userInput){
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iter->getFullDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;				
-				cout << endl;
-			}
-			count++;
-		}
-	}
 }
 
 void ScheduledEntry::sort(){

@@ -30,20 +30,24 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, bool& 
 	ptime endTimeAnotherEntry = anotherEntry.getEndTime().getTime();
 
 	if(startDateInputEntry == startDateAnotherEntry){
-		cout << "Clash in Start Date detected with entry no." << listCount << "! " << endl;
+		cout << "Clash in Start Date detected with entry no." << listCount 
+			<< ": " << anotherEntry.getName()
+			<< "! " << endl;
 		status = true;
 		if((endTimeAnotherEntry > startTimeInputEntry &&  startTimeAnotherEntry < startTimeInputEntry)
 			|| (endTimeAnotherEntry > endTimeInputEntry && startTimeAnotherEntry < endTimeInputEntry)
 			|| (startTimeInputEntry < startTimeAnotherEntry &&  endTimeInputEntry > startTimeAnotherEntry)
 			|| (startTimeInputEntry < endTimeAnotherEntry && endTimeInputEntry > endTimeAnotherEntry)){
-			cout << "Clash in Time detected with entry no." << listCount << "! " << endl;
+				cout << "Clash in Time with the same entry is detected!" << endl;
 		}
 	}
 	else if( (endDateAnotherEntry > startDateInputEntry && startDateAnotherEntry < startDateInputEntry) 
 		|| (endDateAnotherEntry > endDateInputEntry && startDateAnotherEntry < endDateInputEntry)
 		|| (startDateInputEntry < startDateAnotherEntry && endDateInputEntry > startDateAnotherEntry) 
 		|| (startDateInputEntry < endDateAnotherEntry && endDateInputEntry > endDateAnotherEntry)){
-		cout << "Clash in Date periods detected with entry no." << listCount << "! " << endl;
+		cout << "Clash in Date periods detected with entry no." << listCount 
+			<< ": " << anotherEntry.getName()
+			<< "! " << endl;
 		status = true;
 	}
 }

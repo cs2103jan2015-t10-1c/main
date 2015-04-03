@@ -6,7 +6,7 @@ EntryEdit::EntryEdit(){
 
 int EntryEdit::getEntryNumber(string& entryComponents){
 	entryComponents = entryComponents.substr(1);
-	int pos = entryComponents.find(' ');
+	int pos = entryComponents.find_first_of(' ');
 	string numberString = entryComponents.substr(0, pos);
 	entryComponents.erase(0, pos+1);
 	_entryNumber = convertToNumber(numberString);
@@ -14,8 +14,8 @@ int EntryEdit::getEntryNumber(string& entryComponents){
 }
 
 string EntryEdit::getMarker(string& entryComponents){
-	_marker = entryComponents.substr(0, 2);
-	entryComponents = entryComponents.substr(3);
+	_marker = entryComponents.substr(0, entryComponents.find_first_of(' '));
+	entryComponents = entryComponents.substr(entryComponents.find_first_of(' ') + 1);
 	_newInformation = entryComponents;
 	return _marker;
 }

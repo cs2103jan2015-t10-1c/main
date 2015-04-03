@@ -20,6 +20,7 @@ private:
 	static const string TYPE_FLOATING;
 	static const string TYPE_NEXT;
 	static const string TYPE_PREV;
+	static const string TYPE_CLASH;
 
 
 public:
@@ -32,6 +33,7 @@ public:
 	//Floating Entries
 	void displayFloatingEntries();
 	void displayOneFloatingEntry(int index);
+	void displayClashes();
 	int returnPageNumber();
 };
 
