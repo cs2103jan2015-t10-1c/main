@@ -117,8 +117,11 @@ void ScheduledEntry::editEntry(string userInput){
 		int inputStartDay;
 		int inputStartMonth;
 		int inputStartYear;
+		int inputEndDay;
+		int inputEndMonth;
+		int inputEndYear;
 				
-		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear);
+		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear, inputEndDay, inputEndMonth, inputEndYear);
 		vector<Entry>::iterator iter = _scheduledList.begin();
 		for(int i = 1; i < entryNumber; i++){
 			iter++;
@@ -127,8 +130,12 @@ void ScheduledEntry::editEntry(string userInput){
 		newStartDate.insertDay(inputStartDay);
 		newStartDate.insertMonth(inputStartMonth);
 		newStartDate.insertYear(inputStartYear);
-
+		Date newEndDate;
+		newEndDate.insertDay(inputEndDay);
+		newEndDate.insertMonth(inputEndMonth);
+		newEndDate.insertYear(inputEndYear);
 		iter->insertStartDate(newStartDate);
+		iter->insertEndDate(newEndDate);
 	}
 			
 	if (marker == LOCATION_MARKER){

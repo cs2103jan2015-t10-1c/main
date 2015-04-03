@@ -42,14 +42,27 @@ void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour,
 	string newStartTime;
 	string newEndTime;
 	parseTime.extractStringTime(_newInformation, newStartTime);
+	if(_newInformation.empty()){
+		newEndTime = newStartTime;
+	}
 	parseTime.extractStringTime(_newInformation, newEndTime);
 	parseTime.convertTime(newStartTime, newStartHour, newStartMinute);
 	parseTime.convertTime(newEndTime, newEndHour, newEndMinute);
 }
 
-void EntryEdit::getDate(int& newDay, int& newMonth, int& newYear){
+void EntryEdit::getDate(int& newStartDay, int& newStartMonth, int& newStartYear, int& newEndDay, int& newEndMonth, int& newEndYear){
 	StringConvertor parseDate;
-	parseDate.convertDate(_newInformation, newDay, newMonth, newYear);
+	string startDate;
+	string endDate;
+	parseDate.extractStringDate(_newInformation, startDate);
+	if(_newInformation.empty()){
+		endDate = startDate;
+	}
+	else{
+		parseDate.extractStringDate(_newInformation, endDate);
+	}
+	parseDate.convertDate(startDate, newStartDay, newStartMonth, newStartYear);
+	parseDate.convertDate(endDate, newEndDay, newEndMonth, newEndYear);
 }
 
 string EntryEdit::getLocation(){

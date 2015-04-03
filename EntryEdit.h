@@ -22,7 +22,7 @@ public:
 	int convertToNumber(string);
 	string getName ();
 	void getTime (int&, int&, int&, int&);
-	void getDate (int&, int&, int&);
+	void getDate (int&, int&, int&, int&, int&, int&);
 	string getLocation ();
 	string getStatus();
 };
