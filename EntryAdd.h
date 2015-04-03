@@ -15,6 +15,7 @@ private:
 	static const string MONTHLONG_ARRAY[12];
 	static const int BLANK_SPACE_COUNT;
 	static const string AT_MARKER;
+	static const string BY_MARKER;
 	static const string BLANK_SPACE;
 	static const string FROM_MARKER;
 	static const string FULLSTOP_MARKER;

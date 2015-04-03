@@ -35,6 +35,7 @@ const string EntryAdd::MONTHLONG_ARRAY[12] = {MONTHLONG_JANUARY, MONTHLONG_FEBRU
 
 const int EntryAdd::BLANK_SPACE_COUNT = 1;
 const string EntryAdd::AT_MARKER = "at";
+const string EntryAdd::BY_MARKER = "by";
 const string EntryAdd::BLANK_SPACE = " ";
 const string EntryAdd::FROM_MARKER = "from";
 const string EntryAdd::FULLSTOP_MARKER = ".";
@@ -60,7 +61,16 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		extractDate(entryComponents, entryEndDate);
 		extractTime(entryComponents, entryEndTime);
 	}
-
+	//extract deadline (1 date 1 time)
+	else if(entryComponents[0] == BY_MARKER[0] && entryComponents[1] == BY_MARKER[1]){
+		int datePosition = BY_MARKER.size() + BLANK_SPACE_COUNT;
+		entryComponents.erase(0, datePosition);
+		extractDate(entryComponents, entryStartDate);
+		entryEndDate = entryStartDate;
+		extractTime(entryComponents, entryStartTime);
+		entryEndTime = entryStartTime;
+		entryComponents = entryComponents.substr(1);
+	}
 	//only name and location, and maybe tags
 	else if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){
 		extractLocation(entryComponents, entryLocation);
