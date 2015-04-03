@@ -87,7 +87,8 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 	}
 
 	//extract date and time (1 date)
-	else{
+	else if (entryComponents[0] == ON_MARKER[0] && entryComponents[1] == ON_MARKER[1]){
+		entryComponents = entryComponents.substr(ON_MARKER.size() + BLANK_SPACE_COUNT);
 		extractDate(entryComponents, entryStartDate);
 		//for entry with only one date, the end date is the same as starting date
 		entryEndDate = entryStartDate;
@@ -96,6 +97,9 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		int endOfLine = entryComponents.size() - 1;
 		entryComponents = entryComponents.substr(endTimePosition, endOfLine);
 		extractTime(entryComponents, entryEndTime);
+	}
+	else {
+		cout << "Wrong parameters are given!" << endl << endl;
 	}
 
 	if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){
