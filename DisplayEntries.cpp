@@ -9,14 +9,14 @@ const string DisplayEntries::TYPE_PREV = " prev";
 const string DisplayEntries::TYPE_CLASH = " clashes";
 
 
-DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, int pageNumber){
+DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, int pageNumber, bool atScheduledList){
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
-	_viewingScheduledList;
+	_viewingScheduledList = atScheduledList;
 	_pageNumber = pageNumber;
 }
 
-void DisplayEntries::execute(string command){
+void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNumber){
 	_userInput = command;
 	StringConvertor convert;
 
@@ -29,6 +29,7 @@ void DisplayEntries::execute(string command){
 		cout << endl << "You are currently viewing your SCHEDULED entries" << endl
 			<< "No. of Entries: " << _scheduledList.size() << endl;
 		_viewingScheduledList = true;
+		atScheduledList = _viewingScheduledList;
 	}
 	else if (_userInput == TYPE_FLOATING){
 		if(_scheduledList.empty()){
@@ -39,6 +40,7 @@ void DisplayEntries::execute(string command){
 		cout << endl << "You are currently viewing your FLOATING entries" << endl
 			<< "No. of Entries: " << _floatingList.size() << endl;
 		_viewingScheduledList = false;
+		atScheduledList = _viewingScheduledList;
 	}
 	else if (_userInput == TYPE_NEXT){
 		if(_scheduledList.empty()){
@@ -77,6 +79,7 @@ void DisplayEntries::execute(string command){
 	else {
 		cout << "Invalid display command! Try again" << endl << endl;
 	}
+	pageNumber = _pageNumber;
 }
 
 void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
@@ -85,10 +88,10 @@ void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
 	int lastEntry = firstEntry + 5;
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl
-			<< "- - - - - - - - - - - - - - - - -" << endl
+			<< "- - - - - - - - - - - - - - - - - - - - - - -" << endl
 			<< (number) << ". "
 			<< _scheduledList[i].getShortDisplay() << endl;
-		cout << "- - - - - - - - - - - - - - - - -" << endl;
+		cout << "- - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		number++;
 	}
 	cout << "Page: " << _pageNumber << " out of " << _scheduledList.size()/5 << endl
@@ -97,10 +100,10 @@ void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
 
 void DisplayEntries::displayOneScheduledEntry(int index){
 	cout << endl
-		<< "- - - - - - - - - - - - - - - - -" << endl
+		<< "- - - - - - - - - - - - - - - - - - - - - - -" << endl
 		<< index << ". "
 		<< _scheduledList[index-1].getFullDisplay()
-	 << "- - - - - - - - - - - - - - - - -";
+	 << "- - - - - - - - - - - - - - - - - - - - - - -";
 }
 
 void DisplayEntries::displayFloatingEntries(){

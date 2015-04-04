@@ -24,7 +24,7 @@ public:
 	void searchName(string);
 	void searchLocation(string);
 	void searchStatus(string);
-
+	void searchDate(string);
 
 };
 #endif
