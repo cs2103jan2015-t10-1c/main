@@ -6,15 +6,16 @@ const string DisplayEntries::TYPE_NEXT = " next";
 const string DisplayEntries::TYPE_PREV = " prev";
 const string DisplayEntries::TYPE_CLASH = " clashes";
 
-const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - -";
+const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
 
-DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, int pageNumber){
+DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, int pageNumber, bool atScheduledList){
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
 	_pageNumber = pageNumber;
+	_viewingScheduledList = atScheduledList;
 }
 
-void DisplayEntries::execute(string command, bool& isScheduled){
+void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNumber){
 	_userInput = command;
 	StringConvertor convert;
 
@@ -28,6 +29,7 @@ void DisplayEntries::execute(string command, bool& isScheduled){
 		cout << endl << "You are currently viewing your SCHEDULED entries" << endl
 			<< "No. of Entries: " << _scheduledList.size() << endl;
 		_viewingScheduledList = true;
+		atScheduledList = _viewingScheduledList;
 	}
 	
 	//display floating
@@ -40,6 +42,7 @@ void DisplayEntries::execute(string command, bool& isScheduled){
 		cout << endl << "You are currently viewing your FLOATING entries" << endl
 			<< "No. of Entries: " << _floatingList.size() << endl;
 		_viewingScheduledList = false;
+		atScheduledList = _viewingScheduledList;
 	}
 	
 	//display next page
@@ -88,8 +91,7 @@ void DisplayEntries::execute(string command, bool& isScheduled){
 	else {
 		cout << "Invalid display command! Try again" << endl << endl;
 	}
-
-	isScheduled = _viewingScheduledList;
+	pageNumber = _pageNumber;
 }
 
 void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
@@ -100,8 +102,8 @@ void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
 		cout << endl
 			<< BORDER << endl
 			<< (number) << ". "
-			<< _scheduledList[i].getShortDisplay() << endl
-			<< BORDER << endl;
+			<< _scheduledList[i].getShortDisplay() << endl;
+		cout << BORDER << endl;
 		number++;
 	}
 	cout << "Page: " << _pageNumber << " out of " << _scheduledList.size()/5 << endl

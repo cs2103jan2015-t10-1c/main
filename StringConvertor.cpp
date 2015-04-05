@@ -107,6 +107,9 @@ void StringConvertor::convertDate(string entryDate, int& entryDay, int& entryMon
 	if (!(convertYear >> entryYear)) {
 		entryYear = 0;  
 	}
+	if(entryYear < 1000){
+		entryYear = entryYear + 2000;
+	}
 }
 
 void StringConvertor::convertStringToNumber(string input, int& number){

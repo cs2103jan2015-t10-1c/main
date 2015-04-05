@@ -27,9 +27,9 @@ private:
 	static const string BORDER;
 
 public:
-	DisplayEntries(vector<Entry>, vector<Entry>, int);
+	DisplayEntries(vector<Entry>, vector<Entry>, int, bool);
 	//Scheduled Entries
-	void execute(string, bool&);
+	void execute(string, bool&, int&);
 	void displayScheduledEntryShort(int);
 	void displayOneScheduledEntry(int index);
 	void displayScheduledEntries();
