@@ -149,7 +149,13 @@ string Entry::getFullDisplay(){
 	
 	oss << _name << endl;
 	if (_hasDate){
-		oss	<< "Start Date & Time: ";
+		string eventType;
+		if(_startTime.getTime() == _endTime.getTime()){
+			eventType = "Deadline: ";
+		} else {
+			eventType = "Start Date & Time: ";
+		}
+		oss	<< eventType;
 		greg_weekday startDateToString = _startDate.getDate().day_of_week();
 		oss << " " << startDateToString.as_long_string()
 			<< " " << _startDate.getDay() << " "
@@ -159,28 +165,32 @@ string Entry::getFullDisplay(){
 		if (_startTime.getMinute() < 10){
 			oss << '0';
 		}
-		oss	<< _startTime.getMinute() << endl
-		<< "End Date & Time: ";
-		greg_weekday endDateToString = _endDate.getDate().day_of_week();
-		oss << " " << endDateToString.as_long_string() 
-		<< " " << _endDate.getDay() << " "
-		<< _endDate.getMonth() << " "
-		<< _endDate.getYear() << FEEDBACK_AT
-		<< _endTime.getHour() << ".";
-		if (_endTime.getMinute() < 10){
-			oss << '0';
-		}
+		oss	<< _startTime.getMinute() << endl;
+		if(_startTime.getTime() != _endTime.getTime()){
+			oss << "End Date & Time: ";
+			greg_weekday endDateToString = _endDate.getDate().day_of_week();
+			oss << " " << endDateToString.as_long_string() 
+			<< " " << _endDate.getDay() << " "
+			<< _endDate.getMonth() << " "
+			<< _endDate.getYear() << FEEDBACK_AT
+			<< _endTime.getHour() << ".";
+			if (_endTime.getMinute() < 10){
+				oss << '0';
+			}
 		oss << _endTime.getMinute() << endl;
+		}
 	}
 	
 	oss << "Location: " << _location << endl;
 	
 	if (_hasDate){
-	oss	<< "Event duration : "
-		<< days(calculateEventDurationInHours().hours()/24) << " days and "
-		<< calculateEventDurationInHours().hours()%24 << " hours and " 
-		<< calculateEventDurationInHours().minutes() << " minutes" << endl
-		<< "Time left: " << calculateDaysFromToday() << " days "<< endl
+		if(_startTime.getTime() != _endTime.getTime()){
+			oss	<< "Event duration : "
+			<< days(calculateEventDurationInHours().hours()/24) << " days and "
+			<< calculateEventDurationInHours().hours()%24 << " hours and " 
+			<< calculateEventDurationInHours().minutes() << " minutes" << endl;
+		}
+	oss << "Time left: " << calculateDaysFromToday() << " days "<< endl
 		<< "Status: " << getStatus() << endl
 		<< "Tags: ";
 	vector<string>::iterator tagIter;
@@ -189,16 +199,20 @@ string Entry::getFullDisplay(){
 	}
 	oss << endl;
 	}
-	
 	return oss.str();
 }
 
 string Entry::getShortDisplay(){
 	ostringstream oss;
-	
 	oss << _name << endl;
 	if (_hasDate){
-		oss	<< "Start Date & Time: ";
+		string eventType;
+		if(_startTime.getTime() == _endTime.getTime()){
+			eventType = "Deadline: ";
+		} else {
+			eventType = "Start Date & Time: ";
+		}
+		oss	<< eventType;
 		greg_weekday startDateToString = _startDate.getDate().day_of_week();
 		oss << " " << startDateToString.as_long_string()
 			<< " " << _startDate.getDay() << " "
@@ -208,18 +222,23 @@ string Entry::getShortDisplay(){
 		if (_startTime.getMinute() < 10){
 			oss << '0';
 		}
-		oss	<< _startTime.getMinute() << endl
-		<< "End Date & Time: ";
-		greg_weekday endDateToString = _endDate.getDate().day_of_week();
-		oss << " " << endDateToString.as_long_string() 
-		<< " " << _endDate.getDay() << " "
-		<< _endDate.getMonth() << " "
-		<< _endDate.getYear() << FEEDBACK_AT
-		<< _endTime.getHour() << ".";
-		if (_endTime.getMinute() < 10){
+		oss	<< _startTime.getMinute() << endl;
+		if(_startTime.getTime() == _endTime.getTime()){
+			return oss.str();
+		}
+		else{
+			oss << "End Date & Time: ";
+			greg_weekday endDateToString = _endDate.getDate().day_of_week();
+			oss << " " << endDateToString.as_long_string() 
+			<< " " << _endDate.getDay() << " "
+			<< _endDate.getMonth() << " "
+			<< _endDate.getYear() << FEEDBACK_AT
+			<< _endTime.getHour() << ".";
+			if (_endTime.getMinute() < 10){
 			oss << '0';
 		}
 		oss << _endTime.getMinute() << endl;
+		}
 	}
 	return oss.str();
 }
