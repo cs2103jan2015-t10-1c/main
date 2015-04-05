@@ -71,9 +71,10 @@ void SearchEntries::searchName(string inputName){
 		vector<Entry>::iterator iterFloatingEntry;
 
 		int count = 0;
-		cout << "Scheduled Entries containing name:  " << inputName << ":" << endl;
+		cout << "Scheduled Entries containing " << inputName << " in their name:" << endl;
 		for (iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
-			if (iterScheduledEntry->getName() == inputName){
+			size_t found = iterScheduledEntry->getName().find(inputName);
+			if (found != string::npos){
 				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << count << ". " << iterScheduledEntry->getFullDisplay();
 				cout << "- - - - - - - - - - - - - - -" << endl;
@@ -82,9 +83,10 @@ void SearchEntries::searchName(string inputName){
 			count++;
 		}
 		count = 0;
-		cout << "Floating Entries containing name:  " << inputName << ":" << endl;
+		cout << "Floating Entries containing " << inputName << " in their name:" << endl;
 		for (iterFloatingEntry = _floatingList.begin(); iterFloatingEntry != _floatingList.end(); iterFloatingEntry++){
-			if (iterFloatingEntry->getName() == inputName){
+			size_t found = iterFloatingEntry->getName().find(inputName);
+			if (found != string::npos){
 				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << count << ". " << iterFloatingEntry->getFullDisplay();
 				cout << "- - - - - - - - - - - - - - -" << endl;
@@ -99,19 +101,21 @@ void SearchEntries::searchLocation(string inputLocation){
 		vector<Entry>::iterator iterFloatingEntry;
 
 		int count = 1;
-		cout << "Scheduled Entries containing location " << inputLocation << ":" << endl;
+		cout << "Scheduled Entries containing " << inputLocation << " in their location:" << endl;
 		for (iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
-			if (iterScheduledEntry->getLocation() == inputLocation){
+			size_t found = iterScheduledEntry->getLocation().find(inputLocation);
+			if (found != string::npos){
 				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << count << ". " << iterScheduledEntry->getFullDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;				
+				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << endl;
 			}
 			count++;
 		}
 		count = 1;
-		cout << "Floating Entries containing location " << inputLocation << ":" << endl;
+		cout << "Floating Entries containing " << inputLocation << " in their location:" << endl;
 		for (iterFloatingEntry = _floatingList.begin(); iterFloatingEntry != _floatingList.end(); iterFloatingEntry++){
+			size_t found = iterFloatingEntry->getLocation().find(inputLocation);
 			if (iterFloatingEntry->getLocation() == inputLocation){
 				cout << "- - - - - - - - - - - - - - -" << endl;
 				cout << count << ". " << iterFloatingEntry->getFullDisplay();

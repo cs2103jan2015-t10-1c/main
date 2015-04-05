@@ -103,7 +103,8 @@ void Entry::addTags(vector<string>& tags){
 void Entry::searchEntryTag(string tag, int count){
 	vector<string>::iterator iterTag;
 	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
-		if(*iterTag == tag){
+		size_t found = iterTag->find(tag);
+		if(found != string::npos){
 			cout << endl;
 			cout << "- - - - - - - - - - - - - - - -";
 			cout << *iterTag << " " << endl
