@@ -3,6 +3,8 @@
 const string SearchEntries::NAME_MARKER = "name";
 const string SearchEntries::LOCATION_MARKER = "place";
 const string SearchEntries::STATUS_MARKER = "status";
+const string SearchEntries::DATE_MARKER = "date";
+const string SearchEntries::TIME_MARKER = "time";
 const string SearchEntries::ALL_MARKER = "all";
 
 
@@ -22,14 +24,23 @@ void SearchEntries::execute(string userInput){
 		if (marker == NAME_MARKER){
 			searchName(userInput);
 		}
-		if (marker == LOCATION_MARKER){
+		else if (marker == LOCATION_MARKER){
 			searchLocation(userInput);
 		}
-		if (marker == STATUS_MARKER){
+		else if (marker == STATUS_MARKER){
 			searchStatus(userInput);
 		}
-		if (marker == ALL_MARKER){
+		else if (marker == DATE_MARKER){
+			searchDate(userInput);
+		}
+		else if (marker == TIME_MARKER){
+			searchTime(userInput);
+		}
+		else if (marker == ALL_MARKER){
 			searchAll(userInput);
+		}
+		else {
+			cout << "Wrong search input is given!" << endl << endl;
 		}
 	}
 }
@@ -137,6 +148,78 @@ void SearchEntries::searchStatus(string inputStatus){
 			count++;
 		}
 }
+
+void SearchEntries::searchDate(string userInput){
+	vector<Entry>::iterator iterScheduledEntry;
+	Date inputDate;
+	int inputDay;
+	int inputMonth;
+	int inputYear;
+	_datetimeParser.convertDate(userInput, inputDay, inputMonth, inputYear);
+	inputDate.insertDay(inputDay);
+	inputDate.insertMonth(inputMonth);
+	inputDate.insertYear(inputYear);
+	inputDate.initialiseDate();
+	int count = 1;
+	cout << "Scheduled Entries on the date " << inputDate.getDay() << " "
+		<< inputDate.getMonth() << " "
+		<< inputDate.getYear() << " "
+		":" << endl << endl;
+		for (iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
+			bool isInBetweenStartDateAndEndDate = iterScheduledEntry->getStartDate().getDate() <= inputDate.getDate() && iterScheduledEntry->getEndDate().getDate() >= inputDate.getDate();
+			if (isInBetweenStartDateAndEndDate){
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iterScheduledEntry->getShortDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << endl;
+			}
+			count++;
+		}
+}
+
+void SearchEntries::searchTime(string userInput){
+	vector<Entry>::iterator iterScheduledEntry;
+	date today(day_clock::local_day());
+	//initialise inputTime
+	Time inputTime;
+	int inputHour;
+	int inputMinute;
+	int entryStartHour;
+	int entryStartMinute;
+	int entryEndHour;
+	int entryEndMinute;
+	_datetimeParser.convertTime(userInput, inputHour, inputMinute);
+	inputTime.insertHour(inputHour);
+	inputTime.insertMinute(inputMinute);
+	inputTime.initialiseTime(today);
+	int count = 1;
+	cout << "Scheduled Entries on the time " << inputTime.getHour() << "."
+		<< inputTime.getMinute()
+		<< " :" << endl << endl;
+		for (iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
+			Time entryStartTime;
+			Time entryEndTime;
+			entryStartHour = iterScheduledEntry->getStartTime().getHour();
+			entryStartMinute = iterScheduledEntry->getStartTime().getMinute();
+			entryEndHour = iterScheduledEntry->getEndTime().getHour();
+			entryEndMinute = iterScheduledEntry->getEndTime().getMinute();
+			entryStartTime.insertHour(entryStartHour);
+			entryStartTime.insertMinute(entryStartMinute);
+			entryEndTime.insertHour(entryEndHour);
+			entryEndTime.insertMinute(entryEndMinute);
+			entryStartTime.initialiseTime(today);
+			entryEndTime.initialiseTime(today);
+			bool isInBetweenStartTimeAndEndTime = entryStartTime.getTime() <= inputTime.getTime() && entryEndTime.getTime() >= inputTime.getTime();
+			if (isInBetweenStartTimeAndEndTime){
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << count << ". " << iterScheduledEntry->getShortDisplay();
+				cout << "- - - - - - - - - - - - - - -" << endl;
+				cout << endl;
+			}
+			count++;
+		}
+}
+
 
 void SearchEntries::searchAll(string userInput){
 		vector<Entry>::iterator iterScheduledEntry;
