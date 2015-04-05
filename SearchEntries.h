@@ -15,6 +15,7 @@ private:
 	static const string NAME_MARKER;
 	static const string LOCATION_MARKER;
 	static const string STATUS_MARKER;
+	static const string ALL_MARKER;
 
 public:
 
@@ -25,6 +26,7 @@ public:
 	void searchLocation(string);
 	void searchStatus(string);
 	void searchDate(string);
+	void searchAll(string);
 
 };
 #endif
