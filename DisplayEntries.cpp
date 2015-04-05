@@ -5,6 +5,11 @@ const string DisplayEntries::TYPE_FLOATING = " floating";
 const string DisplayEntries::TYPE_NEXT = " next";
 const string DisplayEntries::TYPE_PREV = " prev";
 const string DisplayEntries::TYPE_CLASH = " clashes";
+const string DisplayEntries::TYPE_FIRSTPAGE = " first page";
+const string DisplayEntries::TYPE_LASTPAGE = " last page";
+const string DisplayEntries::TYPE_SPECIFICPAGE = " page";
+
+const int DisplayEntries::BLANKSPACE_COUNT = 1;
 
 const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
 
@@ -73,7 +78,21 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 	else if (_userInput == TYPE_CLASH){
 		displayClashes();
 	}
-
+	//display first page
+	else if (_userInput == TYPE_FIRSTPAGE){
+		displayFirstPage();
+	}
+	//display last page
+	else if (_userInput == TYPE_LASTPAGE){
+		displayLastPage();
+	}
+	//display specified page
+	else if (_userInput.substr(0, TYPE_SPECIFICPAGE.size()) == TYPE_SPECIFICPAGE){
+		int inputPageNumber;
+		_userInput = _userInput.substr(TYPE_SPECIFICPAGE.size() + BLANKSPACE_COUNT);
+		convert.convertStringToNumber(_userInput, inputPageNumber);
+		displaySpecifiedPage(inputPageNumber);
+	}
 	//display details of an entry
 	else if (_userInput[1] > '0'){
 		int entryNumber;
@@ -95,18 +114,35 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 }
 
 void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
+	int numberOfPages = _scheduledList.size()/5;
+	int numberOfEntriesOnLastPage = _scheduledList.size()%5;
+	if(numberOfEntriesOnLastPage > 0){
+		numberOfPages++;
+	}
 	int number = (_pageNumber-1)*5 + 1;
 	int firstEntry = 5*(_pageNumber-1);
 	int lastEntry = firstEntry + 5;
-	for (int i = firstEntry; i < lastEntry; i++){
-		cout << endl
-			<< BORDER << endl
-			<< (number) << ". "
-			<< _scheduledList[i].getShortDisplay() << endl;
-		cout << BORDER << endl;
-		number++;
+	if(_pageNumber == numberOfPages){
+		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+		for (int i = firstEntry; i < lastEntry; i++){
+			cout << endl
+				<< BORDER << endl
+				<< (number) << ". "
+				<< _scheduledList[i].getShortDisplay() << endl;
+			cout << BORDER << endl;
+			number++;
+		}
+	}else{
+		for (int i = firstEntry; i < lastEntry; i++){
+			cout << endl
+				<< BORDER << endl
+				<< (number) << ". "
+				<< _scheduledList[i].getShortDisplay() << endl;
+			cout << BORDER << endl;
+			number++;
+		}
 	}
-	cout << "Page: " << _pageNumber << " out of " << _scheduledList.size()/5 << endl
+	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 }
 
@@ -149,6 +185,22 @@ void DisplayEntries::displayClashes(){
 		cout << endl;
 		count++;
 	}
+}
+
+void DisplayEntries::displayFirstPage(){
+	displayScheduledEntryShort(1);
+}
+
+void DisplayEntries::displayLastPage(){
+	int numberOfPages = _scheduledList.size()/5;
+	if(_scheduledList.size() % 5 > 0){
+		numberOfPages++;
+	}
+	displayScheduledEntryShort(numberOfPages);
+}
+
+void DisplayEntries::displaySpecifiedPage(int page){
+	displayScheduledEntryShort(page);
 }
 
 int DisplayEntries::returnPageNumber(){

@@ -23,6 +23,12 @@ private:
 	static const string TYPE_NEXT;
 	static const string TYPE_PREV;
 	static const string TYPE_CLASH;
+	static const string TYPE_FIRSTPAGE;
+	static const string TYPE_LASTPAGE;
+	static const string TYPE_SPECIFICPAGE;
+
+	static const int BLANKSPACE_COUNT;
+
 
 	static const string BORDER;
 
@@ -37,6 +43,12 @@ public:
 	void displayFloatingEntries();
 	void displayOneFloatingEntry(int index);
 	void displayClashes();
+	//Jump to first, last, and a specific page
+	void displayFirstPage();
+	void displayLastPage();
+	void displaySpecifiedPage(int);
+
+
 	int returnPageNumber();
 };
 
