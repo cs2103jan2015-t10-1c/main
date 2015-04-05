@@ -6,6 +6,7 @@
 #include "EntryAdd.h"
 #include "TextUI.h"
 #include "EntryEdit.h"
+#include "DateTimeInitialiser.h"
 #include "DateTimeInspector.h"
 #include "DisplayEntries.h"
 #include "SearchEntries.h"
@@ -49,6 +50,7 @@ private:
 	ScheduledEntry _newList;
 	//TextUI
 	TextUI _commandInterface;
+	DateTimeInitialiser _initialiser;
 
 public:
 	Main();
