@@ -18,6 +18,12 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 	_floatingList = floatingEntries;
 	_pageNumber = pageNumber;
 	_viewingScheduledList = atScheduledList;
+	_today = (day_clock::local_day());
+	_tomorrow = _today + days(1);
+	_thisWeek = _today + days(7);
+	_nextWeek = _today + days(14);
+	_thisMonth = _today.end_of_month();
+	_nextMonth = _thisMonth + months(1);
 }
 
 void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNumber){
@@ -114,6 +120,16 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 }
 
 void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
+	//marking the boundaries
+	_printInThePast = false;
+	_printToday = false;
+	_printTomorrow = false;
+	_printThisWeek = false;
+	_printNextWeek = false;
+	_printThisMonth = false;
+	_printNextMonth = false;
+
+	//initialising number of pages
 	int numberOfPages = _scheduledList.size()/5;
 	int numberOfEntriesOnLastPage = _scheduledList.size()%5;
 	if(numberOfEntriesOnLastPage > 0){
@@ -124,23 +140,44 @@ void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
 	int lastEntry = firstEntry + 5;
 	if(_pageNumber == numberOfPages){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
-		for (int i = firstEntry; i < lastEntry; i++){
-			cout << endl
-				<< BORDER << endl
-				<< (number) << ". "
-				<< _scheduledList[i].getShortDisplay() << endl;
-			cout << BORDER << endl;
-			number++;
+	}
+	for (int i = firstEntry; i < lastEntry; i++){
+		cout << endl;
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		if(entryStartDate < _today && _printInThePast == false){
+			cout << endl << "[Events in the past:] " << endl << endl;
+			_printInThePast = true;
 		}
-	}else{
-		for (int i = firstEntry; i < lastEntry; i++){
-			cout << endl
-				<< BORDER << endl
-				<< (number) << ". "
-				<< _scheduledList[i].getShortDisplay() << endl;
-			cout << BORDER << endl;
-			number++;
+		if(entryStartDate == _today && _printToday == false){
+			cout << endl << "[Events today:] " << endl << endl;
+			_printToday = true;
 		}
+		if(entryStartDate == _tomorrow && _printTomorrow == false){
+			cout << endl << "[Events tomorrow:] " << endl << endl;
+			_printTomorrow = true;
+			_printThisWeek = true;
+		}
+		if(entryStartDate <= _thisWeek && entryStartDate >= _today && _printThisWeek == false){
+			cout << endl << "[Events This Week:] " << endl << endl;
+			_printThisWeek = true;
+		}
+		if(entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false){
+			cout << endl << "[Events Next Week:] " << endl << endl;
+			_printNextWeek = true;
+		}
+		if(entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false){
+			cout << endl << "[Events This Month:] " << endl << endl;
+			_printThisMonth = true;
+		}
+		if(entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false){
+			cout << endl << "[Events Next Month:] " << endl << endl;
+			_printNextMonth = true;
+		}
+		cout << BORDER << endl
+			<< (number) << ". "
+			<< _scheduledList[i].getShortDisplay() << endl;
+		cout << BORDER << endl;
+		number++;
 	}
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 

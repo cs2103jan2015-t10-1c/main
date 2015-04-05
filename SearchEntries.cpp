@@ -154,16 +154,15 @@ void SearchEntries::searchStatus(string inputStatus){
 }
 
 void SearchEntries::searchDate(string userInput){
+	DateTimeInitialiser _initialiser;
+
 	vector<Entry>::iterator iterScheduledEntry;
 	Date inputDate;
 	int inputDay;
 	int inputMonth;
 	int inputYear;
 	_datetimeParser.convertDate(userInput, inputDay, inputMonth, inputYear);
-	inputDate.insertDay(inputDay);
-	inputDate.insertMonth(inputMonth);
-	inputDate.insertYear(inputYear);
-	inputDate.initialiseDate();
+	_initialiser.initialiseDate(inputDate, inputDay, inputMonth, inputYear);
 	int count = 1;
 	cout << "Scheduled Entries on the date " << inputDate.getDay() << " "
 		<< inputDate.getMonth() << " "
@@ -182,6 +181,7 @@ void SearchEntries::searchDate(string userInput){
 }
 
 void SearchEntries::searchTime(string userInput){
+	DateTimeInitialiser _initialiser;
 	vector<Entry>::iterator iterScheduledEntry;
 	date today(day_clock::local_day());
 	//initialise inputTime
@@ -193,9 +193,8 @@ void SearchEntries::searchTime(string userInput){
 	int entryEndHour;
 	int entryEndMinute;
 	_datetimeParser.convertTime(userInput, inputHour, inputMinute);
-	inputTime.insertHour(inputHour);
-	inputTime.insertMinute(inputMinute);
-	inputTime.initialiseTime(today);
+	_initialiser.initialiseTime(inputTime, inputHour, inputMinute, today);
+
 	int count = 1;
 	cout << "Scheduled Entries on the time " << inputTime.getHour() << "."
 		<< inputTime.getMinute()
@@ -207,12 +206,9 @@ void SearchEntries::searchTime(string userInput){
 			entryStartMinute = iterScheduledEntry->getStartTime().getMinute();
 			entryEndHour = iterScheduledEntry->getEndTime().getHour();
 			entryEndMinute = iterScheduledEntry->getEndTime().getMinute();
-			entryStartTime.insertHour(entryStartHour);
-			entryStartTime.insertMinute(entryStartMinute);
-			entryEndTime.insertHour(entryEndHour);
-			entryEndTime.insertMinute(entryEndMinute);
-			entryStartTime.initialiseTime(today);
-			entryEndTime.initialiseTime(today);
+			_initialiser.initialiseTime(entryStartTime, entryStartHour, entryStartMinute, today);
+			_initialiser.initialiseTime(entryEndTime, entryEndHour, entryEndMinute, today);
+		
 			bool isInBetweenStartTimeAndEndTime = entryStartTime.getTime() <= inputTime.getTime() && entryEndTime.getTime() >= inputTime.getTime();
 			if (isInBetweenStartTimeAndEndTime){
 				cout << "- - - - - - - - - - - - - - -" << endl;

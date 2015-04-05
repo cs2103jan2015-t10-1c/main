@@ -4,6 +4,7 @@
 #include <string>
 #include <boost\date_time\gregorian\gregorian.hpp>
 #include "ScheduledEntry.h"
+#include "DateTimeInitialiser.h"
 
 using namespace std;
 using namespace boost::gregorian;
@@ -20,6 +21,7 @@ private:
 
 	static const string ALL_MARKER;
 	StringConvertor _datetimeParser;
+	
 public:
 
 	SearchEntries(vector<Entry>, vector<Entry>);
