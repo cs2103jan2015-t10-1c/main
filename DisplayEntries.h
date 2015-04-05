@@ -4,6 +4,8 @@
 #include <string>
 #include <boost\date_time\gregorian\gregorian.hpp>
 #include "ScheduledEntry.h"
+#include "StringConvertor.h"
+#include "ClashInspector.h"
 
 using namespace std;
 using namespace boost::gregorian;
@@ -22,11 +24,12 @@ private:
 	static const string TYPE_PREV;
 	static const string TYPE_CLASH;
 
+	static const string BORDER;
 
 public:
 	DisplayEntries(vector<Entry>, vector<Entry>, int);
 	//Scheduled Entries
-	void execute(string);
+	void execute(string, bool&);
 	void displayScheduledEntryShort(int);
 	void displayOneScheduledEntry(int index);
 	void displayScheduledEntries();

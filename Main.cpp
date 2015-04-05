@@ -6,6 +6,7 @@
 #include "DateTimeInspector.h"
 #include "DisplayEntries.h"
 #include "SearchEntries.h"
+#include "UndoActions.h"
 #include <assert.h>
 
 using namespace std;
@@ -18,10 +19,11 @@ const string COMMAND_PROMPT = "command: ";
 const string COMMAND_ADD = "add";
 const string COMMAND_EDIT = "edit";
 const string COMMAND_DISPLAY = "display";
-const string COMMAND_DELETE = "delete";
-const string COMMAND_EXIT = "exit";
 const string COMMAND_SEARCH = "search";
 const string COMMAND_HELP = "help";
+const string COMMAND_DELETE = "delete";
+const string COMMAND_UNDO = "undo";
+const string COMMAND_EXIT = "exit";
 
 void convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
 					 string stringStartTime, int& intStartHour, int& intStartMinute,
@@ -133,7 +135,7 @@ int main (){
 	string command = "";
 	string keyword = "";
 
-	//switch between scheduled and floating list. only for EDIT, DISPLAY, DELETE, SEARCH
+	//switch between scheduled and floating list. only for EDIT, DISPLAY, DELETE
 	bool isScheduled = true;
 	//page count for display
 	int pageNumber = 1;
@@ -188,22 +190,26 @@ int main (){
 
 			//initialise start and end dates
 			DateTimeInspector DateInspector;
-			if(!DateInspector.dateIsValid(intStartDay, intStartMonth, intStartYear)){
+			if(!DateInspector.dateIsValid(intStartDay, intStartMonth, intStartYear)) {
 				cout << "Start Date is invalid!" << endl << endl;
 				dateIsOkay = false;
 			}
-			else{
+			
+			else {
 				initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
 			}
-			if(!DateInspector.dateIsValid(intEndDay, intEndMonth, intEndYear)){
+			
+			if(!DateInspector.dateIsValid(intEndDay, intEndMonth, intEndYear)) {
 				cout << "End Date is invalid!" << endl << endl;
 				dateIsOkay = false;
 			}
-			else{
+			
+			else {
 				initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
 			}
+
 			//only when date is ok
-			if(dateIsOkay){
+			if(dateIsOkay) {
 			//initialise start and end times
 				DateTimeInspector TimeInspector;
 				if(!TimeInspector.timeIsValid(intStartHour, intStartMinute)){
@@ -239,8 +245,9 @@ int main (){
 		}
 		
 		//display scheduled command
+		//display allows the user to toggle between 'scheduled' and 'floating' mode
 		else if (command == COMMAND_DISPLAY){
-			display.execute(userInput);
+			display.execute(userInput, isScheduled);
 		}
 
 		//search command
@@ -261,6 +268,11 @@ int main (){
 				indexNumber = 0;
 			}
 			newList.removeEntry(indexNumber);
+		}
+
+		//undo command
+		else if (command == COMMAND_UNDO){
+			newList.undo();
 		}
 
 		//exit command
@@ -320,4 +332,3 @@ void initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date end
 	newEntry.insertLocation(entryLocation);
 	newEntry.addTags(tags);
 }
-

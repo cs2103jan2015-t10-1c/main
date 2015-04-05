@@ -4,6 +4,7 @@
 #include "Date.h"
 #include "Time.h"
 #include "Entry.h"
+#include "UndoActions.h"
 #include "EntryEdit.h"
 #include "ClashInspector.h"
 
@@ -13,6 +14,7 @@ class ScheduledEntry{
 private:
 	vector<Entry> _scheduledList;
 	vector<Entry> _floatingList;
+	UndoActions _counter;
 
 	//Feedback to the users
 	static const string FEEDBACK_ADDED;
@@ -30,9 +32,7 @@ private:
 	static const string LOCATION_MARKER;
 	static const string STATUS_MARKER;
 
-	//type of list
-	static const string TYPE_SCHEDULED;
-	static const string TYPE_FLOATING;
+	static const string BORDER;
 
 public:
 	ScheduledEntry();
@@ -41,8 +41,10 @@ public:
 	void displayEntry(int index);
 	void removeEntry(int);
 	void editEntry(string);
+	void undo();
 	void exit(bool&);
-	void sort();
+	void sort(int&);
+	
 	//list accessors
 	vector<Entry> getScheduledList();
 	vector<Entry> getFloatingList();
