@@ -16,7 +16,22 @@ private:
 	vector<Entry> _floatingList;
 	string _userInput;
 	bool _viewingScheduledList;
+	bool _printInThePast;
+	bool _printToday;
+	bool _printTomorrow;
+	bool _printThisWeek;
+	bool _printNextWeek;
+	bool _printThisMonth;
+	bool _printNextMonth;
+	
+
 	int _pageNumber;
+	date _today;
+	date _tomorrow;
+	date _thisWeek;
+	date _nextWeek;
+	date _thisMonth;
+	date _nextMonth;
 
 	static const string TYPE_SCHEDULED;
 	static const string TYPE_FLOATING;
@@ -26,11 +41,10 @@ private:
 	static const string TYPE_FIRSTPAGE;
 	static const string TYPE_LASTPAGE;
 	static const string TYPE_SPECIFICPAGE;
-
 	static const int BLANKSPACE_COUNT;
 
-
 	static const string BORDER;
+
 
 public:
 	DisplayEntries(vector<Entry>, vector<Entry>, int, bool);
