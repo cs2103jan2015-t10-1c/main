@@ -50,7 +50,8 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 	extractName(entryComponents, entryName);
 
 	//extract dates and time (2 dates)
-	if (entryComponents[0] == FROM_MARKER[0] && entryComponents[1] == FROM_MARKER[1]){
+	if (entryComponents[0] == FROM_MARKER[0] && entryComponents[1] == FROM_MARKER[1]
+		&& entryComponents[2] == FROM_MARKER[2] && entryComponents[3] == FROM_MARKER[3]){
 		int startDatePosition = FROM_MARKER.size() + BLANK_SPACE_COUNT;
 		entryComponents.erase(0, startDatePosition);
 		extractDate(entryComponents, entryStartDate);
@@ -127,7 +128,8 @@ void EntryAdd::extractTag(string& entryComponents, vector<string>& entryTag){
 }
 	
 void EntryAdd::extractName(string& entryComponents, string& entryName){
-	int endOfName = entryComponents.find(FULLSTOP_MARKER) - 1;
+	int endOfName = entryComponents.find_first_of(FULLSTOP_MARKER) - 1;
+	//remove blank space
 	entryName = entryComponents.substr(1, endOfName);
 	int startOfRemainder = endOfName + FULLSTOP_MARKER.size() + BLANK_SPACE_COUNT + 1;
 	int endOfRemainder = entryComponents.size() - 1;

@@ -22,13 +22,20 @@ const string ScheduledEntry::BORDER = "- - - - - - - - - - - - - - - - -";
 ScheduledEntry::ScheduledEntry(){
 }
 
+void ScheduledEntry::emptyCounter(){
+	_counter.emptyUndoStack();
+}
+
 void ScheduledEntry::addEntry(Entry newEntry){
 	int latestEntryIndex;
+	//scheduled entry
 	if (newEntry.getDateStatus()){
 		_scheduledList.push_back(newEntry);
 		sort(latestEntryIndex);
 		_counter.counterAdd(true, latestEntryIndex);
 	}
+
+	//floating entry
 	else {
 		_floatingList.push_back(newEntry);
 		latestEntryIndex = _floatingList.size();
@@ -71,38 +78,76 @@ void ScheduledEntry::displayEntry(int index){
 		<< BORDER;
 }
 
-void ScheduledEntry::removeEntry(int index){
+void ScheduledEntry::removeEntry(bool isScheduled, int index){
 	cout << FEEDBACK_DELETED << endl;
 	displayEntry(index);
-	_counter.counterDelete(true, index, _scheduledList[index-1]);
-	_scheduledList.erase(_scheduledList.begin() + index - 1);
+	//scheduled entry
+	if (isScheduled){
+		_counter.counterDelete(true, index, _scheduledList[index-1]);
+		_scheduledList.erase(_scheduledList.begin() + index - 1);
+	}
+
+	//floating entry
+	else {
+		_counter.counterDelete(false, index, _floatingList[index-1]);
+		_floatingList.erase(_floatingList.begin() + index - 1);
+	}
 }
 
-void ScheduledEntry::editEntry(string userInput){
-	EntryEdit editComponent;
+void ScheduledEntry::editEntry(bool isScheduled, string userInput){
+	EntryEdit editComponent(isScheduled);
 	int entryNumber = editComponent.getEntryNumber(userInput);
-	string marker = editComponent.getMarker(userInput);
-			
-	if (marker == NAME_MARKER){
-		string newName = editComponent.getName();
-		vector<Entry>::iterator iter = _scheduledList.begin();
-		//loop find the ith entry
-		for(int i = 1; i < entryNumber; i++){
+	editComponent.extractMarkerInfo(userInput);
+	
+	//find the entry to be edited
+	vector<Entry>::iterator iter;
+	if (isScheduled){
+		iter = _scheduledList.begin();
+	}
+	else {
+		iter = _floatingList.begin();
+	}
+	//loop to find the ith entry
+	for (int i = 1; i < entryNumber; i++){
 			iter++;
-		}
-		iter->insertName(newName);
 	}
 	
-	if (marker == TIME_MARKER){
+	//update name
+	string newName = editComponent.getName();
+	if (newName != ""){
+		iter->insertName(newName);
+	}
+
+	//update date
+	if (editComponent.getDateEditStatus()){
+		int inputStartDay;
+		int inputStartMonth;
+		int inputStartYear;
+		int inputEndDay;
+		int inputEndMonth;
+		int inputEndYear;		
+		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear, inputEndDay, inputEndMonth, inputEndYear);
+
+		Date newStartDate;
+		newStartDate.insertDay(inputStartDay);
+		newStartDate.insertMonth(inputStartMonth);
+		newStartDate.insertYear(inputStartYear);
+		Date newEndDate;
+		newEndDate.insertDay(inputEndDay);
+		newEndDate.insertMonth(inputEndMonth);
+		newEndDate.insertYear(inputEndYear);
+		
+		iter->insertStartDate(newStartDate);
+		iter->insertEndDate(newEndDate);
+	}
+
+	//update time
+	if (editComponent.getTimeEditStatus()){
 		int inputStartHour;
 		int inputStartMinute;
 		int inputEndHour;
 		int inputEndMinute;
 		editComponent.getTime(inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
-		vector<Entry>::iterator iter = _scheduledList.begin();
-		for(int i = 1; i < entryNumber; i++){
-			iter++;
-		}
 		
 		Time newStartTime;
 		Time newEndTime;
@@ -114,58 +159,23 @@ void ScheduledEntry::editEntry(string userInput){
 		iter->insertStartTime(newStartTime);
 		iter->insertEndTime(newEndTime);
 	}
-	
-	if (marker == DATE_MARKER){
-		int inputStartDay;
-		int inputStartMonth;
-		int inputStartYear;
-		int inputEndDay;
-		int inputEndMonth;
-		int inputEndYear;
-				
-		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear, inputEndDay, inputEndMonth, inputEndYear);
-		vector<Entry>::iterator iter = _scheduledList.begin();
-		for(int i = 1; i < entryNumber; i++){
-			iter++;
-		}
-		Date newStartDate;
-		newStartDate.insertDay(inputStartDay);
-		newStartDate.insertMonth(inputStartMonth);
-		newStartDate.insertYear(inputStartYear);
-		Date newEndDate;
-		newEndDate.insertDay(inputEndDay);
-		newEndDate.insertMonth(inputEndMonth);
-		newEndDate.insertYear(inputEndYear);
-		iter->insertStartDate(newStartDate);
-		iter->insertEndDate(newEndDate);
-	}
-			
-	if (marker == LOCATION_MARKER){
-		string newLocation = editComponent.getLocation();
-		vector<Entry>::iterator iter = _scheduledList.begin();
-		for(int i = 1; i < entryNumber; i++){
-			iter++;
-		}
+
+	//update location
+	string newLocation = editComponent.getLocation();
+	if (newLocation != ""){
 		iter->insertLocation(newLocation);
 	}
 
-	if (marker == STATUS_MARKER){
-		string status = editComponent.getStatus();
-		vector<Entry>::iterator iter = _scheduledList.begin();
-		for(int i = 1; i < entryNumber; i++){
-			iter++;
-		}
-
-		if (status == "done"){
+	//update status
+	string newStatus = editComponent.getStatus();
+	if (newStatus != ""){
+		if (newStatus == "done"){
 			iter->changeStatus();
-			iter->getStatus();
 		}
-		else if (status == "undone"){
+		else if (newStatus == "undone"){
 			iter->initialiseStatus();
-			iter->getStatus();
 		}
 	}
-
 
 	//feedback to users
 	cout << FEEDBACK_EDITED << entryNumber << endl;
@@ -239,4 +249,3 @@ vector<Entry> ScheduledEntry::getFloatingList(){
 	vector<Entry> FloatingEntries = _floatingList;
 	return FloatingEntries;
 }
-

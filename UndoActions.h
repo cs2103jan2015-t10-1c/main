@@ -13,6 +13,7 @@ public:
 	enum Command {
 		Add, Delete, Edit
 	};
+
 private:
 	struct _ACTION_TO_UNDO {
 		bool _isScheduled;
@@ -34,6 +35,7 @@ private:
 
 public:
 	UndoActions();
+	void emptyUndoStack();
 	void counterAdd(bool, int);
 	void counterDelete(bool, int, Entry);
 

@@ -8,6 +8,12 @@ const string UndoActions::EDITING_UNDONE = "Editing undone";
 UndoActions::UndoActions(){
 }
 
+void UndoActions::emptyUndoStack(){
+	while (!_undoStack.empty()){
+		_undoStack.pop();
+	}
+}
+
 //to counter addition, push delete command and index number into _undoStack
 void UndoActions::counterAdd(bool isScheduled, int latestEntryIndex){
 	_ACTION_TO_UNDO latestAction;

@@ -68,6 +68,9 @@ void Main::loadScheduledEntries(){
 	//reset values
 	resetStringValues();
 	resetIntegerValues();
+
+	//empty the counter stack
+	_newList.emptyCounter();
 }
 
 void Main::loadFloatingEntries(){
@@ -99,6 +102,10 @@ void Main::loadFloatingEntries(){
 	readFloat.close();
 	resetIntegerValues();
 	resetStringValues();
+
+	//empty the counter stack
+	_newList.emptyCounter();
+
 	cout << endl << "Loading done..." << endl << endl;
 }
 
@@ -230,7 +237,7 @@ void Main::executeAddFunction(string userInput){
 }
 
 void Main::executeEditFunction(string userInput){
-	_newList.editEntry(userInput);
+	_newList.editEntry(_atScheduledEntries, userInput);
 }
 
 void Main::executeSearchFunction(string userInput){
@@ -247,7 +254,7 @@ void Main::executeDeleteFunction(string userInput){
 	int indexNumber;
 	StringConvertor convertToNumber;
 	convertToNumber.convertStringToNumber(userInput, indexNumber);
-	_newList.removeEntry(indexNumber);
+	_newList.removeEntry(_atScheduledEntries, indexNumber);
 }
 
 void Main::executeHelpFunction(){

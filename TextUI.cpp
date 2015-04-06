@@ -92,7 +92,7 @@ string TextUI::findCommand(string& inputContent){
 }
 
 string TextUI::removeCommand(string& inputContent){
-    inputContent=inputContent.erase(0,inputContent.find_first_of(' '));
+    inputContent = inputContent.erase(0,inputContent.find_first_of(' '));
     return inputContent;
 }
     

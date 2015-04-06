@@ -36,11 +36,12 @@ private:
 
 public:
 	ScheduledEntry();
+	void emptyCounter();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void displayEntry(int index);
-	void removeEntry(int);
-	void editEntry(string);
+	void displayEntry(int);
+	void removeEntry(bool, int);
+	void editEntry(bool, string);
 	void undo();
 	void exit(bool&);
 	void sort(int&);
