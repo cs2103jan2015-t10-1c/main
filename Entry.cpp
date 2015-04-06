@@ -170,7 +170,7 @@ string Entry::getFullDisplay(){
 		if(_startTime.getTime() != _endTime.getTime()){
 			oss << "End Date & Time: ";
 			greg_weekday endDateToString = _endDate.getDate().day_of_week();
-			oss << " " << endDateToString.as_long_string() 
+			oss << "   " << endDateToString.as_long_string() 
 			<< " " << _endDate.getDay() << " "
 			<< _endDate.getMonth() << " "
 			<< _endDate.getYear() << FEEDBACK_AT
@@ -186,8 +186,8 @@ string Entry::getFullDisplay(){
 	
 	if (_hasDate){
 		if(_startTime.getTime() != _endTime.getTime()){
-			oss	<< "Event duration : "
-			<< days(calculateEventDurationInHours().hours()/24) << " days and "
+			oss	<< "Event duration : ";
+			oss << days(calculateEventDurationInHours().hours()/24) << " days and "
 			<< calculateEventDurationInHours().hours()%24 << " hours and " 
 			<< calculateEventDurationInHours().minutes() << " minutes" << endl;
 		}
@@ -230,7 +230,7 @@ string Entry::getShortDisplay(){
 		else{
 			oss << "End Date & Time: ";
 			greg_weekday endDateToString = _endDate.getDate().day_of_week();
-			oss << " " << endDateToString.as_long_string() 
+			oss << "   " << endDateToString.as_long_string() 
 			<< " " << _endDate.getDay() << " "
 			<< _endDate.getMonth() << " "
 			<< _endDate.getYear() << FEEDBACK_AT

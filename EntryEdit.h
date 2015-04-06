@@ -36,6 +36,8 @@ private:
 	static const string TIME_MARKER;
 	static const string LOCATION_MARKER;
 	static const string STATUS_MARKER;
+	static const string TAG_ADD_MARKER;
+	static const string TAG_REMOVE_MARKER;
 	static const string FULLSTOP_MARKER;
 
 public:	

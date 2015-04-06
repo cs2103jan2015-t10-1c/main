@@ -7,6 +7,8 @@ const string EntryEdit::DATE_MARKER = "date";
 const string EntryEdit::TIME_MARKER = "time";
 const string EntryEdit::LOCATION_MARKER = "place";
 const string EntryEdit::STATUS_MARKER = "status";
+const string EntryEdit::TAG_ADD_MARKER = "add";
+const string EntryEdit::TAG_REMOVE_MARKER = "remove";
 const string EntryEdit::FULLSTOP_MARKER = ". ";
 
 EntryEdit::EntryEdit(bool isScheduled){

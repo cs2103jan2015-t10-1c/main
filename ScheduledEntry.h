@@ -23,14 +23,11 @@ private:
 	static const string FEEDBACK_AT;
 	static const string FEEDBACK_EDITED;
 	static const string FEEDBACK_DELETED;
+	static const string FEEDBACK_NO_ENTRIES_LEFT;
 	static const string FEEDBACK_INVALID_TYPE;
 
-	//markers
-	static const string NAME_MARKER;
-	static const string DATE_MARKER;
-	static const string TIME_MARKER;
-	static const string LOCATION_MARKER;
-	static const string STATUS_MARKER;
+	static const string STATUS_DONE;
+	static const string STATUS_UNDONE;
 
 	static const string BORDER;
 
@@ -39,7 +36,7 @@ public:
 	void emptyCounter();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void displayEntry(int);
+	void displayEntry(bool, int);
 	void removeEntry(bool, int);
 	void editEntry(bool, string);
 	void undo();

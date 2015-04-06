@@ -9,13 +9,11 @@ const string ScheduledEntry::FEEDBACK_TO = " to ";
 const string ScheduledEntry::FEEDBACK_AT = " at ";
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
+const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
 const string ScheduledEntry::FEEDBACK_INVALID_TYPE = "Invalid Type!";
 
-const string ScheduledEntry::NAME_MARKER = "name";
-const string ScheduledEntry::DATE_MARKER = "date";
-const string ScheduledEntry::TIME_MARKER = "time";
-const string ScheduledEntry::LOCATION_MARKER = "place";
-const string ScheduledEntry::STATUS_MARKER = "status";
+const string ScheduledEntry::STATUS_DONE = "done";
+const string ScheduledEntry::STATUS_UNDONE = "undone";
 
 const string ScheduledEntry::BORDER = "- - - - - - - - - - - - - - - - -";
 
@@ -70,27 +68,41 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 }
 
 
-void ScheduledEntry::displayEntry(int index){
+void ScheduledEntry::displayEntry(bool isScheduled, int index){
 	cout << endl
 		<< BORDER << endl
-		<< index << ". "
-		<< _scheduledList[index-1].getFullDisplay()
-		<< BORDER;
+		<< index << ". ";
+	//scheduled entry
+	if (isScheduled){	
+		cout << _scheduledList[index-1].getFullDisplay();
+	}
+	//floating entry
+	else {
+		cout << _floatingList[index-1].getFullDisplay();
+	}
+	cout << BORDER;
 }
 
 void ScheduledEntry::removeEntry(bool isScheduled, int index){
-	cout << FEEDBACK_DELETED << endl;
-	displayEntry(index);
 	//scheduled entry
-	if (isScheduled){
+	if (isScheduled && !_scheduledList.empty()){
+		cout << FEEDBACK_DELETED << endl;
+		displayEntry(isScheduled, index);
 		_counter.counterDelete(true, index, _scheduledList[index-1]);
 		_scheduledList.erase(_scheduledList.begin() + index - 1);
 	}
 
 	//floating entry
-	else {
+	else if (!isScheduled && !_floatingList.empty()){
+		cout << FEEDBACK_DELETED << endl;
+		displayEntry(isScheduled, index);
 		_counter.counterDelete(false, index, _floatingList[index-1]);
 		_floatingList.erase(_floatingList.begin() + index - 1);
+	}
+
+	//no more entry
+	else {
+		cout << FEEDBACK_NO_ENTRIES_LEFT << endl;
 	}
 }
 
@@ -169,10 +181,10 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	//update status
 	string newStatus = editComponent.getStatus();
 	if (newStatus != ""){
-		if (newStatus == "done"){
+		if (newStatus == STATUS_DONE){
 			iter->changeStatus();
 		}
-		else if (newStatus == "undone"){
+		else if (newStatus == STATUS_UNDONE){
 			iter->initialiseStatus();
 		}
 	}
