@@ -25,6 +25,7 @@ private:
 
 	Time _startTime;
 	Time _endTime;
+	bool _hasTime;
 	
 	string _location;
 	

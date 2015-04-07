@@ -49,6 +49,7 @@ public:
 	void displayEntry(bool, int);
 	void removeEntry(bool, int);
 	void editEntry(bool, string);
+	void moveScheduledFloating(bool, int, Entry);
 	void undo();
 	void exit(bool&);
 	void sort(int&);

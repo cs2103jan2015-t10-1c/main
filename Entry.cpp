@@ -54,9 +54,11 @@ bool Entry::getDateStatus(){
 }
 
 void Entry::insertStartTime(Time inputStartTime){
+	_hasTime = inputStartTime.getTimeStatus();
+
 	_startTime = inputStartTime;
 	
-	if (_hasDate) {
+	if (_hasDate && _hasTime) {
 		_startTime.initialiseTime(_startDate.getDate());
 	}
 }
@@ -64,7 +66,7 @@ void Entry::insertStartTime(Time inputStartTime){
 void Entry::insertEndTime(Time inputEndTime){
 	_endTime = inputEndTime;
 	
-	if (_hasDate) {
+	if (_hasDate && _hasTime) {
 		_endTime.initialiseTime(_endDate.getDate());
 	}
 }

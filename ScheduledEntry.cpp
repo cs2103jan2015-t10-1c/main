@@ -144,8 +144,8 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	}
 
 	//update date
+	int inputStartDay;
 	if (editComponent.getDateEditStatus()){
-		int inputStartDay;
 		int inputStartMonth;
 		int inputStartYear;
 		int inputEndDay;
@@ -214,6 +214,16 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 
 	//feedback to users
 	cout << FEEDBACK_EDITED << entryNumber << endl;
+
+	//move entry from floating to scheduled list and vice versa
+	if (editComponent.getDateEditStatus() && (editComponent.getTimeEditStatus() || inputStartDay == 0)){
+		moveScheduledFloating(isScheduled, entryNumber, *iter);
+	}
+}
+
+void ScheduledEntry::moveScheduledFloating(bool isScheduled, int entryNumber, Entry movedEntry){
+	removeEntry(isScheduled, entryNumber);
+	addEntry(movedEntry);
 }
 
 void ScheduledEntry::undo(){

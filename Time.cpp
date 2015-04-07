@@ -1,6 +1,9 @@
 #include "Time.h"
 
 Time::Time(){
+	_hour = 99;
+	_minute = 99;
+	_hasTime = false;
 }
 
 void Time::insertHour(int inputHour){
@@ -9,6 +12,10 @@ void Time::insertHour(int inputHour){
 
 void Time::insertMinute(int inputMinute){
 	_minute = inputMinute;
+
+	if (_hour != 99 && _minute != 99){
+		_hasTime = true;
+	}
 }
 
 int Time::getHour(){
@@ -17,6 +24,11 @@ int Time::getHour(){
 
 int Time::getMinute(){
 	return _entryTime.time_of_day().minutes();
+}
+
+//check whether the entry has time
+bool Time::getTimeStatus(){
+	return _hasTime;
 }
 
 void Time::initialiseTime(date _entryDate){
