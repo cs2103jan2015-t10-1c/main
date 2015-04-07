@@ -268,11 +268,15 @@ void DisplayEntries::initialisePaging(int& numberOfPages, int& firstEntry, int& 
 	if(numberOfEntriesOnLastPage > 0){
 		numberOfPages++;
 	}
+
 	//prevent abort for exceeding page
-	if(_pageNumber > numberOfPages){
-		cout << "Page does not exist!" << endl << endl;
+	while (_pageNumber > numberOfPages){
+		if (_pageNumber = numberOfPages + 1){
+			cout << "Page does not exist!" << endl << endl;
+		}
 		_pageNumber--;
 	}
+
 	firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
 	lastEntry = firstEntry + ENTRY_PERPAGE;
 	//case for the last page
@@ -290,4 +294,3 @@ void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastE
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 }
-
