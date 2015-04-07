@@ -21,8 +21,6 @@ Main::Main(){
 	_running = true;
 	_atScheduledEntries = true;
 	_pageNumber = 1;
-	_numberOfEntriesFound = 0;
-	_lastIteration = 0;
 	_previousSearchInput = "";
 }
 
@@ -245,7 +243,7 @@ void Main::executeEditFunction(string userInput){
 
 void Main::executeSearchFunction(string userInput){
 	SearchEntries search(_newList.getScheduledList(), _newList.getScheduledList());
-	search.execute(userInput, _pageNumber, _previousSearchInput, _numberOfEntriesFound, _lastIteration);
+	search.execute(userInput, _pageNumber, _previousSearchInput);
 }
 
 void Main::executeDisplayFunction(string userInput){

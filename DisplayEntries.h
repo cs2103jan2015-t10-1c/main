@@ -68,6 +68,10 @@ public:
 
 
 	int returnPageNumber();
+
+	void initialisePaging(int&, int&, int&, int&);
+	void closingMessage(int, int, int);
+
 };
 
 #endif

@@ -134,29 +134,13 @@ void DisplayEntries::displayScheduledEntryShort(int& _pageNumber){
 	_printNextWeek = false;
 	_printThisMonth = false;
 	_printNextMonth = false;
+	//initialise for paging
+	int numberOfPages;
+	int firstEntry;
+	int lastEntry;
+	int number;
+	initialisePaging(numberOfPages, firstEntry, lastEntry, number);
 
-	//initialising number of pages
-	int numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
-	int numberOfEntriesOnLastPage = _scheduledList.size()%ENTRY_PERPAGE;
-	if(numberOfEntriesOnLastPage > 0){
-		numberOfPages++;
-	}
-	//prevent abort for exceeding page
-	if(_pageNumber > numberOfPages){
-		cout << "Page does not exist!" << endl << endl;
-		_pageNumber--;
-	}
-	
-	int number = (_pageNumber-1)*ENTRY_PERPAGE + 1;
-	int firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
-	int lastEntry = firstEntry + ENTRY_PERPAGE;
-	if(_pageNumber == numberOfPages){
-		lastEntry = firstEntry + numberOfEntriesOnLastPage;
-	}
-	//prevent abort for number of entries less than 5
-	if(_scheduledList.size() < ENTRY_PERPAGE){
-		lastEntry = _scheduledList.size();	
-	}
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl;
 		date entryStartDate = _scheduledList[i].getStartDate().getDate();
@@ -189,14 +173,14 @@ void DisplayEntries::displayScheduledEntryShort(int& _pageNumber){
 			cout << endl << "[Events Next Month:] " << endl << endl;
 			_printNextMonth = true;
 		}
+		_scheduledList[i].insertEntryNumber(number);
 		cout << BORDER << endl
-			<< (number) << ". "
+			<< _scheduledList[i].getEntryNumber() << ". "
 			<< _scheduledList[i].getShortDisplay() << endl;
 		cout << BORDER << endl;
 		number++;
 	}
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
-			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+	closingMessage(numberOfPages, firstEntry, lastEntry);
 }
 
 void DisplayEntries::displayOneScheduledEntry(int index){
@@ -276,3 +260,34 @@ void DisplayEntries::displaySpecifiedPage(int page){
 int DisplayEntries::returnPageNumber(){
 	return _pageNumber;
 }
+
+void DisplayEntries::initialisePaging(int& numberOfPages, int& firstEntry, int& lastEntry, int& number){
+	//initialise number of Pages
+	numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = _scheduledList.size()%ENTRY_PERPAGE;
+	if(numberOfEntriesOnLastPage > 0){
+		numberOfPages++;
+	}
+	//prevent abort for exceeding page
+	if(_pageNumber > numberOfPages){
+		cout << "Page does not exist!" << endl << endl;
+		_pageNumber--;
+	}
+	firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
+	lastEntry = firstEntry + ENTRY_PERPAGE;
+	//case for the last page
+	if(_pageNumber == numberOfPages){
+		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+	}
+	//prevent abort for number of entries less than 5
+	if(_scheduledList.size() < ENTRY_PERPAGE){
+		lastEntry = _scheduledList.size();	
+	}
+	number = (_pageNumber-1) * ENTRY_PERPAGE + 1;
+}
+
+void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastEntry){
+	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+}
+

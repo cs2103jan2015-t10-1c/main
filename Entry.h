@@ -13,6 +13,8 @@ using namespace boost::posix_time;
 
 class Entry{
 private:
+	int _entryNumber;
+
 	static const string FEEDBACK_AT;
 
 	string _name;
@@ -33,6 +35,8 @@ private:
 
 public:
 	Entry();
+	void insertEntryNumber(int entryNumber);
+	int getEntryNumber();
 	//input name of entry into an Entry object
 	void insertName(string);
 	//return the value of _name
@@ -65,7 +69,7 @@ public:
 	string getLocation();
 	
 	void insertTags(vector<string>&);
-	void searchEntryTag(string, int, bool&);
+	void searchEntryTag(string, bool&, bool);
 	string getTags();
 	void addTag(string);
 	void removeTag(string);

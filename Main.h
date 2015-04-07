@@ -47,8 +47,6 @@ private:
 	bool _running;
 	bool _atScheduledEntries;
 	int _pageNumber;
-	int _numberOfEntriesFound;
-	int _lastIteration;
 	ScheduledEntry _newList;
 	//TextUI
 	TextUI _commandInterface;

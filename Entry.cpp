@@ -15,6 +15,14 @@ string Entry::getName(){
 	return _name;
 }
 
+void Entry::insertEntryNumber(int entryNumber){
+	_entryNumber = entryNumber;
+}
+
+int Entry::getEntryNumber(){
+	return _entryNumber;
+}
+
 void Entry::insertStartDate(Date inputStartDate){
 	_hasDate = inputStartDate.getDateStatus();
 	
@@ -100,18 +108,20 @@ void Entry::insertTags(vector<string>& tags){
 	_tags = tags;
 }
 
-void Entry::searchEntryTag(string tag, int count, bool& tagFound){
+void Entry::searchEntryTag(string tag, bool& tagFound, bool print){
 	vector<string>::iterator iterTag;
 	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		size_t found = iterTag->find(tag);
 		if(found != string::npos){
 			tagFound = true;
-			cout << endl;
-			cout << "- - - - - - - - - - - - - - - -";
-			cout << *iterTag << " " << endl
-				<< count << ". " << getFullDisplay();
-			cout << "- - - - - - - - - - - - - - - -";
-			cout << endl;
+			if(print){
+				cout << endl;
+				cout << "- - - - - - - - - - - - - - - -";
+				cout << *iterTag << " " << endl
+					<< _entryNumber << ". " << getFullDisplay();
+				cout << "- - - - - - - - - - - - - - - -";
+				cout << endl;
+			}
 		}
 	}
 }

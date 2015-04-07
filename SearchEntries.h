@@ -22,15 +22,16 @@ private:
 
 	static const string ALL_MARKER;
 	static const string NEXT_MARKER;
+	static const string PREV_MARKER;
+
+	static const string BORDER;
 
 	StringConvertor _datetimeParser;
 	int _pageNumber;
-	int _numberOfEntriesFound;
-	int _lastIteration;
 public:
 
 	SearchEntries(vector<Entry>, vector<Entry>);
-	void execute(string input, int&, string&, int&, int&);
+	void execute(string input, int&, string&);
 	void searchTag(string);
 	void searchName(string);
 	void searchLocation(string);
@@ -38,6 +39,8 @@ public:
 	void searchDate(string);
 	void searchTime(string);
 	void searchAll(string);
+	void initialisePaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
+	void closingMessage(int, int, int);
 
 };
 #endif
