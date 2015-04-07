@@ -9,8 +9,8 @@ private:
 	vector<Entry> _scheduledEntryList;
 public:
 	ClashInspector(vector<Entry>);
-	void compareEntry(Entry, int);
-	void inspectEntries(Entry, Entry, bool&, int);
+	void compareEntry(Entry, int, bool&, bool);
+	void inspectEntries(Entry, Entry, int, bool&, bool);
 };
 
 #endif

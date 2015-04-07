@@ -217,9 +217,15 @@ void DisplayEntries::displayClashes(){
 	vector<Entry>::iterator thisEntry;
 	int count = 0;
 	for(thisEntry = _scheduledList.begin(); thisEntry != _scheduledList.end(); thisEntry++){
-		cout << count + 1 << ". " << thisEntry->getName() << endl;
-		checkEntries.compareEntry(*thisEntry, count);
-		cout << endl;
+		bool clashExists = false;
+		bool printClash = false;
+		checkEntries.compareEntry(*thisEntry, count, clashExists, printClash);
+		if(clashExists){
+			cout << count + 1 << ". " << thisEntry->getName() << endl;
+			printClash = true;
+			checkEntries.compareEntry(*thisEntry, count, clashExists, printClash);
+			cout << endl;
+		}
 		count++;
 	}
 }
