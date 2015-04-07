@@ -37,6 +37,7 @@ private:
 	string _stringEndTime;
 	string _entryLocation;
 	string _command;
+	string _previousSearchInput;
 
 	int _intStartDay; int _intStartMonth; int _intStartYear;
 	int _intEndDay; int _intEndMonth; int _intEndYear;
@@ -46,7 +47,8 @@ private:
 	bool _running;
 	bool _atScheduledEntries;
 	int _pageNumber;
-
+	int _numberOfEntriesFound;
+	int _lastIteration;
 	ScheduledEntry _newList;
 	//TextUI
 	TextUI _commandInterface;

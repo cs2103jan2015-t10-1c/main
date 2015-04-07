@@ -6,16 +6,27 @@ const string SearchEntries::STATUS_MARKER = "status";
 const string SearchEntries::DATE_MARKER = "date";
 const string SearchEntries::TIME_MARKER = "time";
 const string SearchEntries::ALL_MARKER = "all";
-const int SearchEntries::ENTRY_PERPAGE = 5;
+const string SearchEntries::NEXT_MARKER = "next";
+const int SearchEntries::ENTRY_PERPAGE = 3;
 
 SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries){
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
 	_pageNumber = 1;
+	_lastIteration = 0;
+	_numberOfEntriesFound = 0;
 }
 
-void SearchEntries::execute(string userInput, int& pageNumber){
+void SearchEntries::execute(string userInput, int& pageNumber, string& previousSearchInput, int& numberOfEntriesFound, int& lastIteration){
+	_numberOfEntriesFound = numberOfEntriesFound;
+	_pageNumber = pageNumber;
+	_lastIteration = lastIteration;
 	userInput = userInput.substr(1);
+	string temporaryUserInput = userInput;
+	if (userInput == NEXT_MARKER){
+		_pageNumber++;
+		userInput = previousSearchInput;
+	}
 	if (userInput[0] == '#'){
 		searchTag(userInput);
 	}
@@ -37,6 +48,7 @@ void SearchEntries::execute(string userInput, int& pageNumber){
 		else if (marker == TIME_MARKER){
 			searchTime(userInput);
 		}
+		
 		else if (marker == ALL_MARKER){
 			searchAll(userInput);
 		}
@@ -44,35 +56,40 @@ void SearchEntries::execute(string userInput, int& pageNumber){
 			cout << "Wrong search input is given!" << endl << endl;
 		}
 	}
+	previousSearchInput = temporaryUserInput;
+	numberOfEntriesFound = _numberOfEntriesFound;
 	pageNumber = _pageNumber;
+	lastIteration = _lastIteration;
 }
 
 void SearchEntries::searchTag(string keyword){
-	int count = 1;
-	vector<Entry>::iterator iterScheduledEntry;
-	vector<Entry>::iterator iterFloatingEntry;
-	//initialise number of pages
-	int numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
-	int numberOfEntriesOnLastPage = _scheduledList.size()%ENTRY_PERPAGE;
-	if(numberOfEntriesOnLastPage > 0){
-		numberOfPages++;
-	}
+	int numberOfEntriesInPage = 0;
+
+	int iterateEntry = _lastIteration + 1;
 	cout << endl << endl
 		<< "Scheduled Entries containing tag: " << keyword
 		<< endl;
-	for(iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
-		iterScheduledEntry->searchEntryTag(keyword, count);
-		count ++;
+	while(numberOfEntriesInPage < ENTRY_PERPAGE && iterateEntry != _scheduledList.size()){
+		bool tagFound = false;
+		_scheduledList[iterateEntry].searchEntryTag(keyword, iterateEntry + 1, tagFound);
+		if(tagFound){
+			_numberOfEntriesFound++;
+			numberOfEntriesInPage++;
+		}
+		iterateEntry++;
 	}
-	count = 1;
+	_lastIteration = iterateEntry;
+
+	/*count = 1;
 	cout << endl << endl
 		<< "Floating Entries containing tag: " << keyword
 		<< endl << endl;
-	for(iterFloatingEntry = _floatingList.begin(); iterFloatingEntry != _floatingList.end(); iterFloatingEntry++){
-		iterFloatingEntry->searchEntryTag(keyword, count);
+	for(int i = 0; i < _floatingList.size(); i++){
+		_floatingList[i].searchEntryTag(keyword, count);
 		count ++;
-	}
+		}*/
 }
+
 
 void SearchEntries::searchName(string inputName){
 		vector<Entry>::iterator iterScheduledEntry;

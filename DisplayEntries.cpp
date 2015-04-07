@@ -146,11 +146,16 @@ void DisplayEntries::displayScheduledEntryShort(int& _pageNumber){
 		cout << "Page does not exist!" << endl << endl;
 		_pageNumber--;
 	}
+	
 	int number = (_pageNumber-1)*ENTRY_PERPAGE + 1;
 	int firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
 	int lastEntry = firstEntry + ENTRY_PERPAGE;
 	if(_pageNumber == numberOfPages){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+	}
+	//prevent abort for number of entries less than 5
+	if(_scheduledList.size() < ENTRY_PERPAGE){
+		lastEntry = _scheduledList.size();	
 	}
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl;

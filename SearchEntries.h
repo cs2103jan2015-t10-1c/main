@@ -21,12 +21,16 @@ private:
 	static const int ENTRY_PERPAGE;
 
 	static const string ALL_MARKER;
+	static const string NEXT_MARKER;
+
 	StringConvertor _datetimeParser;
 	int _pageNumber;
+	int _numberOfEntriesFound;
+	int _lastIteration;
 public:
 
 	SearchEntries(vector<Entry>, vector<Entry>);
-	void execute(string input, int&);
+	void execute(string input, int&, string&, int&, int&);
 	void searchTag(string);
 	void searchName(string);
 	void searchLocation(string);

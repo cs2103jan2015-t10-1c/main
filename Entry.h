@@ -65,7 +65,7 @@ public:
 	string getLocation();
 	
 	void insertTags(vector<string>&);
-	void searchEntryTag(string, int);
+	void searchEntryTag(string, int, bool&);
 	string getTags();
 	void addTag(string);
 	void removeTag(string);
