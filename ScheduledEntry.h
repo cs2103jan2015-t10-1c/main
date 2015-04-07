@@ -25,9 +25,19 @@ private:
 	static const string FEEDBACK_DELETED;
 	static const string FEEDBACK_NO_ENTRIES_LEFT;
 	static const string FEEDBACK_WRONG_COMMAND;
+	static const string FEEDBACK_SUCCESSFULLY_STORED;
 
 	static const string STATUS_DONE;
 	static const string STATUS_UNDONE;
+
+	//Prompts at exit
+	static const string SPECIFY_STORAGE_PROMPT;
+	static const string SCHEDULED_ENTRIES_PROMPT;
+	static const string FLOATING_ENTRIES_PROMPT;
+
+	//File names
+	static const string SCHEDULED_FILE_NAME;
+	static const string FLOATING_FILE_NAME;
 
 	static const string BORDER;
 
