@@ -18,14 +18,15 @@ private:
 	static const string STATUS_MARKER;
 	static const string DATE_MARKER;
 	static const string TIME_MARKER;
+	static const int ENTRY_PERPAGE;
 
 	static const string ALL_MARKER;
 	StringConvertor _datetimeParser;
-	
+	int _pageNumber;
 public:
 
 	SearchEntries(vector<Entry>, vector<Entry>);
-	void execute(string input);
+	void execute(string input, int&);
 	void searchTag(string);
 	void searchName(string);
 	void searchLocation(string);

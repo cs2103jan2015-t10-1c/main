@@ -41,7 +41,10 @@ private:
 	static const string TYPE_FIRSTPAGE;
 	static const string TYPE_LASTPAGE;
 	static const string TYPE_SPECIFICPAGE;
+	static const string TYPE_PAST;
+
 	static const int BLANKSPACE_COUNT;
+	static const int ENTRY_PERPAGE;
 
 	static const string BORDER;
 
@@ -50,7 +53,7 @@ public:
 	DisplayEntries(vector<Entry>, vector<Entry>, int, bool);
 	//Scheduled Entries
 	void execute(string, bool&, int&);
-	void displayScheduledEntryShort(int);
+	void displayScheduledEntryShort(int&);
 	void displayOneScheduledEntry(int index);
 	void displayScheduledEntries();
 	//Floating Entries
@@ -61,6 +64,7 @@ public:
 	void displayFirstPage();
 	void displayLastPage();
 	void displaySpecifiedPage(int);
+	/*void displayPastEntries();*/
 
 
 	int returnPageNumber();

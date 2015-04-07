@@ -242,7 +242,7 @@ void Main::executeEditFunction(string userInput){
 
 void Main::executeSearchFunction(string userInput){
 	SearchEntries search(_newList.getScheduledList(), _newList.getFloatingList());
-	search.execute(userInput);
+	search.execute(userInput, _pageNumber);
 }
 
 void Main::executeDisplayFunction(string userInput){
