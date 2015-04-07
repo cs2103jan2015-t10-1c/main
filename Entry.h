@@ -64,9 +64,12 @@ public:
 	//return the value of _location
 	string getLocation();
 	
-	void addTags(vector<string>&);
+	void insertTags(vector<string>&);
 	void searchEntryTag(string, int);
 	string getTags();
+	void addTag(string);
+	void removeTag(string);
+
 	date_duration calculateDaysFromToday();
 	date_duration calculateEventDurationInDays();
 	time_duration calculateEventDurationInHours();

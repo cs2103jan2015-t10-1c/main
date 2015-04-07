@@ -319,7 +319,7 @@ void Main::initialiseEntry(Entry& newEntry, string entryName, Date startDate, Da
 	newEntry.insertStartTime(startTime);
 	newEntry.insertEndTime(endTime);
 	newEntry.insertLocation(entryLocation);
-	newEntry.addTags(tags);
+	newEntry.insertTags(tags);
 }
 
 void Main::initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
