@@ -23,11 +23,9 @@ void SearchEntries::execute(string userInput, int& pageNumber, string& previousS
 	_pageNumber = pageNumber;
 	userInput = userInput.substr(1);
 	if (userInput == NEXT_MARKER){
-		cout << previousSearchInput << endl;
 		_pageNumber++;
 		userInput = previousSearchInput;
 	} else if (userInput == PREV_MARKER){
-		cout << previousSearchInput << endl;
 		_pageNumber--;
 		userInput = previousSearchInput;
 	} else{
@@ -108,6 +106,7 @@ void SearchEntries::searchTag(string keyword){
 void SearchEntries::searchName(string inputName){
 		/*vector<Entry>::iterator iterScheduledEntry;
 		vector<Entry>::iterator iterFloatingEntry;*/
+
 		vector<Entry> searchResult;
 		int numberOfPages;
 		int firstEntry;
@@ -152,22 +151,38 @@ void SearchEntries::searchName(string inputName){
 }
 
 void SearchEntries::searchLocation(string inputLocation){
-		vector<Entry>::iterator iterScheduledEntry;
-		vector<Entry>::iterator iterFloatingEntry;
+		/*vector<Entry>::iterator iterScheduledEntry;
+		vector<Entry>::iterator iterFloatingEntry;*/
 
-		int count = 1;
-		cout << "Scheduled Entries containing " << inputLocation << " in their location:" << endl;
-		for (iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
-			size_t found = iterScheduledEntry->getLocation().find(inputLocation);
+		vector<Entry> searchResult;
+		int numberOfPages;
+		int firstEntry;
+		int lastEntry;
+		//initialise search results
+		for(int i = 0; i < _scheduledList.size(); i++){
+			bool locationFound = false;
+			_scheduledList[i].insertEntryNumber(i+1);
+			size_t found = _scheduledList[i].getLocation().find(inputLocation);
 			if (found != string::npos){
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iterScheduledEntry->getFullDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << endl;
+				locationFound = true;
 			}
-			count++;
+			if(locationFound){
+				searchResult.push_back(_scheduledList[i]);
+			}
 		}
-		count = 1;
+		cout << "Scheduled Entries containing " << inputLocation << " in their location:" << endl;
+
+		initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+		for (int i = firstEntry; i < lastEntry; i++){
+			cout << BORDER << endl
+				<< searchResult[i].getEntryNumber() << ". "
+				<< searchResult[i].getShortDisplay() << endl
+				<< BORDER << endl;
+			}
+		cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
+
+		/*count = 1;
 		cout << "Floating Entries containing " << inputLocation << " in their location:" << endl;
 		for (iterFloatingEntry = _floatingList.begin(); iterFloatingEntry != _floatingList.end(); iterFloatingEntry++){
 			size_t found = iterFloatingEntry->getLocation().find(inputLocation);
@@ -178,24 +193,37 @@ void SearchEntries::searchLocation(string inputLocation){
 				cout << endl;
 			}
 			count++;
-		}
+		}*/
 }
 
 void SearchEntries::searchStatus(string inputStatus){
-		vector<Entry>::iterator iterScheduledEntry;
-		vector<Entry>::iterator iterFloatingEntry;
-		int count = 1;
-		cout << "Scheduled Entries that is/are " << inputStatus << ":" << endl;
-		for (iterScheduledEntry = _scheduledList.begin(); iterScheduledEntry != _scheduledList.end(); iterScheduledEntry++){
-			if (iterScheduledEntry->getStatus() == inputStatus){
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iterScheduledEntry->getShortDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;				
-				cout << endl;
+		/*vector<Entry>::iterator iterScheduledEntry;
+		vector<Entry>::iterator iterFloatingEntry;*/
+		vector<Entry> searchResult;
+		int numberOfPages;
+		int firstEntry;
+		int lastEntry;
+		//initialise search results
+		for(int i = 0; i < _scheduledList.size(); i++){
+			bool statusMatches = false;
+			_scheduledList[i].insertEntryNumber(i+1);
+			if(inputStatus == _scheduledList[i].getStatus()){
+				statusMatches == true;
+				searchResult.push_back(_scheduledList[i]);
 			}
-			count++;
 		}
-		count = 1;
+		cout << "Scheduled Entries that is/are " << inputStatus << ":" << endl;
+		initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+		for (int i = firstEntry; i < lastEntry; i++){
+			cout << BORDER << endl
+				<< searchResult[i].getEntryNumber() << ". "
+				<< searchResult[i].getShortDisplay() << endl
+				<< BORDER << endl;
+			}
+		cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
+
+		/*count = 1;
 		cout << "Floating Entries that is/are " << inputStatus << ":" << endl;
 		for (iterFloatingEntry = _floatingList.begin(); iterFloatingEntry != _floatingList.end(); iterFloatingEntry++){
 			if (iterFloatingEntry->getStatus() == inputStatus){
@@ -205,7 +233,7 @@ void SearchEntries::searchStatus(string inputStatus){
 				cout << endl;
 			}
 			count++;
-		}
+		}*/
 }
 
 void SearchEntries::searchDate(string userInput){
