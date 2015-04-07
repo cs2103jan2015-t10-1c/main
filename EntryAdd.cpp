@@ -62,6 +62,7 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		extractDate(entryComponents, entryEndDate);
 		extractTime(entryComponents, entryEndTime);
 	}
+
 	//extract deadline (1 date 1 time)
 	else if(entryComponents[0] == BY_MARKER[0] && entryComponents[1] == BY_MARKER[1]){
 		int datePosition = BY_MARKER.size() + BLANK_SPACE_COUNT;
@@ -72,6 +73,7 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		entryEndTime = entryStartTime;
 		cout << entryComponents << endl;
 	}
+
 	//only name and location, and maybe tags
 	else if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){
 		extractLocation(entryComponents, entryLocation);

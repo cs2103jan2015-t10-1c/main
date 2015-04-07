@@ -189,6 +189,16 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 		}
 	}
 
+	//update added tags
+	if (editComponent.getTagAddedStatus()){
+		editComponent.addTag(*iter);
+	}
+
+	//update removed tags
+	if (editComponent.getTagRemovedStatus()){
+		editComponent.removeTag(*iter);
+	}
+
 	//feedback to users
 	cout << FEEDBACK_EDITED << entryNumber << endl;
 }

@@ -96,7 +96,7 @@ string Entry::getLocation (){
 	return _location;
 }
 
-void Entry::addTags(vector<string>& tags){
+void Entry::insertTags(vector<string>& tags){
 	_tags = tags;
 }
 
@@ -123,6 +123,27 @@ string Entry::getTags(){
 	}
 
 	return oss.str();
+}
+
+void Entry::addTag(string tag){
+	_tags.push_back(tag);
+}
+
+void Entry::removeTag(string tag){
+	vector<string>::iterator iterTag;
+	bool isFound = false;
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+		size_t found = iterTag->find(tag);
+		if(found != string::npos){
+			_tags.erase(iterTag);
+			isFound = true;
+			break;
+		}
+	}
+
+	if (!isFound){
+		cout << tag << " does not exist" << endl;
+	}
 }
 
 date_duration Entry::calculateDaysFromToday(){
@@ -191,15 +212,17 @@ string Entry::getFullDisplay(){
 			<< calculateEventDurationInHours().hours()%24 << " hours and " 
 			<< calculateEventDurationInHours().minutes() << " minutes" << endl;
 		}
-	oss << "Time left: " << calculateDaysFromToday() << " days "<< endl
-		<< "Status: " << getStatus() << endl
+		oss << "Time left: " << calculateDaysFromToday() << " days "<< endl;
+	}
+	
+	oss	<< "Status: " << getStatus() << endl
 		<< "Tags: ";
 	vector<string>::iterator tagIter;
 	for(tagIter = _tags.begin(); tagIter != _tags.end(); tagIter++){
 		oss << *tagIter << " ";
 	}
 	oss << endl;
-	}
+	
 	return oss.str();
 }
 
