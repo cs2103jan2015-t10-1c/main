@@ -9,6 +9,7 @@ const string ScheduledEntry::FEEDBACK_TO = " to ";
 const string ScheduledEntry::FEEDBACK_AT = " at ";
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
+const string ScheduledEntry::FEEDBACK_OUT_OF_BOUND = "Entry number is out of bound.";
 const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
 const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 const string ScheduledEntry::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
@@ -94,6 +95,10 @@ void ScheduledEntry::displayEntry(bool isScheduled, int index){
 void ScheduledEntry::removeEntry(bool isScheduled, int index){
 	//scheduled entry
 	if (isScheduled && !_scheduledList.empty()){
+		if (index > _scheduledList.size()){
+			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			return;
+		}
 		cout << FEEDBACK_DELETED << endl;
 		displayEntry(isScheduled, index);
 		_counter.counterDelete(true, index, _scheduledList[index-1]);
@@ -102,6 +107,10 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index){
 
 	//floating entry
 	else if (!isScheduled && !_floatingList.empty()){
+		if (index > _floatingList.size()){
+			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			return;
+		}
 		cout << FEEDBACK_DELETED << endl;
 		displayEntry(isScheduled, index);
 		_counter.counterDelete(false, index, _floatingList[index-1]);

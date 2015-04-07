@@ -23,6 +23,7 @@ private:
 	static const string FEEDBACK_AT;
 	static const string FEEDBACK_EDITED;
 	static const string FEEDBACK_DELETED;
+	static const string FEEDBACK_OUT_OF_BOUND;
 	static const string FEEDBACK_NO_ENTRIES_LEFT;
 	static const string FEEDBACK_WRONG_COMMAND;
 	static const string FEEDBACK_SUCCESSFULLY_STORED;
