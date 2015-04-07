@@ -248,7 +248,7 @@ void Main::executeSearchFunction(string userInput){
 }
 
 void Main::executeDisplayFunction(string userInput){
-	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _pageNumber, _atScheduledEntries);
+	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _atScheduledEntries);
 	display.execute(userInput, _atScheduledEntries, _pageNumber, _viewingClashes);
 }
 

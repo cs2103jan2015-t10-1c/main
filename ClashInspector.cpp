@@ -35,7 +35,7 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 				<< ": " << anotherEntry.getName()
 				<< "! " << endl;
 		}
-			clashExists = true;
+		clashExists = true;
 		if((endTimeAnotherEntry > startTimeInputEntry &&  startTimeAnotherEntry < startTimeInputEntry)
 			|| (endTimeAnotherEntry > endTimeInputEntry && startTimeAnotherEntry < endTimeInputEntry)
 			|| (startTimeInputEntry < startTimeAnotherEntry &&  endTimeInputEntry > startTimeAnotherEntry)
