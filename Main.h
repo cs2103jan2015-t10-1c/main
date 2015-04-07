@@ -46,6 +46,7 @@ private:
 
 	bool _running;
 	bool _atScheduledEntries;
+	bool _viewingClashes;
 	int _pageNumber;
 	ScheduledEntry _newList;
 	//TextUI

@@ -22,6 +22,7 @@ Main::Main(){
 	_atScheduledEntries = true;
 	_pageNumber = 1;
 	_previousSearchInput = "";
+	_viewingClashes = false;
 }
 
 void Main::welcomeMessage(){
@@ -248,7 +249,7 @@ void Main::executeSearchFunction(string userInput){
 
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _pageNumber, _atScheduledEntries);
-	display.execute(userInput, _atScheduledEntries, _pageNumber);
+	display.execute(userInput, _atScheduledEntries, _pageNumber, _viewingClashes);
 }
 
 void Main::executeDeleteFunction(string userInput){
