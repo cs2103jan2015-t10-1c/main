@@ -10,7 +10,7 @@ const string ScheduledEntry::FEEDBACK_AT = " at ";
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
 const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
-const string ScheduledEntry::FEEDBACK_INVALID_TYPE = "Invalid Type!";
+const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 
 const string ScheduledEntry::STATUS_DONE = "done";
 const string ScheduledEntry::STATUS_UNDONE = "undone";
@@ -111,6 +111,11 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	int entryNumber = editComponent.getEntryNumber(userInput);
 	editComponent.extractMarkerInfo(userInput);
 	
+	if (!editComponent.getEditStatus()){
+		cout << FEEDBACK_WRONG_COMMAND << endl;
+		return;
+	}
+
 	//find the entry to be edited
 	vector<Entry>::iterator iter;
 	if (isScheduled){

@@ -13,6 +13,7 @@ const string EntryEdit::FULLSTOP_MARKER = ". ";
 
 EntryEdit::EntryEdit(bool isScheduled){
 	_isScheduled = isScheduled;
+	_isEdited = true;
 	_dateEdited = false;
 	_timeEdited = false;
 	_tagAdded = false;
@@ -74,6 +75,12 @@ void EntryEdit::extractMarkerInfo(string entryComponents){
 		else if (entryComponents[0] == TAG_REMOVE_MARKER[0] && entryComponents[1] == TAG_REMOVE_MARKER[1] && entryComponents[2] == TAG_REMOVE_MARKER[2]
 		&& entryComponents[3] == TAG_REMOVE_MARKER[3] && entryComponents[4] == TAG_REMOVE_MARKER[4] && entryComponents[5] == TAG_REMOVE_MARKER[5]){
 			extractRemovedTag(entryComponents, currentChange, isEndOfEdit);
+		}
+
+		//unrecognised command
+		else {
+			_isEdited = false;
+			isEndOfEdit = true;
 		}
 	}
 }
@@ -346,6 +353,10 @@ void EntryEdit::removeTag(Entry& editedEntry){
 			editedEntry.removeTag(tag);
 		}
 	}
+}
+
+bool EntryEdit::getEditStatus(){
+	return _isEdited;
 }
 
 bool EntryEdit::getDateEditStatus(){

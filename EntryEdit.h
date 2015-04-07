@@ -25,6 +25,7 @@ private:
 		string _newInformation;
 	};
 	vector<_NEW_CHANGES> _changesList;
+	bool _isEdited;
 	bool _dateEdited;
 	bool _timeEdited;
 	bool _tagAdded;
@@ -64,6 +65,7 @@ public:
 	void addTag(Entry&);
 	void removeTag(Entry&);
 
+	bool getEditStatus();
 	bool getDateEditStatus();
 	bool getTimeEditStatus();
 	bool getTagAddedStatus();
