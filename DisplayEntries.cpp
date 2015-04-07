@@ -141,11 +141,15 @@ void DisplayEntries::displayScheduledEntryShort(int& _pageNumber){
 	if(numberOfEntriesOnLastPage > 0){
 		numberOfPages++;
 	}
+
 	//prevent abort for exceeding page
-	if(_pageNumber > numberOfPages){
-		cout << "Page does not exist!" << endl << endl;
+	while(_pageNumber > numberOfPages){
+		if (_pageNumber = numberOfPages + 1){
+			cout << "Page does not exist!" << endl << endl;
+		}
 		_pageNumber--;
 	}
+	
 	int number = (_pageNumber-1)*ENTRY_PERPAGE + 1;
 	int firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
 	int lastEntry = firstEntry + ENTRY_PERPAGE;

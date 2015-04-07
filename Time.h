@@ -12,6 +12,7 @@ class Time{
 private:
 	int _hour;
 	int _minute;
+	bool _hasTime;
 	ptime _entryTime;
 
 public:
@@ -24,6 +25,7 @@ public:
 	//return the values of the private attributes
 	int getHour();
 	int getMinute();
+	bool getTimeStatus();
 	void initialiseTime(date);
 	ptime getTime();
 };
