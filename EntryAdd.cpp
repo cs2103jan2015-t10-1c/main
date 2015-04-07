@@ -1,38 +1,6 @@
 #include <sstream>
 #include "EntryAdd.h"
 
-
-const string MONTHSHORT_JANUARY = "Jan";
-const string MONTHSHORT_FEBRUARY = "Feb";
-const string MONTHSHORT_MARCH = "Mar";
-const string MONTHSHORT_APRIL = "Apr";
-const string MONTHSHORT_MAY = "May";
-const string MONTHSHORT_JUNE = "Jun";
-const string MONTHSHORT_JULY = "Jul";
-const string MONTHSHORT_AUGUST = "Aug";
-const string MONTHSHORT_SEPTEMBER = "Sep";
-const string MONTHSHORT_OCTOBER = "Oct";
-const string MONTHSHORT_NOVEMBER = "Nov";
-const string MONTHSHORT_DECEMBER = "Dec";
-
-const string MONTHLONG_JANUARY = "January";
-const string MONTHLONG_FEBRUARY = "February";
-const string MONTHLONG_MARCH = "March";
-const string MONTHLONG_APRIL = "April";
-const string MONTHLONG_MAY = "May";
-const string MONTHLONG_JUNE = "June";
-const string MONTHLONG_JULY = "July";
-const string MONTHLONG_AUGUST = "August";
-const string MONTHLONG_SEPTEMBER = "September";
-const string MONTHLONG_OCTOBER = "October";
-const string MONTHLONG_NOVEMBER = "November";
-const string MONTHLONG_DECEMBER = "December";
-
-const string EntryAdd::MONTHSHORT_ARRAY[12] = {MONTHSHORT_JANUARY, MONTHSHORT_FEBRUARY, MONTHSHORT_MARCH, MONTHSHORT_APRIL, MONTHSHORT_MAY, MONTHSHORT_JUNE,
-	MONTHSHORT_JULY, MONTHSHORT_AUGUST, MONTHSHORT_SEPTEMBER, MONTHSHORT_OCTOBER, MONTHSHORT_NOVEMBER, MONTHSHORT_DECEMBER};
-const string EntryAdd::MONTHLONG_ARRAY[12] = {MONTHLONG_JANUARY, MONTHLONG_FEBRUARY, MONTHLONG_MARCH, MONTHLONG_APRIL, MONTHLONG_MAY, MONTHLONG_JUNE,
-	MONTHLONG_JULY, MONTHLONG_AUGUST, MONTHLONG_SEPTEMBER, MONTHLONG_OCTOBER, MONTHLONG_NOVEMBER, MONTHLONG_DECEMBER};
-
 const int EntryAdd::BLANK_SPACE_COUNT = 1;
 const string EntryAdd::AT_MARKER = "at";
 const string EntryAdd::BY_MARKER = "by";
@@ -71,7 +39,6 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		entryEndDate = entryStartDate;
 		extractTime(entryComponents, entryStartTime);
 		entryEndTime = entryStartTime;
-		cout << entryComponents << endl;
 	}
 
 	//only name and location, and maybe tags

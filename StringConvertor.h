@@ -8,8 +8,10 @@ using namespace std;
 
 class StringConvertor{
 private:
-	static const string MONTHSHORT_ARRAY[12];
-	static const string MONTHLONG_ARRAY[12];
+	static const string UPPERCASE_MONTHSHORT_ARRAY[12];
+	static const string LOWERCASE_MONTHSHORT_ARRAY[12];
+	static const string UPPERCASE_MONTHLONG_ARRAY[12];
+	static const string LOWERCASE_MONTHLONG_ARRAY[12];
 	static const int BLANK_SPACE_COUNT;
 	static const string BLANK_SPACE;
 	static const string FULLSTOP_MARKER;

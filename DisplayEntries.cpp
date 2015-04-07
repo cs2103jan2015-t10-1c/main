@@ -8,7 +8,9 @@ const string DisplayEntries::TYPE_CLASH = " clashes";
 const string DisplayEntries::TYPE_FIRSTPAGE = " first page";
 const string DisplayEntries::TYPE_LASTPAGE = " last page";
 const string DisplayEntries::TYPE_SPECIFICPAGE = " page";
+const string DisplayEntries::TYPE_PAST = " past";
 
+const int DisplayEntries::ENTRY_PERPAGE = 5;
 const int DisplayEntries::BLANKSPACE_COUNT = 1;
 
 const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
@@ -112,6 +114,10 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 		}
 	}
 
+	/*else if (_userInput == TYPE_PAST){
+		displayPastEntries();
+	}*/
+
 	//if command is invalid
 	else {
 		cout << "Invalid display command! Try again" << endl << endl;
@@ -119,7 +125,7 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 	pageNumber = _pageNumber;
 }
 
-void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
+void DisplayEntries::displayScheduledEntryShort(int& _pageNumber){
 	//marking the boundaries
 	_printInThePast = false;
 	_printToday = false;
@@ -130,14 +136,19 @@ void DisplayEntries::displayScheduledEntryShort(int _pageNumber){
 	_printNextMonth = false;
 
 	//initialising number of pages
-	int numberOfPages = _scheduledList.size()/5;
-	int numberOfEntriesOnLastPage = _scheduledList.size()%5;
+	int numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = _scheduledList.size()%ENTRY_PERPAGE;
 	if(numberOfEntriesOnLastPage > 0){
 		numberOfPages++;
 	}
-	int number = (_pageNumber-1)*5 + 1;
-	int firstEntry = 5*(_pageNumber-1);
-	int lastEntry = firstEntry + 5;
+	//prevent abort for exceeding page
+	if(_pageNumber > numberOfPages){
+		cout << "Page does not exist!" << endl << endl;
+		_pageNumber--;
+	}
+	int number = (_pageNumber-1)*ENTRY_PERPAGE + 1;
+	int firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
+	int lastEntry = firstEntry + ENTRY_PERPAGE;
 	if(_pageNumber == numberOfPages){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
@@ -217,20 +228,27 @@ void DisplayEntries::displayClashes(){
 	vector<Entry>::iterator thisEntry;
 	int count = 0;
 	for(thisEntry = _scheduledList.begin(); thisEntry != _scheduledList.end(); thisEntry++){
-		cout << count + 1 << ". " << thisEntry->getName() << endl;
-		checkEntries.compareEntry(*thisEntry, count);
-		cout << endl;
+		bool clashExists = false;
+		bool printClash = false;
+		checkEntries.compareEntry(*thisEntry, count, clashExists, printClash);
+		if(clashExists){
+			cout << count + 1 << ". " << thisEntry->getName() << endl;
+			printClash = true;
+			checkEntries.compareEntry(*thisEntry, count, clashExists, printClash);
+			cout << endl;
+		}
 		count++;
 	}
 }
 
 void DisplayEntries::displayFirstPage(){
-	displayScheduledEntryShort(1);
+	int firstPage = 1;
+	displayScheduledEntryShort(firstPage);
 }
 
 void DisplayEntries::displayLastPage(){
-	int numberOfPages = _scheduledList.size()/5;
-	if(_scheduledList.size() % 5 > 0){
+	int numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
+	if(_scheduledList.size() % ENTRY_PERPAGE > 0){
 		numberOfPages++;
 	}
 	displayScheduledEntryShort(numberOfPages);
@@ -238,7 +256,17 @@ void DisplayEntries::displayLastPage(){
 
 void DisplayEntries::displaySpecifiedPage(int page){
 	displayScheduledEntryShort(page);
+	_pageNumber = page;
 }
+
+/*void DisplayEntries::displayPastEntries(){
+	vector<Entry>::iterator iterPastEntry;
+	bool isToday;
+	for(iterPastEntry = _scheduledList.begin(); iterPastEntry != _scheduledList.end(); iterPastEntry++){
+		cout << iterPastEntry->getShortDisplay();
+		cout << endl << endl;
+	}
+}*/
 
 int DisplayEntries::returnPageNumber(){
 	return _pageNumber;

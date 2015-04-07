@@ -10,9 +10,6 @@ using namespace std;
 
 class EntryAdd{
 private:
-	
-	static const string MONTHSHORT_ARRAY[12];
-	static const string MONTHLONG_ARRAY[12];
 	static const int BLANK_SPACE_COUNT;
 	static const string AT_MARKER;
 	static const string BY_MARKER;
