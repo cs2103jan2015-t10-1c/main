@@ -11,9 +11,17 @@ const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
 const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
 const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
+const string ScheduledEntry::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
 
 const string ScheduledEntry::STATUS_DONE = "done";
 const string ScheduledEntry::STATUS_UNDONE = "undone";
+
+const string ScheduledEntry::SPECIFY_STORAGE_PROMPT = "Please specify where you want to store your: ";
+const string ScheduledEntry::SCHEDULED_ENTRIES_PROMPT = "Scheduled entries";
+const string ScheduledEntry::FLOATING_ENTRIES_PROMPT = "Floating entries";
+
+const string ScheduledEntry::SCHEDULED_FILE_NAME = "\\FastAddSched.txt";
+const string ScheduledEntry::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
 
 const string ScheduledEntry::BORDER = "- - - - - - - - - - - - - - - - -";
 
@@ -213,25 +221,37 @@ void ScheduledEntry::undo(){
 }
 
 void ScheduledEntry::exit(bool& running){
+	cout << SPECIFY_STORAGE_PROMPT << endl;
+	
 	//write scheduled
 	ofstream writeSched;
-	writeSched.open("FastAddSched.txt");
+	string scheduledPath;
+	cout << SCHEDULED_ENTRIES_PROMPT << ": ";
+	cin >> scheduledPath;
+	scheduledPath = scheduledPath + SCHEDULED_FILE_NAME;
+	writeSched.open(scheduledPath);
 	vector<Entry>::iterator iterSched;
 
 	for (iterSched = _scheduledList.begin(); iterSched != _scheduledList.end(); iterSched++){
 		writeSched << iterSched->storeEntry() << endl;
 	}
 	writeSched.close();
+	cout << SCHEDULED_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << scheduledPath << endl;
 
 	//write floating
 	ofstream writeFloat;
-	writeFloat.open("FastAddFloat.txt");
+	string floatingPath;
+	cout << FLOATING_ENTRIES_PROMPT << ": ";
+	cin >> floatingPath;
+	floatingPath = floatingPath + FLOATING_FILE_NAME;
+	writeFloat.open(floatingPath);
 	vector<Entry>::iterator iterFloat;
 
 	for (iterFloat = _floatingList.begin(); iterFloat != _floatingList.end(); iterFloat++){
 		writeFloat << iterFloat->storeEntry() << endl;
 	}
 	writeFloat.close();
+	cout << FLOATING_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << floatingPath << endl;
 
 	running = false;
 }

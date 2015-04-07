@@ -6,5 +6,6 @@ int main(){
 	RunFA.loadScheduledEntries();
 	RunFA.loadFloatingEntries();
 	RunFA.operateFastAdd();
+	system("pause");
 	return 0;
 }
