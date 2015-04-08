@@ -6,6 +6,15 @@ Date::Date(){
 	_month = 0;
 	_year = 0;
 	_hasDate = false;
+	_loading = false;
+}
+
+Date::Date(bool loading){
+	_day = 0;
+	_month = 0;
+	_year = 0;
+	_hasDate = false;
+	_loading = loading;
 }
 
 void Date::insertDay(int inputDay){
@@ -31,10 +40,12 @@ void Date::initialiseDate(){
 	date thisDate(_year, _month, _day);
 	inThePast = thisDate < today;
 	if (inThePast){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << endl << "Warning! Date is in the past" << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		if(!_loading){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << endl << "Warning! Date is in the past" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		}
 	}
 		_entryDate = date(_year, _month, _day);
 }

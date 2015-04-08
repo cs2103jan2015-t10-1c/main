@@ -36,6 +36,17 @@ void UndoActions::counterDelete(bool isScheduled, int latestEntryIndex, Entry la
 	_undoStack.push(latestAction);
 }
 
+//to counter editing, push edit command, index number and the entry into _undoStack
+void UndoActions::counterEdit(bool isScheduled, int latestEntryIndex, Entry latestEntry){
+	_ACTION_TO_UNDO latestAction;
+	latestAction._isScheduled = isScheduled;
+	latestAction._counterCommand = Edit;
+	latestAction._indexNumber = latestEntryIndex;
+	latestAction._modifiedEntry = latestEntry;
+
+	_undoStack.push(latestAction);
+}
+
 void UndoActions::execute(vector<Entry>& _scheduledList, vector<Entry>& _floatingList){
 	//no more action to undo
 	if(_undoStack.empty()){
@@ -112,5 +123,15 @@ void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _sched
 
 //undo editing of entry. Counter command = edit
 void UndoActions::undoEdit(_ACTION_TO_UNDO latestAction){
+	//scheduled entries
+	if (latestAction._isScheduled){
 
+	}
+
+	//floating entries
+	else {
+
+	}
+
+	cout << EDITING_UNDONE << endl;
 }

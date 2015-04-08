@@ -7,8 +7,12 @@
 #include "UndoActions.h"
 #include "EntryEdit.h"
 #include "ClashInspector.h"
+#include "DateTimeInspector.h"
 
+#include <iostream>
+#include <sstream>
 #include <fstream>
+#include <Windows.h>
 
 class ScheduledEntry{
 private:
@@ -21,12 +25,30 @@ private:
 	static const string FEEDBACK_FROM;
 	static const string FEEDBACK_TO;
 	static const string FEEDBACK_AT;
+
 	static const string FEEDBACK_EDITED;
+	static const string FEEDBACK_ARROW;
+	static const string FEEDBACK_NAME;
+	static const string FEEDBACK_DATE;
+	static const string FEEDBACK_NO_DATE;
+	static const string FEEDBACK_REMOVED;
+	static const string FEEDBACK_TIME;
+	static const string FEEDBACK_NO_TIME;
+	static const string FEEDBACK_LOCATION;
+	static const string FEEDBACK_STATUS;
+	static const string FEEDBACK_TAGS_ADDED;
+	static const string FEEDBACK_TAGS_REMOVED;
+	static const string FEEDBACK_MOVED_TO;
+	static const string FEEDBACK_SCHEDULED_LIST;
+	static const string FEEDBACK_FLOATING_LIST;
+
 	static const string FEEDBACK_DELETED;
-	static const string FEEDBACK_OUT_OF_BOUND;
 	static const string FEEDBACK_NO_ENTRIES_LEFT;
-	static const string FEEDBACK_WRONG_COMMAND;
+	static const string FEEDBACK_OUT_OF_BOUND;
+	
 	static const string FEEDBACK_SUCCESSFULLY_STORED;
+
+	static const string FEEDBACK_WRONG_COMMAND;
 
 	static const string STATUS_DONE;
 	static const string STATUS_UNDONE;
@@ -47,9 +69,9 @@ public:
 	void emptyCounter();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void displayEntry(bool, int);
-	void removeEntry(bool, int);
-	void editEntry(bool, string);
+	string getEntryDisplay(bool, int);
+	void removeEntry(bool, int, string&);
+	void editEntry(bool, string, string&);
 	void moveScheduledFloating(bool, int, Entry);
 	void undo();
 	void exit(bool&);

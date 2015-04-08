@@ -29,6 +29,8 @@ private:
 	static const string COMMAND_UNDO;
 	static const string COMMAND_EXIT;
 	static const string COMMAND_RESIZE;
+	static const string COMMAND_BORDER;
+
 
 	string _userInput;
 	string _entryName;
@@ -46,9 +48,14 @@ private:
 	int _intEndHour; int _intEndMinute;
 
 	bool _running;
-	bool _atScheduledEntries;
+	bool _viewingScheduledList;
+	bool _viewingFloatingList;
+	bool _viewingPastEntries;
 	bool _viewingClashes;
+
 	int _pageNumber;
+	int _lastPage;
+	bool _loadingEntries;
 	ScheduledEntry _newList;
 	//TextUI
 	TextUI _commandInterface;
