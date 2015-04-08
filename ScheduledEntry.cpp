@@ -233,6 +233,12 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput, string& editF
 		int inputEndMonth;
 		int inputEndYear;		
 		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear, inputEndDay, inputEndMonth, inputEndYear);
+		/*DateTimeInspector inspector;
+		if(!inspector.dateIsValid(inputStartDay, inputStartMonth, inputStartYear)
+			|| !inspector.dateIsValid(inputEndDay, inputEndMonth, inputEndYear)){
+			editFeedback = "Invalid date\n";
+			return;
+		}*/
 
 		Date newStartDate;
 		newStartDate.insertDay(inputStartDay);
@@ -305,7 +311,13 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput, string& editF
 		int inputEndHour;
 		int inputEndMinute;
 		editComponent.getTime(inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
-		
+		DateTimeInspector inspector;
+		if(!inspector.timeIsValid(inputStartHour, inputStartMinute)
+			|| !inspector.timeIsValid(inputEndHour, inputEndMinute)){
+			editFeedback = "Invalid time\n";
+			return;
+		}
+
 		Time newStartTime;
 		Time newEndTime;
 		newStartTime.insertHour(inputStartHour);

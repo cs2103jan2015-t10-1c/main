@@ -7,6 +7,7 @@
 #include "UndoActions.h"
 #include "EntryEdit.h"
 #include "ClashInspector.h"
+#include "DateTimeInspector.h"
 
 #include <iostream>
 #include <sstream>
