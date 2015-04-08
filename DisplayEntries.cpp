@@ -313,19 +313,23 @@ void DisplayEntries::displayClashes(){
 	bool printClash;
 
 	for(int i = 0; i < _scheduledList.size(); i++){
-		clashExists = false;
-		printClash = false;
-		_scheduledList[i].insertEntryNumber(i + 1);
-		checkEntries.compareEntry(_scheduledList[i], _scheduledList[i].getEntryNumber(), clashExists, printClash);
-		if(clashExists){
-			listOfClashes.push_back(_scheduledList[i]);
-		}
+		if(!isInThePast(_scheduledList[i].getStartTime().getTime())){
+			clashExists = false;
+			printClash = false;
+			_scheduledList[i].insertEntryNumber(i + 1);
+			checkEntries.compareEntry(_scheduledList[i], _scheduledList[i].getEntryNumber(), clashExists, printClash);
+			if(clashExists){
+				listOfClashes.push_back(_scheduledList[i]);
+			}
 		count++;
+		}
 	}
+
 	initialisePaging(listOfClashes, numberOfPages, firstEntry, lastEntry, count);
 	clashExists = false;
 	printClash = true;
 	ClashInspector checkSearchResult(listOfClashes);
+	cout << "Entry clashes in the future: " << endl << endl;
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
 			<< listOfClashes[i].getEntryNumber() << ". "
@@ -414,17 +418,14 @@ void DisplayEntries::displaySpecifiedPage(int page){
 void DisplayEntries::displayPastEntries(){
 	vector<Entry>::iterator iterPastEntry;
 	vector<Entry> entriesInThePast;
-	date today(day_clock::local_day());
-	ptime now(second_clock::local_time());
-	bool inThePast;
+
 	int number = 1;
 	int firstEntry;
 	int lastEntry;
 	int numberOfPages;
 	for(iterPastEntry = _scheduledList.begin(); iterPastEntry != _scheduledList.end(); iterPastEntry++){
 		iterPastEntry->insertEntryNumber(number);
-		inThePast = iterPastEntry->getStartTime().getTime() < now;
-		if(inThePast){
+		if(isInThePast(iterPastEntry->getStartTime().getTime())){
 			entriesInThePast.push_back(*iterPastEntry);
 		}
 		number++;
@@ -434,7 +435,6 @@ void DisplayEntries::displayPastEntries(){
 	for(int i = firstEntry; i < lastEntry ; i++){
 		cout << BORDER << endl
 			<< entriesInThePast[i].getEntryNumber() << ". "
-			<< entriesInThePast[i].getName() << endl
 			<< _scheduledList[i].getShortDisplay() << endl;
 		cout << BORDER << endl;
 	}
@@ -484,4 +484,82 @@ void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastE
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+/*void DisplayEntries::displayTodayAndTomorrow(int& pageNumber, int& lastPage, bool& viewingScheduledList, bool& viewingFloatingList, bool& viewingPast, bool& viewingClashes){
+	//marking the boundaries
+	_printInThePast = false;
+	_printToday = false;
+	_printTomorrow = false;
+	_printThisWeek = false;
+	_printNextWeek = false;
+	_printThisMonth = false;
+	_printNextMonth = false;
+	//initialise for paging
+	int numberOfPages;
+	int firstEntry;
+	int lastEntry;
+	int number;
+	initialisePaging(_scheduledList, numberOfPages, firstEntry, lastEntry, number);
+
+	for (int i = firstEntry; i < lastEntry; i++){
+		cout << endl;
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		if(entryStartDate == _today && _printToday == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			cout << endl << "[Events today:] " << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			_printToday = true;
+		}
+		if(entryStartDate == _tomorrow && _printTomorrow == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+			cout << endl << "[Events tomorrow:] " << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			_printTomorrow = true;
+			_printThisWeek = true;
+		}
+		if(entryStartDate <= _thisWeek && entryStartDate >= _today && _printThisWeek == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			cout << endl << "[Events This Week:] " << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			_printThisWeek = true;
+		}
+		if(entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			cout << endl << "[Events Next Week:] " << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			_printNextWeek = true;
+		}
+		if(entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			cout << endl << "[Events This Month:] " << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			_printThisMonth = true;
+		}
+		if(entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			cout << endl << "[Events Next Month:] " << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			_printNextMonth = true;
+		}
+		_scheduledList[i].insertEntryNumber(number);
+		cout << BORDER << endl
+			<< _scheduledList[i].getEntryNumber() << ". "
+			<< _scheduledList[i].getShortDisplay() << endl;
+		cout << BORDER << endl;
+		number++;
+	}
+	closingMessage(numberOfPages, firstEntry, lastEntry);
+}*/
+
+
+bool DisplayEntries::isInThePast(ptime entryTime){
+	ptime now(second_clock::local_time());
+	return entryTime < now;
 }

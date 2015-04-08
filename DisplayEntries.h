@@ -77,6 +77,8 @@ public:
 
 	void initialisePaging(vector<Entry>, int&, int&, int&, int&);
 	void closingMessage(int, int, int);
+	/*void displayTodayAndTomorrow(int&, int&, bool&, bool&, bool&, bool&);*/
+	bool isInThePast(ptime);
 
 };
 
