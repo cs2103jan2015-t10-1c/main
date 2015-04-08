@@ -176,17 +176,22 @@ void Main::operateFastAdd(){
 }
 
 void Main::executeResizeFunction(){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << "Please enter the width of the console: " << endl;
 	int width;
 	cin >> width;
 	cout << "Please enter the height of the console: " << endl;
 	int height;
 	cin >> height;
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	
 	system("mode 180,70");   //Set mode to ensure window does not exceed buffer size
 	SMALL_RECT WinRect = {0, 0, width, height};   //New dimensions for window in 8x12 pixel chars
 	SMALL_RECT* WinSize = &WinRect;
 	SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
+
 }
 
 void Main::executeAddFunction(string userInput){
