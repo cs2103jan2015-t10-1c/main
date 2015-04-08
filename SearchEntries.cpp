@@ -1,4 +1,7 @@
 #include "SearchEntries.h"
+#include <algorithm>
+#include <iterator>
+#include <cctype>
 
 const string SearchEntries::NAME_MARKER = "name";
 const string SearchEntries::LOCATION_MARKER = "place";
@@ -11,6 +14,22 @@ const string SearchEntries::PREV_MARKER = "prev";
 const int SearchEntries::ENTRY_PERPAGE = 3;
 const string SearchEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
 
+
+inline bool caseInsCharCompSingle(char a, char b) {
+   return(toupper(a) == b);
+}
+
+string::const_iterator caseInsFind(string& s, const string& p) {
+   string tmp;
+
+   transform(p.begin(), p.end(),            
+             back_inserter(tmp),                 
+             toupper);
+
+   return(search(s.begin(), s.end(),         
+                 tmp.begin(), tmp.end(),     
+                 caseInsCharCompSingle));        
+}
 
 SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries){
 	_scheduledList = scheduledEntries;
@@ -53,12 +72,13 @@ void SearchEntries::execute(string userInput, int& pageNumber, string& previousS
 			searchTime(userInput);
 		}
 		
-		else if (marker == ALL_MARKER){
+		else {
 			searchAll(userInput);
 		}
-		else {
+
+		/*else {
 			cout << "Wrong search input is given!" << endl << endl;
-		}
+		}*/
 	}
 	pageNumber = _pageNumber;
 }
@@ -68,6 +88,7 @@ void SearchEntries::searchTag(string keyword){
 	int numberOfPages;
 	int firstEntry;
 	int lastEntry;
+	bool print = false;
 	//initialise search results
 	for(int i = 0; i < _scheduledList.size(); i++){
 		bool tagFound = false;
@@ -118,8 +139,9 @@ void SearchEntries::searchName(string inputName){
 		for(int i = 0; i < _scheduledList.size(); i++){
 			bool nameFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
-			size_t found = _scheduledList[i].getName().find(inputName);
-			if (found != string::npos){
+			string entryName = _scheduledList[i].getName();
+			string::const_iterator it = caseInsFind(entryName, inputName);
+			if (it != entryName.end()){
 				nameFound = true;
 			}
 			if(nameFound){
@@ -168,8 +190,9 @@ void SearchEntries::searchLocation(string inputLocation){
 		for(int i = 0; i < _scheduledList.size(); i++){
 			bool locationFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
-			size_t found = _scheduledList[i].getLocation().find(inputLocation);
-			if (found != string::npos){
+			string entryLocation = _scheduledList[i].getLocation();
+			string::const_iterator it = caseInsFind(entryLocation, inputLocation);
+			if (it != entryLocation.end()){
 				locationFound = true;
 			}
 			if(locationFound){
@@ -223,6 +246,8 @@ void SearchEntries::searchStatus(string inputStatus){
 				searchResult.push_back(_scheduledList[i]);
 			}
 		}
+
+		cout << searchResult.size() << endl;
 
 		if(searchResult.empty()){
 			cout << "Entries are not found" << endl << endl;
@@ -379,13 +404,22 @@ void SearchEntries::searchAll(string userInput){
 			_scheduledList[i].insertEntryNumber( i + 1);
 			bool allFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
-			size_t stringNameFound = _scheduledList[i].getName().find(userInput);
-			bool nameFound = stringNameFound != string::npos;
-			size_t stringLocationFound = _scheduledList[i].getLocation().find(userInput);
-			bool locationFound = stringLocationFound != string::npos;
-			size_t stringTagFound = _scheduledList[i].getTags().find(userInput);
-			bool tagFound = stringTagFound != string::npos;
-			if (nameFound || locationFound || tagFound){
+			string entryName = _scheduledList[i].getName();
+			string::const_iterator it = caseInsFind(entryName, userInput);
+			if (it != entryName.end()){
+				allFound = true;
+			}
+			string entryLocation = _scheduledList[i].getLocation();
+			it = caseInsFind(entryLocation, userInput);
+			if (it != entryLocation.end()){
+				allFound = true;
+			}
+			string entryTag = _scheduledList[i].getTags();
+			it = caseInsFind(entryTag, userInput);
+			if (it != entryTag.end()){
+				allFound = true;
+			}
+			if (allFound){
 				searchResult.push_back(_scheduledList[i]);
 			}
 		}

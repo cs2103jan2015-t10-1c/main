@@ -305,3 +305,4 @@ string Entry::storeEntry(){
 	
 	return oss.str();
 }
+
