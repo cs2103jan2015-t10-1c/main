@@ -5,11 +5,29 @@ const string ScheduledEntry::FEEDBACK_ADDED = "added ";
 const string ScheduledEntry::FEEDBACK_FROM = " from ";
 const string ScheduledEntry::FEEDBACK_TO = " to ";
 const string ScheduledEntry::FEEDBACK_AT = " at ";
+
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
+const string ScheduledEntry::FEEDBACK_ARROW = " --> ";
+const string ScheduledEntry::FEEDBACK_NAME = "Name: ";
+const string ScheduledEntry::FEEDBACK_DATE = "Date: ";
+const string ScheduledEntry::FEEDBACK_NO_DATE = "No date";
+const string ScheduledEntry::FEEDBACK_REMOVED = "removed";
+const string ScheduledEntry::FEEDBACK_TIME = "Time: ";
+const string ScheduledEntry::FEEDBACK_NO_TIME = "No time";
+const string ScheduledEntry::FEEDBACK_LOCATION = "Location: ";
+const string ScheduledEntry::FEEDBACK_STATUS = "Status: ";
+const string ScheduledEntry::FEEDBACK_TAGS_ADDED = "Tags added: ";
+const string ScheduledEntry::FEEDBACK_TAGS_REMOVED = "Tags removed: ";
+const string ScheduledEntry::FEEDBACK_MOVED_TO = "Moved to ";
+const string ScheduledEntry::FEEDBACK_SCHEDULED_LIST = "Scheduled list.";
+const string ScheduledEntry::FEEDBACK_FLOATING_LIST = "Floating list.";
+
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
-const string ScheduledEntry::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
 const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
 const string ScheduledEntry::FEEDBACK_OUT_OF_BOUND = "Entry number is out of bound.";
+
+const string ScheduledEntry::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
+
 const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 
 const string ScheduledEntry::STATUS_DONE = "done";
@@ -97,18 +115,20 @@ string ScheduledEntry::getEntryDisplay(bool isScheduled, int index){
 }
 
 void ScheduledEntry::removeEntry(bool isScheduled, int index, string& deleteFeedback){
+	deleteFeedback = "";
 	ostringstream oss;
-	
+
 	//scheduled entry
 	if (isScheduled && !_scheduledList.empty()){
 		if (index > _scheduledList.size()){
-			deleteFeedback = FEEDBACK_OUT_OF_BOUND + "\n";
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));	
+			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+
 		oss << FEEDBACK_DELETED << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		oss << getEntryDisplay(isScheduled, index);
 		deleteFeedback = oss.str();
 		_counter.counterDelete(true, index, _scheduledList[index-1]);
@@ -118,13 +138,14 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index, string& deleteFeed
 	//floating entry
 	else if (!isScheduled && !_floatingList.empty()){
 		if (index > _floatingList.size()){
-			deleteFeedback = FEEDBACK_OUT_OF_BOUND + "\n";
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		
 		oss << FEEDBACK_DELETED << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		oss << getEntryDisplay(isScheduled, index);
 		deleteFeedback = oss.str();
 		_counter.counterDelete(false, index, _floatingList[index-1]);
@@ -133,11 +154,16 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index, string& deleteFeed
 
 	//no more entry
 	else {
-		deleteFeedback = FEEDBACK_NO_ENTRIES_LEFT + "\n";
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << FEEDBACK_NO_ENTRIES_LEFT << endl;
 	}
 }
 
-void ScheduledEntry::editEntry(bool isScheduled, string userInput){
+void ScheduledEntry::editEntry(bool isScheduled, string userInput, string& editFeedback){
+	editFeedback = "";
+	ostringstream oss;
+	
 	EntryEdit editComponent(isScheduled);
 	int entryNumber = editComponent.getEntryNumber(userInput);
 	editComponent.extractMarkerInfo(userInput);
@@ -148,6 +174,9 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 		cout << FEEDBACK_WRONG_COMMAND << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
+	}
+	else {
+		oss << FEEDBACK_EDITED << entryNumber << endl;
 	}
 
 	//find the entry to be edited
@@ -167,12 +196,37 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	//update name
 	string newName = editComponent.getName();
 	if (newName != ""){
+		oss << FEEDBACK_NAME << iter->getName();
 		iter->insertName(newName);
+		oss << FEEDBACK_ARROW << iter->getName() << endl; 
 	}
 
 	//update date
 	int inputStartDay;
 	if (editComponent.getDateEditStatus()){
+		oss << FEEDBACK_DATE;
+		Date currentStartDate = iter->getStartDate();
+		if (currentStartDate.getDateStatus()){
+			int currentStartDay = currentStartDate.getDay();
+			string currentStartMonth = currentStartDate.getMonth();
+			int currentStartYear = currentStartDate.getYear();
+			oss << currentStartDay << " " << currentStartMonth << " " << currentStartYear;
+
+			Date currentEndDate = iter->getEndDate();
+			int currentEndDay = currentEndDate.getDay();
+			string currentEndMonth = currentEndDate.getMonth();
+			int currentEndYear = currentEndDate.getYear();
+			bool diffStartEndDay = currentEndDay != currentStartDay;
+			bool diffStartEndMonth = currentEndMonth != currentStartMonth;
+			bool diffStartEndYear = currentEndYear != currentStartYear;
+			if (diffStartEndDay || diffStartEndMonth || diffStartEndYear){
+				oss << FEEDBACK_TO << currentEndDay << " " << currentEndMonth << " " << currentEndYear;
+			}
+		}
+		else {	
+			oss << FEEDBACK_NO_DATE;		
+		}
+
 		int inputStartMonth;
 		int inputStartYear;
 		int inputEndDay;
@@ -191,7 +245,26 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 		
 		iter->insertStartDate(newStartDate);
 		iter->insertEndDate(newEndDate);
-		
+		oss << FEEDBACK_ARROW;
+		if (inputStartDay == 0){
+			oss << FEEDBACK_REMOVED << endl;
+		}
+		else {
+			newStartDate = iter->getStartDate();
+			string inputStartMonthString = newStartDate.getMonth();
+			oss << inputStartDay << " " << inputStartMonthString << " " << inputStartYear;
+			
+			newEndDate = iter->getEndDate();
+			string inputEndMonthString = newEndDate.getMonth();
+			bool diffStartEndDay = inputEndDay != inputStartDay;
+			bool diffStartEndMonth = inputEndMonthString != inputStartMonthString;
+			bool diffStartEndYear = inputEndYear != inputStartYear;
+			if (diffStartEndDay || diffStartEndMonth || diffStartEndYear){
+				oss << FEEDBACK_TO << inputEndDay << " " << inputEndMonthString << " " << inputEndYear;
+			}
+			oss << endl;
+		}
+
 		//initialise time for sorting
 		Time startTimeInitialiser = iter->getStartTime();
 		Time endTimeInitialiser = iter->getEndTime();
@@ -201,6 +274,32 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 
 	//update time
 	if (editComponent.getTimeEditStatus()){
+		oss << FEEDBACK_TIME ;
+		Time currentStartTime = iter->getStartTime();
+		int currentStartHour = currentStartTime.getHour();
+		int currentStartMinute = currentStartTime.getMinute();
+		if (currentStartTime.getTimeStatus() && (currentStartHour != 0 || currentStartMinute != 0)){
+			oss << currentStartHour << ".";
+			if (currentStartMinute < 10){
+					oss << '0';
+			}
+			oss << currentStartMinute;
+
+			Time currentEndTime = iter->getEndTime();
+			int currentEndHour = currentEndTime.getHour();
+			int currentEndMinute = currentEndTime.getMinute();
+			if (currentEndTime.getTime() != currentStartTime.getTime()){
+				oss << FEEDBACK_TO << currentEndHour << ".";
+				if (currentEndMinute < 10){
+					oss << '0';
+				}
+				oss << currentEndMinute;
+			} 
+		}
+		else {
+			oss << FEEDBACK_NO_TIME;
+		}
+
 		int inputStartHour;
 		int inputStartMinute;
 		int inputEndHour;
@@ -216,41 +315,60 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 
 		iter->insertStartTime(newStartTime);
 		iter->insertEndTime(newEndTime);
+		oss << FEEDBACK_ARROW;
+		oss << inputStartHour << ".";
+		if (inputStartMinute < 10){
+			oss << '0';
+		}
+		oss << inputStartMinute;
+			
+		newStartTime = iter->getStartTime();
+		newEndTime = iter->getEndTime();
+		if (newEndTime.getTime() != newStartTime.getTime()){
+			oss << FEEDBACK_TO << inputEndHour << ".";
+			if (inputEndMinute < 10){
+				oss << '0';
+			}
+			oss << inputEndMinute;
+		}
+		oss << endl;
 	}
 
 	//update location
 	string newLocation = editComponent.getLocation();
 	if (newLocation != ""){
+		oss << FEEDBACK_LOCATION << iter->getLocation();
 		iter->insertLocation(newLocation);
+		oss << FEEDBACK_ARROW << iter->getLocation() << endl; 
 	}
 
 	//update status
 	string newStatus = editComponent.getStatus();
 	if (newStatus != ""){
 		if (newStatus == STATUS_DONE){
-			iter->changeStatus();
+		oss << FEEDBACK_STATUS << iter->getStatus();
+		iter->changeStatus();
+		oss << FEEDBACK_ARROW << iter->getStatus() << endl; 
 		}
 		else if (newStatus == STATUS_UNDONE){
+			oss << FEEDBACK_STATUS << iter->getStatus();
 			iter->initialiseStatus();
+			oss << FEEDBACK_ARROW << iter->getStatus() << endl;
 		}
 	}
 
 	//update added tags
 	if (editComponent.getTagAddedStatus()){
-		editComponent.addTag(*iter);
+		oss << FEEDBACK_TAGS_ADDED;
+		editComponent.addTag(*iter, oss);
 	}
 
 	//update removed tags
 	if (editComponent.getTagRemovedStatus()){
-		editComponent.removeTag(*iter);
+		oss << FEEDBACK_TAGS_REMOVED;
+		editComponent.removeTag(*iter, oss);
 	}
-
-	//feedback to users
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << FEEDBACK_EDITED << entryNumber << endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-
+	
 	//sort the list again if either date or time has been edited
 	//if date editing is done on scheduled list AND date is not deleted, i.e. no shift from scheduled to floating
 	bool dateEditedSort = editComponent.getDateEditStatus() && isScheduled && inputStartDay != 0;
@@ -268,7 +386,16 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	bool isFloatingToScheduled = !isScheduled && editComponent.getDateEditStatus() && editComponent.getTimeEditStatus();
 	if (isScheduledToFloating || isFloatingToScheduled){
 		moveScheduledFloating(isScheduled, entryNumber, *iter);
+		oss << FEEDBACK_MOVED_TO;
+		if (isScheduled){
+			oss << FEEDBACK_FLOATING_LIST << endl;
+		}
+		else {
+			oss << FEEDBACK_SCHEDULED_LIST << endl;
+		}
 	}
+
+	editFeedback = oss.str();
 }
 
 void ScheduledEntry::moveScheduledFloating(bool isScheduled, int entryNumber, Entry movedEntry){

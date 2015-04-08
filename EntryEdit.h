@@ -62,8 +62,8 @@ public:
 	void getTime(int&, int&, int&, int&);
 	string getLocation();
 	string getStatus();
-	void addTag(Entry&);
-	void removeTag(Entry&);
+	void addTag(Entry&, ostringstream&);
+	void removeTag(Entry&, ostringstream&);
 
 	bool getEditStatus();
 	bool getDateEditStatus();
