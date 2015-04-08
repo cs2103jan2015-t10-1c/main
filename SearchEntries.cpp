@@ -65,7 +65,6 @@ void SearchEntries::execute(string userInput, int& pageNumber, string& previousS
 
 void SearchEntries::searchTag(string keyword){
 	vector<Entry> searchResult;
-	bool print = false;
 	int numberOfPages;
 	int firstEntry;
 	int lastEntry;
@@ -73,7 +72,7 @@ void SearchEntries::searchTag(string keyword){
 	for(int i = 0; i < _scheduledList.size(); i++){
 		bool tagFound = false;
 		_scheduledList[i].insertEntryNumber(i+1);
-		_scheduledList[i].searchEntryTag(keyword, tagFound, print);
+		_scheduledList[i].searchEntryTag(keyword, tagFound);
 		if(tagFound){
 			searchResult.push_back(_scheduledList[i]);
 		}
