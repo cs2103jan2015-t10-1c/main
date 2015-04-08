@@ -13,7 +13,7 @@ const string DisplayEntries::TYPE_PAST = " past";
 const int DisplayEntries::ENTRY_PERPAGE = 5;
 const int DisplayEntries::BLANKSPACE_COUNT = 1;
 
-const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
+const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
 
 DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, bool atScheduledList){
 	_scheduledList = scheduledEntries;

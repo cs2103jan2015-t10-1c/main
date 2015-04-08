@@ -29,6 +29,8 @@ private:
 	static const string COMMAND_UNDO;
 	static const string COMMAND_EXIT;
 	static const string COMMAND_RESIZE;
+	static const string COMMAND_BORDER;
+
 
 	string _userInput;
 	string _entryName;

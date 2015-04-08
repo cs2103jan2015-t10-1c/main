@@ -11,6 +11,7 @@ const string Main::COMMAND_HELP = "help";
 const string Main::COMMAND_UNDO = "undo";
 const string Main::COMMAND_EXIT = "exit";
 const string Main::COMMAND_RESIZE = "resize";
+const string Main::COMMAND_BORDER = "_________________________________________________________";
 
 Main::Main(){
 	_userInput = "";
@@ -125,10 +126,10 @@ void Main::loadFloatingEntries(){
 void Main::operateFastAdd(){
 	_loadingEntries = false;
 	while(_running){
-		cout << "_____________________________________________" << endl << endl
+		cout << COMMAND_BORDER << endl << endl
 			<< COMMAND_PROMPT;
 		getline(cin, _userInput);
-		cout << "_____________________________________________" << endl << endl;
+		cout << COMMAND_BORDER << endl << endl;
 
 		_command = _commandInterface.findCommand(_userInput);
 		_userInput = _commandInterface.removeCommand(_userInput);
