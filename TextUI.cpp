@@ -64,7 +64,9 @@ void TextUI::displayHelp(){
 	case 1:
 		cout << "1. Add - add <event name>. from <DD Month YYYY> <HH.MM> to <DD Month YYYY> "<< endl
 			<< "<HH.MM> at <location> #<tag>" << endl
-			<< "or - add <even name>. <DD Month YYYY> <HH.MM> to <HH.MM>  at <location> #<tag>" << endl;
+			<< "or - add <even name>. on <DD Month YYYY> <HH.MM> to <HH.MM>  at <location> #<tag>" << endl
+			<< "or - add <even name>. by <DD Month YYYY> <HH.MM> at <location> #<tag>" << endl
+			<< "or - add <even name>. at <location> #<tag>" << endl;
 		break;
 	case 2:
 		cout << "2. Display - display" << endl;
