@@ -64,26 +64,38 @@ void TextUI::displayHelp(){
 	case 1:
 		cout << "1. Add - add <event name>. from <DD Month YYYY> <HH.MM> to <DD Month YYYY> "<< endl
 			<< "<HH.MM> at <location> #<tag>" << endl
-			<< "or - add <even name>. <DD Month YYYY> <HH.MM> to <HH.MM>  at <location> #<tag>" << endl;
+			<< "or - add <even name>. on <DD Month YYYY> <HH.MM> to <HH.MM>  at <location> #<tag>" << endl
+			<< "or - add <even name>. by <DD Month YYYY> <HH.MM> at <location> #<tag>" << endl
+			<< "or - add <even name>. at <location> #<tag>" << endl;
 		break;
 	case 2:
-		cout << "2. Display - display" << endl;
+		cout << "2. Display - display scheduled" << endl
+			<< "or - display floating" << endl;
 		break;
 	case 3:
 		cout << "3. Delete - delete <entry number>" << endl;
 		break;
 	case 4:
 		cout << "4. Edit - these edit functions are enabled: " << endl
-			<< "edit <entry number> -n <new name> " << endl
-			<< "edit <entry number> -t <HH.MM> <HH.MM> " << endl
-			<< "edit <entry number> -d <DD Month YYYY>" << endl
-			<< "edit <entry number> -l <new location>" << endl;
+			<< "edit <entry number> name <new name> " << endl
+			<< "edit <entry number> time <HH.MM> <HH.MM> " << endl
+			<< "edit <entry number> date <DD Month YYYY>" << endl
+			<< "edit <entry number> place <new location>" << endl
+			<< "edit <entry number> status <done/undone> " << endl
+			<< "edit <entry number> add <# new tag> " << endl
+			<< "edit <entry number> remove <# the tag to be removed>" << endl
+			<< "editing multiple parts is also possible, in any orders" <<endl;
+
 		break;
 	case 5:
 		cout << "5. Search - these search functions are enabled "
-			<< "search <#keyword>" << endl
-			<< "search -n <name> " << endl
-			<< "search -l <location>" << endl;
+			<< "search name <name of event>" << endl
+			<< "search place <location> " << endl
+			<< "search status <done>" << endl
+			<< "search status <undone>" << endl
+			<< "search date <DD Month YYYY>" << endl
+			<< "search time <HH.MM>" << endl;
+						
 		break;
 	default:
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
