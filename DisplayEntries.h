@@ -50,7 +50,7 @@ private:
 
 
 public:
-	DisplayEntries(vector<Entry>, vector<Entry>, int, bool);
+	DisplayEntries(vector<Entry>, vector<Entry>, bool);
 	//Scheduled Entries
 	void execute(string, bool&, int&, bool&);
 	void displayScheduledEntryShort();

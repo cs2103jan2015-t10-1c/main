@@ -15,10 +15,9 @@ const int DisplayEntries::BLANKSPACE_COUNT = 1;
 
 const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
 
-DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, int pageNumber, bool atScheduledList){
+DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries, bool atScheduledList){
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
-	_pageNumber = pageNumber;
 	_viewingScheduledList = atScheduledList;
 	_today = (day_clock::local_day());
 	_tomorrow = _today + days(1);
@@ -121,20 +120,26 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 		_pageNumber = inputPageNumber;
 		if (_viewingClashes){
 			displayClashes();
-		} else {
+		} 
+		else {
 			displaySpecifiedPage(_pageNumber);
 		}
 	}
 	//display details of an entry
-	else if (_userInput[1] > '0'){
+	
+	else if (isdigit(_userInput[1])){
 		int entryNumber;
 		convert.convertStringToNumber(_userInput, entryNumber);
-		if(_viewingScheduledList){
+		if(_viewingScheduledList && entryNumber > 0){
 			cout << "Scheduled Entry" << endl;
 			displayOneScheduledEntry(entryNumber);
-		} else if(!_viewingScheduledList){
+		} 
+		else if(!_viewingScheduledList && entryNumber > 0){
 			cout << "Floating Entry" << endl;
 			displayOneFloatingEntry(entryNumber);
+		}
+		else if (entryNumber <= 0) {
+			cout << "Invalid display command! Try again" << endl << endl;
 		}
 	}
 
