@@ -1,4 +1,5 @@
 #include "Main.h"
+#include <windows.h>
 
 const string Main::COMMAND_PROMPT = "command: ";
 const string Main::COMMAND_ADD = "add";
@@ -9,6 +10,7 @@ const string Main::COMMAND_SEARCH = "search";
 const string Main::COMMAND_HELP = "help";
 const string Main::COMMAND_UNDO = "undo";
 const string Main::COMMAND_EXIT = "exit";
+const string Main::COMMAND_RESIZE = "resize";
 
 Main::Main(){
 	_userInput = "";
@@ -161,12 +163,30 @@ void Main::operateFastAdd(){
 		else if(_command == COMMAND_EXIT){
 			executeExitFunction();
 		}
+
+		else if(_command == COMMAND_RESIZE){
+			executeResizeFunction();
+		}
 		
 		else{
 			_commandInterface.displayErrorFeedback();
 		}
 		cout << endl;
 	}
+}
+
+void Main::executeResizeFunction(){
+	cout << "Please enter the width of the console: " << endl;
+	int width;
+	cin >> width;
+	cout << "Please enter the height of the console: " << endl;
+	int height;
+	cin >> height;
+	
+	system("mode 180,70");   //Set mode to ensure window does not exceed buffer size
+	SMALL_RECT WinRect = {0, 0, width, height};   //New dimensions for window in 8x12 pixel chars
+	SMALL_RECT* WinSize = &WinRect;
+	SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
 }
 
 void Main::executeAddFunction(string userInput){
