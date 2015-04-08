@@ -6,7 +6,7 @@
 class ClashInspector{
 	
 private:
-	vector<Entry> _scheduledEntryList;
+	vector<Entry> _entryVector;
 public:
 	ClashInspector(vector<Entry>);
 	void compareEntry(Entry, int, bool&, bool);

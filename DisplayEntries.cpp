@@ -85,10 +85,12 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 		_pageNumber++;
 		if(_viewingClashes){
 			displayClashes();
-			return;
 		} else {
 		displayScheduledEntryShort();
 		}
+		cout << "HERE IN DISPLAY ENTRIES" << endl
+			<< _pageNumber;
+		pageNumber = _pageNumber;
 	}
 
 	//display previous page
@@ -110,14 +112,15 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 		}
 		if(_viewingClashes){
 			displayClashes();
-			return;
 		} else {
 		displayScheduledEntryShort();
 		}
+		pageNumber = _pageNumber;
 	}
 	
 	//display clashing scheduled entries
 	else if (_userInput == TYPE_CLASH){
+		_pageNumber = 1;
 		displayClashes();
 	}
 	//display first page
@@ -308,24 +311,25 @@ void DisplayEntries::displayClashes(){
 	bool clashExists;
 	bool printClash;
 
-	for(int i = 0; i < _scheduledList.size() ; i++){
+	for(int i = 0; i < _scheduledList.size(); i++){
 		clashExists = false;
 		printClash = false;
 		_scheduledList[i].insertEntryNumber(i + 1);
-		checkEntries.compareEntry(_scheduledList[i], (i + 1), clashExists, printClash);
+		checkEntries.compareEntry(_scheduledList[i], _scheduledList[i].getEntryNumber(), clashExists, printClash);
 		if(clashExists){
 			listOfClashes.push_back(_scheduledList[i]);
 		}
+		count++;
 	}
 	initialiseClashPaging(numberOfPages, listOfClashes, firstEntry, lastEntry);
-	count = 0;
 	clashExists = false;
 	printClash = true;
+	ClashInspector checkSearchResult(listOfClashes);
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
 			<< listOfClashes[i].getEntryNumber() << ". "
 			<< listOfClashes[i].getName() << endl;
-		checkEntries.compareEntry(listOfClashes[i], count, clashExists, printClash);
+		checkSearchResult.compareEntry(listOfClashes[i], i + 1, clashExists, printClash);
 		cout << BORDER << endl;
 	}
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -333,7 +337,6 @@ void DisplayEntries::displayClashes(){
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-
 }
 
 void DisplayEntries::displayFirstPage(){
