@@ -27,6 +27,7 @@ private:
 	bool _viewingClashes;
 
 	int _pageNumber;
+	int _lastPage;
 	date _today;
 	date _tomorrow;
 	date _thisWeek;
@@ -53,7 +54,7 @@ private:
 public:
 	DisplayEntries(vector<Entry>, vector<Entry>, bool);
 	//Scheduled Entries
-	void execute(string, bool&, int&, bool&);
+	void execute(string, bool&, int&, int&, bool&);
 	void displayScheduledEntryShort();
 	void displayOneScheduledEntry(int);
 	void displayScheduledEntries();
@@ -64,15 +65,15 @@ public:
 	//Jump to first, last, and a specific page
 	void displayFirstPage();
 	void displayLastPage();
+	void displayPrevPage();
+	void displayNextPage();
 	void displaySpecifiedPage(int);
-	void initialiseClashPaging(int&, vector<Entry>, int&, int&);
-
 	/*void displayPastEntries();*/
 
 
 	int returnPageNumber();
 
-	void initialisePaging(int&, int&, int&, int&);
+	void initialisePaging(vector<Entry>, int&, int&, int&, int&);
 	void closingMessage(int, int, int);
 
 };

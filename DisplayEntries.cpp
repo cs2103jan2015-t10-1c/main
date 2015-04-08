@@ -29,13 +29,15 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 }
 
 
-void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNumber, bool& viewingClashes){
+void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNumber, int& lastPage, bool& viewingClashes){
+	_lastPage = lastPage;
 	_pageNumber = pageNumber;
 	_userInput = command;
 	StringConvertor convert;
 	_viewingClashes = viewingClashes;
 	//display scheduled
 	if (_userInput == TYPE_SCHEDULED){
+		_pageNumber = 1;
 		_viewingClashes = false;
 		if(_scheduledList.empty()){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -56,6 +58,7 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 	
 	//display floating
 	else if (_userInput == TYPE_FLOATING){
+		_pageNumber = 1;
 		if(_floatingList.empty()){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
@@ -75,46 +78,13 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 	
 	//display next page
 	else if (_userInput == TYPE_NEXT){
-		if(_scheduledList.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Scheduled List is empty!" << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			return;
-		}
-		_pageNumber++;
-		if(_viewingClashes){
-			displayClashes();
-		} else {
-		displayScheduledEntryShort();
-		}
-		cout << "HERE IN DISPLAY ENTRIES" << endl
-			<< _pageNumber;
+		displayNextPage();
 		pageNumber = _pageNumber;
 	}
 
 	//display previous page
 	else if (_userInput == TYPE_PREV){
-		if(_scheduledList.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Scheduled List is empty!" << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			return;
-		}
-		_pageNumber--;
-		if(_pageNumber < 1){
-			_pageNumber = 1;
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << "You are on the first page ";
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		}
-		if(_viewingClashes){
-			displayClashes();
-		} else {
-		displayScheduledEntryShort();
-		}
+		displayPrevPage();
 		pageNumber = _pageNumber;
 	}
 	
@@ -149,8 +119,8 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 			displaySpecifiedPage(_pageNumber);
 		}
 	}
+
 	//display details of an entry
-	
 	else if (isdigit(_userInput[1])){
 		int entryNumber;
 		convert.convertStringToNumber(_userInput, entryNumber);
@@ -189,6 +159,7 @@ void DisplayEntries::execute(string command, bool& atScheduledList, int& pageNum
 	}
 	pageNumber = _pageNumber;
 	viewingClashes = _viewingClashes;
+	lastPage = _lastPage;
 }
 
 void DisplayEntries::displayScheduledEntryShort(){
@@ -205,7 +176,7 @@ void DisplayEntries::displayScheduledEntryShort(){
 	int firstEntry;
 	int lastEntry;
 	int number;
-	initialisePaging(numberOfPages, firstEntry, lastEntry, number);
+	initialisePaging(_scheduledList, numberOfPages, firstEntry, lastEntry, number);
 
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl;
@@ -279,12 +250,16 @@ void DisplayEntries::displayOneScheduledEntry(int index){
 }
 
 void DisplayEntries::displayFloatingEntries(){
-	int number = 0;
+	int numberOfPages;
+	int firstEntry;
+	int lastEntry;
+	int number;
+	initialisePaging(_floatingList, numberOfPages, firstEntry, lastEntry, number);
 	vector<Entry>::iterator iter;
 	for (iter = _floatingList.begin(); iter != _floatingList.end(); iter++){
 		cout << endl
 			<< BORDER << endl
-			<< (number + 1) << ". "
+			<< (number) << ". "
 			<< iter->getShortDisplay() << endl
 			<< BORDER;
 		number++;
@@ -321,7 +296,7 @@ void DisplayEntries::displayClashes(){
 		}
 		count++;
 	}
-	initialiseClashPaging(numberOfPages, listOfClashes, firstEntry, lastEntry);
+	initialisePaging(listOfClashes, numberOfPages, firstEntry, lastEntry, count);
 	clashExists = false;
 	printClash = true;
 	ClashInspector checkSearchResult(listOfClashes);
@@ -345,11 +320,49 @@ void DisplayEntries::displayFirstPage(){
 }
 
 void DisplayEntries::displayLastPage(){
-	int numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
-	if(_scheduledList.size() % ENTRY_PERPAGE > 0){
-		numberOfPages++;
-	}
-	displayScheduledEntryShort();
+	_pageNumber = _lastPage - 1;
+	displayNextPage();
+}
+
+void DisplayEntries::displayNextPage(){
+	if(_scheduledList.empty()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << "Scheduled List is empty!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		_pageNumber++;
+		if(_viewingClashes){
+			displayClashes();
+		} else if(_viewingScheduledList){
+			displayScheduledEntryShort();
+		} else {
+			displayFloatingEntries();
+		}
+}
+
+void DisplayEntries::displayPrevPage(){
+	if(_scheduledList.empty()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << "Scheduled List is empty!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		_pageNumber--;
+		if(_pageNumber < 1){
+			_pageNumber = 1;
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			cout << "You are on the first page ";
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		}
+		if(_viewingClashes){
+			displayClashes();
+		} else {
+		displayScheduledEntryShort();
+		}
 }
 
 void DisplayEntries::displaySpecifiedPage(int page){
@@ -370,10 +383,10 @@ int DisplayEntries::returnPageNumber(){
 	return _pageNumber;
 }
 
-void DisplayEntries::initialisePaging(int& numberOfPages, int& firstEntry, int& lastEntry, int& number){
+void DisplayEntries::initialisePaging(vector<Entry> entryVector, int& numberOfPages,int& firstEntry, int& lastEntry, int& number){
 	//initialise number of Pages
-	numberOfPages = _scheduledList.size()/ENTRY_PERPAGE;
-	int numberOfEntriesOnLastPage = _scheduledList.size()%ENTRY_PERPAGE;
+	numberOfPages = entryVector.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = entryVector.size()%ENTRY_PERPAGE;
 	if(numberOfEntriesOnLastPage > 0){
 		numberOfPages++;
 	}
@@ -396,37 +409,11 @@ void DisplayEntries::initialisePaging(int& numberOfPages, int& firstEntry, int& 
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
 	//prevent abort for number of entries less than 5
-	if(_scheduledList.size() < ENTRY_PERPAGE){
-		lastEntry = _scheduledList.size();	
+	if(entryVector.size() < ENTRY_PERPAGE){
+		lastEntry = entryVector.size();	
 	}
 	number = (_pageNumber-1) * ENTRY_PERPAGE + 1;
-}
-
-void DisplayEntries::initialiseClashPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
-	//initialise search result parameters
-	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
-	int numberOfEntriesOnLastPage = searchResult.size()%ENTRY_PERPAGE;
-	if(numberOfEntriesOnLastPage > 0){
-		numberOfPages++;
-	}
-	//prevent abort for exceeding page
-	if(_pageNumber > numberOfPages){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << "Page does not exist!" << endl << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		_pageNumber--;
-	}
-	firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
-	lastEntry = firstEntry + ENTRY_PERPAGE;
-	//case for the last page
-	if(_pageNumber == numberOfPages){
-		lastEntry = firstEntry + numberOfEntriesOnLastPage;
-	}
-	//prevent abort for number of entries less than 5
-	if(searchResult.size() < ENTRY_PERPAGE){
-		lastEntry = searchResult.size();	
-	}
+	_lastPage = numberOfPages;
 }
 
 void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastEntry){

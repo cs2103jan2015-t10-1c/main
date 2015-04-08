@@ -51,6 +51,7 @@ private:
 	bool _atScheduledEntries;
 	bool _viewingClashes;
 	int _pageNumber;
+	int _lastPage;
 	bool _loadingEntries;
 	ScheduledEntry _newList;
 	//TextUI

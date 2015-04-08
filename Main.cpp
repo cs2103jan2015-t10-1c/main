@@ -297,7 +297,7 @@ void Main::executeSearchFunction(string userInput){
 
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _atScheduledEntries);
-	display.execute(userInput, _atScheduledEntries, _pageNumber, _viewingClashes);
+	display.execute(userInput, _atScheduledEntries, _pageNumber, _lastPage, _viewingClashes);
 }
 
 void Main::executeDeleteFunction(string userInput){
