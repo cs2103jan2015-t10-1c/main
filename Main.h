@@ -28,6 +28,7 @@ private:
 	static const string COMMAND_HELP;
 	static const string COMMAND_UNDO;
 	static const string COMMAND_EXIT;
+	static const string COMMAND_RESIZE;
 
 	string _userInput;
 	string _entryName;
@@ -46,6 +47,7 @@ private:
 
 	bool _running;
 	bool _atScheduledEntries;
+	bool _viewingClashes;
 	int _pageNumber;
 	ScheduledEntry _newList;
 	//TextUI
@@ -71,6 +73,7 @@ public:
 	void executeHelpFunction();
 	void executeUndoFunction();
 	void executeExitFunction();
+	void executeResizeFunction();
 
 	void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear);
 	void initialiseTime(Time& inputTime, int inputHour, int inputMinute);

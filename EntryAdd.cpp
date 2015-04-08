@@ -1,5 +1,6 @@
 #include <sstream>
 #include "EntryAdd.h"
+#include <Windows.h>
 
 const int EntryAdd::BLANK_SPACE_COUNT = 1;
 const string EntryAdd::AT_MARKER = "at";
@@ -69,7 +70,10 @@ void EntryAdd::dissectCommand (string entryComponents, string& entryName, string
 		extractTime(entryComponents, entryEndTime);
 	}
 	else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Wrong parameters are given!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 
 	if (entryComponents[0] == AT_MARKER[0] && entryComponents[1] == AT_MARKER[1]){

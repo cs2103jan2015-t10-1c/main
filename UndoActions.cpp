@@ -1,4 +1,5 @@
 #include "UndoActions.h"
+#include <windows.h>
 
 const string UndoActions::NO_MORE_ACTION = "There is no more action left to undo.";
 const string UndoActions::ADDITION_UNDONE = "Addition undone";
@@ -49,7 +50,10 @@ void UndoActions::counterEdit(bool isScheduled, int latestEntryIndex, Entry late
 void UndoActions::execute(vector<Entry>& _scheduledList, vector<Entry>& _floatingList){
 	//no more action to undo
 	if(_undoStack.empty()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << NO_MORE_ACTION << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 
 	//there is action to undo
@@ -90,7 +94,10 @@ void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedule
 		_floatingList.erase(_floatingList.begin() + latestAction._indexNumber - 1);
 	}
 
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << ADDITION_UNDONE << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 //undo deletion of entry. Counter command = add
@@ -108,7 +115,10 @@ void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _sched
 		_floatingList.insert(iter, latestAction._modifiedEntry);
 	}
 
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << DELETION_UNDONE << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 //undo editing of entry. Counter command = edit

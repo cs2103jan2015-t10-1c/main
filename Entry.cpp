@@ -1,5 +1,6 @@
 #include "Entry.h"
 #include <iostream>
+#include <Windows.h>
 
 const string Entry::FEEDBACK_AT = " at ";
 
@@ -110,20 +111,12 @@ void Entry::insertTags(vector<string>& tags){
 	_tags = tags;
 }
 
-void Entry::searchEntryTag(string tag, bool& tagFound, bool print){
+void Entry::searchEntryTag(string tag, bool& tagFound){
 	vector<string>::iterator iterTag;
 	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		size_t found = iterTag->find(tag);
 		if(found != string::npos){
 			tagFound = true;
-			if(print){
-				cout << endl;
-				cout << "- - - - - - - - - - - - - - - -";
-				cout << *iterTag << " " << endl
-					<< _entryNumber << ". " << getFullDisplay();
-				cout << "- - - - - - - - - - - - - - - -";
-				cout << endl;
-			}
 		}
 	}
 }
@@ -155,7 +148,10 @@ void Entry::removeTag(string tag){
 	}
 
 	if (!isFound){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << tag << " does not exist" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 }
 
@@ -186,7 +182,10 @@ string Entry::getFullDisplay(){
 	if (_hasDate){
 		string eventType;
 		if(_startTime.getTime() == _endTime.getTime()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			eventType = "Deadline: ";
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		} else {
 			eventType = "Start Date & Time: ";
 		}
@@ -225,7 +224,10 @@ string Entry::getFullDisplay(){
 			<< calculateEventDurationInHours().hours()%24 << " hours and " 
 			<< calculateEventDurationInHours().minutes() << " minutes" << endl;
 		}
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		oss << "Time left: " << calculateDaysFromToday() << " days "<< endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 	
 	oss	<< "Status: " << getStatus() << endl
@@ -245,7 +247,10 @@ string Entry::getShortDisplay(){
 	if (_hasDate){
 		string eventType;
 		if(_startTime.getTime() == _endTime.getTime()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			eventType = "Deadline: ";
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		} else {
 			eventType = "Start Date & Time: ";
 		}
@@ -313,3 +318,4 @@ string Entry::storeEntry(){
 	
 	return oss.str();
 }
+

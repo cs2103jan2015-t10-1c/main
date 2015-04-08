@@ -11,6 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <Windows.h>
 
 class ScheduledEntry{
 private:

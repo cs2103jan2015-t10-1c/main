@@ -1,13 +1,12 @@
-//3.34am
-
 #include<iostream>
 #include<sstream>
 #include<fstream>
 #include<string>
 #include "TextUI.h"
+#include <Windows.h>
 
 const string TextUI::WELCOME_TO_FASTADD = "Welcome to FastAdd";
-const string TextUI::CURRENT_VERSION = "version v0.3";
+const string TextUI::CURRENT_VERSION = "version v0.4";
 const string TextUI::KEY_IN_COMMANDS = "Please key in your commands";
 const string TextUI::HELP_FOR_INFORMATION = "Type 'help' for information on how to use FastAdd";
 
@@ -19,19 +18,26 @@ TextUI::TextUI(string& inputContent){
 }
 
 void TextUI::displayWelcomeMessage(){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << WELCOME_TO_FASTADD << endl
 		<< CURRENT_VERSION << endl
-		<< KEY_IN_COMMANDS << endl
-		<< HELP_FOR_INFORMATION << endl
+		<< KEY_IN_COMMANDS << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+	cout << HELP_FOR_INFORMATION << endl
 		<< endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void TextUI::displayCurrentDateTime(){
 	date d(day_clock::local_day());
 	ptime t(second_clock::local_time());
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 	cout << "The date today is " << t.date() << endl
 		<< "and the time when FastAdd starts was " << t.time_of_day() << endl
 		<< endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void TextUI::displayHelp(){
@@ -80,7 +86,10 @@ void TextUI::displayHelp(){
 			<< "search -l <location>" << endl;
 		break;
 	default:
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Wrong input. Try again";
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		break;
 	}
 }
@@ -97,7 +106,10 @@ string TextUI::removeCommand(string& inputContent){
 }
     
 void TextUI::displayErrorFeedback(){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 	cout << "Input command not identified. Please try again."<< endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 

@@ -6,6 +6,7 @@
 #include "ScheduledEntry.h"
 #include "StringConvertor.h"
 #include "ClashInspector.h"
+#include <windows.h>
 
 using namespace std;
 using namespace boost::gregorian;
@@ -23,7 +24,7 @@ private:
 	bool _printNextWeek;
 	bool _printThisMonth;
 	bool _printNextMonth;
-	
+	bool _viewingClashes;
 
 	int _pageNumber;
 	date _today;
@@ -50,11 +51,11 @@ private:
 
 
 public:
-	DisplayEntries(vector<Entry>, vector<Entry>, int, bool);
+	DisplayEntries(vector<Entry>, vector<Entry>, bool);
 	//Scheduled Entries
-	void execute(string, bool&, int&);
-	void displayScheduledEntryShort(int&);
-	void displayOneScheduledEntry(int index);
+	void execute(string, bool&, int&, bool&);
+	void displayScheduledEntryShort();
+	void displayOneScheduledEntry(int);
 	void displayScheduledEntries();
 	//Floating Entries
 	void displayFloatingEntries();
@@ -64,6 +65,8 @@ public:
 	void displayFirstPage();
 	void displayLastPage();
 	void displaySpecifiedPage(int);
+	void initialiseClashPaging(int&, vector<Entry>, int&, int&);
+
 	/*void displayPastEntries();*/
 
 

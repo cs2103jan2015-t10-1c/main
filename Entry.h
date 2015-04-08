@@ -70,7 +70,7 @@ public:
 	string getLocation();
 	
 	void insertTags(vector<string>&);
-	void searchEntryTag(string, bool&, bool);
+	void searchEntryTag(string, bool&);
 	string getTags();
 	void addTag(string);
 	void removeTag(string);

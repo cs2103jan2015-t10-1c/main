@@ -1,4 +1,5 @@
 #include "Date.h"
+#include <Windows.h>
 
 Date::Date(){
 	_day = 0;
@@ -30,7 +31,10 @@ void Date::initialiseDate(){
 	date thisDate(_year, _month, _day);
 	inThePast = thisDate < today;
 	if (inThePast){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << endl << "Warning! Date is in the past" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 		_entryDate = date(_year, _month, _day);
 }

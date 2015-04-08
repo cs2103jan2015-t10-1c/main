@@ -43,11 +43,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>D:\Christian%27s Folder\Year 2 Sem 2\CS2103\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>M:\NUS\Semester 4 - 2015\CS2103\Others\boost_1_57_0\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Christian%27s Folder\Year 2 Sem 2\CS2103\boost_1_57_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>M:\NUS\Semester 4 - 2015\CS2103\Others\boost_1_57_0\boost_1_57_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,25 +66,37 @@
   <ItemGroup>
     <ClInclude Include="ClashInspector.h" />
     <ClInclude Include="Date.h" />
+    <ClInclude Include="DateTimeInitialiser.h" />
+    <ClInclude Include="DateTimeInspector.h" />
+    <ClInclude Include="DisplayEntries.h" />
     <ClInclude Include="Entry.h" />
     <ClInclude Include="EntryEdit.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="ScheduledEntry.h" />
     <ClInclude Include="EntryAdd.h" />
+    <ClInclude Include="SearchEntries.h" />
     <ClInclude Include="StringConvertor.h" />
     <ClInclude Include="TextUI.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="UndoActions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClashInspector.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="DateTimeInitialiser.cpp" />
+    <ClCompile Include="DateTimeInspector.cpp" />
+    <ClCompile Include="DisplayEntries.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="EntryEdit.cpp" />
+    <ClCompile Include="FastAdd.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ScheduledEntry.cpp" />
     <ClCompile Include="EntryAdd.cpp" />
+    <ClCompile Include="SearchEntries.cpp" />
     <ClCompile Include="StringConvertor.cpp" />
     <ClCompile Include="TextUI.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="UndoActions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,5 @@
 #include "ClashInspector.h"
+#include <windows.h>
 
 using namespace std;
 
@@ -31,17 +32,24 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 
 	if(startDateInputEntry == startDateAnotherEntry){
 		if(printClash){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Clash in Start Date detected with entry no." << listCount 
 				<< ": " << anotherEntry.getName()
 				<< "! " << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
 		}
-			clashExists = true;
+		clashExists = true;
 		if((endTimeAnotherEntry > startTimeInputEntry &&  startTimeAnotherEntry < startTimeInputEntry)
 			|| (endTimeAnotherEntry > endTimeInputEntry && startTimeAnotherEntry < endTimeInputEntry)
 			|| (startTimeInputEntry < startTimeAnotherEntry &&  endTimeInputEntry > startTimeAnotherEntry)
 			|| (startTimeInputEntry < endTimeAnotherEntry && endTimeInputEntry > endTimeAnotherEntry)){
 				if(printClash){
+					HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+					SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 					cout << "Clash in Time with the same entry is detected!" << endl;
+					SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 				}
 		}
 	}
@@ -50,9 +58,12 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 		|| (startDateInputEntry < startDateAnotherEntry && endDateInputEntry > startDateAnotherEntry) 
 		|| (startDateInputEntry < endDateAnotherEntry && endDateInputEntry > endDateAnotherEntry)){
 			if(printClash){
+				HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 				cout << "Clash in Date periods detected with entry no." << listCount 
 				<< ": " << anotherEntry.getName()
 				<< "! " << endl;
+				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			}
 			clashExists = true;
 	}

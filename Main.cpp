@@ -1,4 +1,5 @@
 #include "Main.h"
+#include <windows.h>
 
 const string Main::COMMAND_PROMPT = "command: ";
 const string Main::COMMAND_ADD = "add";
@@ -9,6 +10,7 @@ const string Main::COMMAND_SEARCH = "search";
 const string Main::COMMAND_HELP = "help";
 const string Main::COMMAND_UNDO = "undo";
 const string Main::COMMAND_EXIT = "exit";
+const string Main::COMMAND_RESIZE = "resize";
 
 Main::Main(){
 	_userInput = "";
@@ -22,6 +24,7 @@ Main::Main(){
 	_atScheduledEntries = true;
 	_pageNumber = 1;
 	_previousSearchInput = "";
+	_viewingClashes = false;
 }
 
 void Main::welcomeMessage(){
@@ -29,7 +32,11 @@ void Main::welcomeMessage(){
 	_commandInterface.displayCurrentDateTime();
 }
 void Main::loadScheduledEntries(){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 	cout << "Loading existing entries..." << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
 	//load existing scheduled entries
 	ifstream readSched("FastAddSched.txt");
 	while (getline(readSched, _userInput)){
@@ -107,7 +114,10 @@ void Main::loadFloatingEntries(){
 	//empty the counter stack
 	_newList.emptyCounter();
 
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE));
 	cout << endl << "Loading done..." << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void Main::operateFastAdd(){
@@ -160,12 +170,35 @@ void Main::operateFastAdd(){
 		else if(_command == COMMAND_EXIT){
 			executeExitFunction();
 		}
+
+		else if(_command == COMMAND_RESIZE){
+			executeResizeFunction();
+		}
 		
 		else{
 			_commandInterface.displayErrorFeedback();
 		}
 		cout << endl;
 	}
+}
+
+void Main::executeResizeFunction(){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << "Please enter the width of the console: " << endl;
+	int width;
+	cin >> width;
+	cout << "Please enter the height of the console: " << endl;
+	int height;
+	cin >> height;
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	
+	system("mode 180,70");   //Set mode to ensure window does not exceed buffer size
+	SMALL_RECT WinRect = {0, 0, width, height};   //New dimensions for window in 8x12 pixel chars
+	SMALL_RECT* WinSize = &WinRect;
+	SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
+
 }
 
 void Main::executeAddFunction(string userInput){
@@ -194,14 +227,20 @@ void Main::executeAddFunction(string userInput){
 	//initialise start and end dates
 	DateTimeInspector DateInspector;
 	if(!DateInspector.dateIsValid(_intStartDay, _intStartMonth, _intStartYear)){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Start Date is invalid!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		dateIsOkay = false;
 	}
 	else{
 		initialiseDate(startDate, _intStartDay, _intStartMonth, _intStartYear);
 	}
 	if(!DateInspector.dateIsValid(_intEndDay, _intEndMonth, _intEndYear)){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "End Date is invalid!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		dateIsOkay = false;
 	}
 	else{
@@ -212,14 +251,20 @@ void Main::executeAddFunction(string userInput){
 	//initialise start and end times
 		DateTimeInspector TimeInspector;
 		if(!TimeInspector.timeIsValid(_intStartHour, _intStartMinute)){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Start Time is invalid!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			timeIsOkay = false;
 		}
 		else{
 			initialiseTime(startTime, _intStartHour, _intStartMinute);
 		}
 		if(!DateInspector.timeIsValid(_intEndHour, _intEndMinute)){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "End Time is invalid!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			timeIsOkay = false;
 		}
 		else{
@@ -247,8 +292,8 @@ void Main::executeSearchFunction(string userInput){
 }
 
 void Main::executeDisplayFunction(string userInput){
-	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _pageNumber, _atScheduledEntries);
-	display.execute(userInput, _atScheduledEntries, _pageNumber);
+	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _atScheduledEntries);
+	display.execute(userInput, _atScheduledEntries, _pageNumber, _viewingClashes);
 }
 
 void Main::executeDeleteFunction(string userInput){
@@ -257,7 +302,10 @@ void Main::executeDeleteFunction(string userInput){
 	convertToNumber.convertStringToNumber(userInput, indexNumber);
 	string deleteFeedback;
 	_newList.removeEntry(_atScheduledEntries, indexNumber, deleteFeedback);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));	
 	cout << deleteFeedback;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void Main::executeHelpFunction(){

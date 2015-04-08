@@ -5,7 +5,7 @@
 #include <boost\date_time\gregorian\gregorian.hpp>
 #include "ScheduledEntry.h"
 #include "DateTimeInitialiser.h"
-
+#include "DateTimeInspector.h"
 using namespace std;
 using namespace boost::gregorian;
 
