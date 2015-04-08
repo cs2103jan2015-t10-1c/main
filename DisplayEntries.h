@@ -6,6 +6,7 @@
 #include "ScheduledEntry.h"
 #include "StringConvertor.h"
 #include "ClashInspector.h"
+#include <windows.h>
 
 using namespace std;
 using namespace boost::gregorian;

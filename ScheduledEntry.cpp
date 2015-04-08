@@ -1,6 +1,7 @@
 #include "ScheduledEntry.h"
 #include <iostream>
 #include <fstream>
+#include <Windows.h>
 
 //Static variables that cannot be initialised in the header file
 const string ScheduledEntry::FEEDBACK_ADDED = "added ";
@@ -9,10 +10,10 @@ const string ScheduledEntry::FEEDBACK_TO = " to ";
 const string ScheduledEntry::FEEDBACK_AT = " at ";
 const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
 const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
-const string ScheduledEntry::FEEDBACK_OUT_OF_BOUND = "Entry number is out of bound.";
-const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
-const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 const string ScheduledEntry::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
+const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
+const string ScheduledEntry::FEEDBACK_OUT_OF_BOUND = "Entry number is out of bound.";
+const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 
 const string ScheduledEntry::STATUS_DONE = "done";
 const string ScheduledEntry::STATUS_UNDONE = "undone";
@@ -58,7 +59,10 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 	Time entryEndTime = newEntry.getEndTime();
 	string entryLocation = newEntry.getLocation();
 
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN |  FOREGROUND_INTENSITY));
 	cout << FEEDBACK_ADDED << entryName;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if (newEntry.getDateStatus()){
 		cout << FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
 			<< FEEDBACK_AT << entryStartTime.getHour() << ".";
@@ -96,10 +100,16 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index){
 	//scheduled entry
 	if (isScheduled && !_scheduledList.empty()){
 		if (index > _scheduledList.size()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << FEEDBACK_DELETED << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		displayEntry(isScheduled, index);
 		_counter.counterDelete(true, index, _scheduledList[index-1]);
 		_scheduledList.erase(_scheduledList.begin() + index - 1);
@@ -108,10 +118,16 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index){
 	//floating entry
 	else if (!isScheduled && !_floatingList.empty()){
 		if (index > _floatingList.size()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << FEEDBACK_DELETED << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		displayEntry(isScheduled, index);
 		_counter.counterDelete(false, index, _floatingList[index-1]);
 		_floatingList.erase(_floatingList.begin() + index - 1);
@@ -119,7 +135,10 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index){
 
 	//no more entry
 	else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << FEEDBACK_NO_ENTRIES_LEFT << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 }
 
@@ -129,7 +148,10 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	editComponent.extractMarkerInfo(userInput);
 	
 	if (!editComponent.getEditStatus()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << FEEDBACK_WRONG_COMMAND << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
 	}
 
@@ -222,7 +244,10 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	}
 
 	//feedback to users
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << FEEDBACK_EDITED << entryNumber << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
 	//move entry from floating to scheduled list and vice versa
 	if (editComponent.getDateEditStatus() && (editComponent.getTimeEditStatus() || inputStartDay == 0)){
@@ -255,7 +280,10 @@ void ScheduledEntry::exit(bool& running){
 		writeSched << iterSched->storeEntry() << endl;
 	}
 	writeSched.close();
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << SCHEDULED_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << scheduledPath << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
 	//write floating
 	ofstream writeFloat;
@@ -270,7 +298,9 @@ void ScheduledEntry::exit(bool& running){
 		writeFloat << iterFloat->storeEntry() << endl;
 	}
 	writeFloat.close();
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << FLOATING_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << floatingPath << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
 	running = false;
 }

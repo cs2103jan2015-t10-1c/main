@@ -32,7 +32,11 @@ void Main::welcomeMessage(){
 	_commandInterface.displayCurrentDateTime();
 }
 void Main::loadScheduledEntries(){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 	cout << "Loading existing entries..." << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
 	//load existing scheduled entries
 	ifstream readSched("FastAddSched.txt");
 	while (getline(readSched, _userInput)){
@@ -110,7 +114,10 @@ void Main::loadFloatingEntries(){
 	//empty the counter stack
 	_newList.emptyCounter();
 
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE));
 	cout << endl << "Loading done..." << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void Main::operateFastAdd(){
@@ -220,14 +227,20 @@ void Main::executeAddFunction(string userInput){
 	//initialise start and end dates
 	DateTimeInspector DateInspector;
 	if(!DateInspector.dateIsValid(_intStartDay, _intStartMonth, _intStartYear)){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Start Date is invalid!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		dateIsOkay = false;
 	}
 	else{
 		initialiseDate(startDate, _intStartDay, _intStartMonth, _intStartYear);
 	}
 	if(!DateInspector.dateIsValid(_intEndDay, _intEndMonth, _intEndYear)){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "End Date is invalid!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		dateIsOkay = false;
 	}
 	else{
@@ -238,14 +251,20 @@ void Main::executeAddFunction(string userInput){
 	//initialise start and end times
 		DateTimeInspector TimeInspector;
 		if(!TimeInspector.timeIsValid(_intStartHour, _intStartMinute)){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Start Time is invalid!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			timeIsOkay = false;
 		}
 		else{
 			initialiseTime(startTime, _intStartHour, _intStartMinute);
 		}
 		if(!DateInspector.timeIsValid(_intEndHour, _intEndMinute)){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "End Time is invalid!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			timeIsOkay = false;
 		}
 		else{
