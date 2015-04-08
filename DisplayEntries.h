@@ -17,6 +17,10 @@ private:
 	vector<Entry> _floatingList;
 	string _userInput;
 	bool _viewingScheduledList;
+	bool _viewingFloatingList;
+	bool _viewingPastEntries;
+	bool _viewingClashes;
+
 	bool _printInThePast;
 	bool _printToday;
 	bool _printTomorrow;
@@ -24,7 +28,6 @@ private:
 	bool _printNextWeek;
 	bool _printThisMonth;
 	bool _printNextMonth;
-	bool _viewingClashes;
 
 	int _pageNumber;
 	int _lastPage;
@@ -52,12 +55,11 @@ private:
 
 
 public:
-	DisplayEntries(vector<Entry>, vector<Entry>, bool);
+	DisplayEntries(vector<Entry>, vector<Entry>);
 	//Scheduled Entries
-	void execute(string, bool&, int&, int&, bool&);
+	void execute(string, int&, int&, bool&, bool&, bool&, bool&);
 	void displayScheduledEntryShort();
 	void displayOneScheduledEntry(int);
-	void displayScheduledEntries();
 	//Floating Entries
 	void displayFloatingEntries();
 	void displayOneFloatingEntry(int index);
@@ -68,7 +70,7 @@ public:
 	void displayPrevPage();
 	void displayNextPage();
 	void displaySpecifiedPage(int);
-	/*void displayPastEntries();*/
+	void displayPastEntries();
 
 
 	int returnPageNumber();

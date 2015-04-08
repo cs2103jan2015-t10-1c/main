@@ -22,10 +22,12 @@ Main::Main(){
 	_stringEndTime = "";
 	_entryLocation = "";
 	_running = true;
-	_atScheduledEntries = true;
+	_viewingScheduledList = true;
+	_viewingFloatingList = false;
+	_viewingPastEntries = false;
+	_viewingClashes = false;
 	_pageNumber = 1;
 	_previousSearchInput = "";
-	_viewingClashes = false;
 }
 
 void Main::welcomeMessage(){
@@ -287,7 +289,7 @@ void Main::executeAddFunction(string userInput){
 }
 
 void Main::executeEditFunction(string userInput){
-	_newList.editEntry(_atScheduledEntries, userInput);
+	_newList.editEntry(_viewingScheduledList, userInput);
 }
 
 void Main::executeSearchFunction(string userInput){
@@ -296,8 +298,8 @@ void Main::executeSearchFunction(string userInput){
 }
 
 void Main::executeDisplayFunction(string userInput){
-	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _atScheduledEntries);
-	display.execute(userInput, _atScheduledEntries, _pageNumber, _lastPage, _viewingClashes);
+	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList());
+	display.execute(userInput, _pageNumber, _lastPage, _viewingScheduledList, _viewingFloatingList, _viewingPastEntries, _viewingClashes);
 }
 
 void Main::executeDeleteFunction(string userInput){
@@ -305,7 +307,7 @@ void Main::executeDeleteFunction(string userInput){
 	StringConvertor convertToNumber;
 	convertToNumber.convertStringToNumber(userInput, indexNumber);
 	string deleteFeedback;
-	_newList.removeEntry(_atScheduledEntries, indexNumber, deleteFeedback);
+	_newList.removeEntry(_viewingScheduledList, indexNumber, deleteFeedback);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));	
 	cout << deleteFeedback;

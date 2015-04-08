@@ -48,8 +48,11 @@ private:
 	int _intEndHour; int _intEndMinute;
 
 	bool _running;
-	bool _atScheduledEntries;
+	bool _viewingScheduledList;
+	bool _viewingFloatingList;
+	bool _viewingPastEntries;
 	bool _viewingClashes;
+
 	int _pageNumber;
 	int _lastPage;
 	bool _loadingEntries;
