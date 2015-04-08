@@ -305,7 +305,7 @@ string EntryEdit::getStatus(){
 	return "";
 }
 
-void EntryEdit::addTag(Entry& editedEntry){
+void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss){
 	string addedTags;
 	//store the added tags into the string addedTags
 	vector<_NEW_CHANGES>::iterator iter;
@@ -315,7 +315,8 @@ void EntryEdit::addTag(Entry& editedEntry){
 			break;
 		}
 	}
-	
+	oss << addedTags << endl;
+
 	int endOfTag = addedTags.size();
 	string tag;
 	int tracker;
@@ -330,7 +331,7 @@ void EntryEdit::addTag(Entry& editedEntry){
 	}
 }
 
-void EntryEdit::removeTag(Entry& editedEntry){
+void EntryEdit::removeTag(Entry& editedEntry, ostringstream& oss){
 	string removedTags;
 	//store the removed tags into the string removedTags
 	vector<_NEW_CHANGES>::iterator iter;
@@ -340,6 +341,7 @@ void EntryEdit::removeTag(Entry& editedEntry){
 			break;
 		}
 	}
+	oss << removedTags << endl;
 
 	int endOfTag = removedTags.size();
 	string tag;

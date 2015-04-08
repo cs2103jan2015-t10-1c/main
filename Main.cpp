@@ -289,7 +289,12 @@ void Main::executeAddFunction(string userInput){
 }
 
 void Main::executeEditFunction(string userInput){
-	_newList.editEntry(_viewingScheduledList, userInput);
+	string editFeedback;
+	_newList.editEntry(_viewingScheduledList, userInput, editFeedback);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << editFeedback;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void Main::executeSearchFunction(string userInput){
@@ -309,7 +314,7 @@ void Main::executeDeleteFunction(string userInput){
 	string deleteFeedback;
 	_newList.removeEntry(_viewingScheduledList, indexNumber, deleteFeedback);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));	
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << deleteFeedback;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
