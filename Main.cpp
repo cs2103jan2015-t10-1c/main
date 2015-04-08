@@ -255,7 +255,9 @@ void Main::executeDeleteFunction(string userInput){
 	int indexNumber;
 	StringConvertor convertToNumber;
 	convertToNumber.convertStringToNumber(userInput, indexNumber);
-	_newList.removeEntry(_atScheduledEntries, indexNumber);
+	string deleteFeedback;
+	_newList.removeEntry(_atScheduledEntries, indexNumber, deleteFeedback);
+	cout << deleteFeedback;
 }
 
 void Main::executeHelpFunction(){

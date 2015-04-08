@@ -8,6 +8,8 @@
 #include "EntryEdit.h"
 #include "ClashInspector.h"
 
+#include <iostream>
+#include <sstream>
 #include <fstream>
 
 class ScheduledEntry{
@@ -47,8 +49,8 @@ public:
 	void emptyCounter();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
-	void displayEntry(bool, int);
-	void removeEntry(bool, int);
+	string getEntryDisplay(bool, int);
+	void removeEntry(bool, int, string&);
 	void editEntry(bool, string);
 	void moveScheduledFloating(bool, int, Entry);
 	void undo();

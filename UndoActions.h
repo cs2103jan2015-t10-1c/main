@@ -38,6 +38,7 @@ public:
 	void emptyUndoStack();
 	void counterAdd(bool, int);
 	void counterDelete(bool, int, Entry);
+	void counterEdit(bool, int, Entry);
 
 	void execute(vector<Entry>&, vector<Entry>&);
 	void executeCounter(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);

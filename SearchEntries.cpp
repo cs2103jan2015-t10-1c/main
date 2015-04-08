@@ -208,7 +208,7 @@ void SearchEntries::searchStatus(string inputStatus){
 			bool statusMatches = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			if(inputStatus == _scheduledList[i].getStatus()){
-				statusMatches == true;
+				statusMatches = true;
 				searchResult.push_back(_scheduledList[i]);
 			}
 		}

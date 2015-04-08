@@ -1,6 +1,4 @@
 #include "ScheduledEntry.h"
-#include <iostream>
-#include <fstream>
 
 //Static variables that cannot be initialised in the header file
 const string ScheduledEntry::FEEDBACK_ADDED = "added ";
@@ -77,30 +75,36 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 }
 
 
-void ScheduledEntry::displayEntry(bool isScheduled, int index){
-	cout << endl
+string ScheduledEntry::getEntryDisplay(bool isScheduled, int index){
+	ostringstream oss;
+	oss << endl
 		<< BORDER << endl
 		<< index << ". ";
 	//scheduled entry
 	if (isScheduled){	
-		cout << _scheduledList[index-1].getFullDisplay();
+		oss << _scheduledList[index-1].getFullDisplay();
 	}
 	//floating entry
 	else {
-		cout << _floatingList[index-1].getFullDisplay();
+		oss << _floatingList[index-1].getFullDisplay();
 	}
-	cout << BORDER;
+	oss << BORDER;
+
+	return oss.str();
 }
 
-void ScheduledEntry::removeEntry(bool isScheduled, int index){
+void ScheduledEntry::removeEntry(bool isScheduled, int index, string& deleteFeedback){
+	ostringstream oss;
+	
 	//scheduled entry
 	if (isScheduled && !_scheduledList.empty()){
 		if (index > _scheduledList.size()){
-			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			deleteFeedback = FEEDBACK_OUT_OF_BOUND + "\n";
 			return;
 		}
-		cout << FEEDBACK_DELETED << endl;
-		displayEntry(isScheduled, index);
+		oss << FEEDBACK_DELETED << endl;
+		oss << getEntryDisplay(isScheduled, index);
+		deleteFeedback = oss.str();
 		_counter.counterDelete(true, index, _scheduledList[index-1]);
 		_scheduledList.erase(_scheduledList.begin() + index - 1);
 	}
@@ -108,18 +112,19 @@ void ScheduledEntry::removeEntry(bool isScheduled, int index){
 	//floating entry
 	else if (!isScheduled && !_floatingList.empty()){
 		if (index > _floatingList.size()){
-			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			deleteFeedback = FEEDBACK_OUT_OF_BOUND + "\n";
 			return;
 		}
-		cout << FEEDBACK_DELETED << endl;
-		displayEntry(isScheduled, index);
+		oss << FEEDBACK_DELETED << endl;
+		oss << getEntryDisplay(isScheduled, index);
+		deleteFeedback = oss.str();
 		_counter.counterDelete(false, index, _floatingList[index-1]);
 		_floatingList.erase(_floatingList.begin() + index - 1);
 	}
 
 	//no more entry
 	else {
-		cout << FEEDBACK_NO_ENTRIES_LEFT << endl;
+		deleteFeedback = FEEDBACK_NO_ENTRIES_LEFT + "\n";
 	}
 }
 
@@ -145,7 +150,8 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	for (int i = 1; i < entryNumber; i++){
 			iter++;
 	}
-	
+	_counter.counterEdit(isScheduled, entryNumber, *iter);
+
 	//update name
 	string newName = editComponent.getName();
 	if (newName != ""){
@@ -173,6 +179,12 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 		
 		iter->insertStartDate(newStartDate);
 		iter->insertEndDate(newEndDate);
+		
+		//initialise time for sorting
+		Time startTimeInitialiser = iter->getStartTime();
+		Time endTimeInitialiser = iter->getEndTime();
+		iter->insertStartTime(startTimeInitialiser);
+		iter->insertEndTime(endTimeInitialiser);
 	}
 
 	//update time
@@ -224,14 +236,29 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput){
 	//feedback to users
 	cout << FEEDBACK_EDITED << entryNumber << endl;
 
+	//sort the list again if either date or time has been edited
+	//if date editing is done on scheduled list AND date is not deleted, i.e. no shift from scheduled to floating
+	bool dateEditedSort = editComponent.getDateEditStatus() && isScheduled && inputStartDay != 0;
+	//if time editing is done on scheduled list. there is no need to check the time as time must have been edited properly
+	bool timeEditedSort = editComponent.getTimeEditStatus() && isScheduled;
+	if (dateEditedSort || timeEditedSort){
+		Entry newEntry = *iter;
+		string dummy;
+		removeEntry(isScheduled, entryNumber, dummy);
+		addEntry(newEntry);
+	}
+
 	//move entry from floating to scheduled list and vice versa
-	if (editComponent.getDateEditStatus() && (editComponent.getTimeEditStatus() || inputStartDay == 0)){
+	bool isScheduledToFloating = isScheduled && editComponent.getDateEditStatus() && (inputStartDay == 0);
+	bool isFloatingToScheduled = !isScheduled && editComponent.getDateEditStatus() && editComponent.getTimeEditStatus();
+	if (isScheduledToFloating || isFloatingToScheduled){
 		moveScheduledFloating(isScheduled, entryNumber, *iter);
 	}
 }
 
 void ScheduledEntry::moveScheduledFloating(bool isScheduled, int entryNumber, Entry movedEntry){
-	removeEntry(isScheduled, entryNumber);
+	string dummy;
+	removeEntry(isScheduled, entryNumber, dummy);
 	addEntry(movedEntry);
 }
 
