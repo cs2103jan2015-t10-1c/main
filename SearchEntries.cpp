@@ -272,7 +272,7 @@ void SearchEntries::searchStatus(string inputStatus){
 			bool statusMatches = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			if(inputStatus == _scheduledList[i].getStatus()){
-				statusMatches == true;
+				statusMatches = true;
 				searchResult.push_back(_scheduledList[i]);
 			}
 		}
@@ -349,7 +349,7 @@ void SearchEntries::searchDate(string userInput){
 		Date entryStartDate = _scheduledList[i].getStartDate();
 		Date entryEndDate = _scheduledList[i].getEndDate();
 		if(inputDate.getDate() >= entryStartDate.getDate() && inputDate.getDate() <= entryEndDate.getDate()){
-			dateFound == true;
+			dateFound = true;
 			searchResult.push_back(_scheduledList[i]);
 		}
 	}
