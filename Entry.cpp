@@ -184,14 +184,14 @@ string Entry::getFullDisplay(){
 		if(_startTime.getTime() == _endTime.getTime()){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			eventType = "Deadline: ";
+			eventType = "Deadline:\t";
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		} else {
 			eventType = "Start Date & Time: ";
 		}
 		oss	<< eventType;
 		greg_weekday startDateToString = _startDate.getDate().day_of_week();
-		oss << " " << startDateToString.as_long_string()
+		oss << "\t|" << startDateToString.as_long_string()
 			<< " " << _startDate.getDay() << " "
 			<< _startDate.getMonth() << " "
 			<< _startDate.getYear() << FEEDBACK_AT
@@ -203,7 +203,7 @@ string Entry::getFullDisplay(){
 		if(_startTime.getTime() != _endTime.getTime()){
 			oss << "End Date & Time: ";
 			greg_weekday endDateToString = _endDate.getDate().day_of_week();
-			oss << "   " << endDateToString.as_long_string() 
+			oss << "\t|" << endDateToString.as_long_string() 
 			<< " " << _endDate.getDay() << " "
 			<< _endDate.getMonth() << " "
 			<< _endDate.getYear() << FEEDBACK_AT
@@ -215,23 +215,25 @@ string Entry::getFullDisplay(){
 		}
 	}
 	
-	oss << "Location: " << _location << endl;
+	oss << "Location: " << "\t\t|" << _location << endl;
 	
 	if (_hasDate){
 		if(_startTime.getTime() != _endTime.getTime()){
-			oss	<< "Event duration : ";
-			oss << days(calculateEventDurationInHours().hours()/24) << " days and "
-			<< calculateEventDurationInHours().hours()%24 << " hours and " 
+			oss	<< "Event duration: " << "\t|";
+			if(days(calculateEventDurationInHours().hours()/24) > days(0)){
+				oss << days(calculateEventDurationInHours().hours()/24) << " days and ";
+			} 
+			oss << calculateEventDurationInHours().hours()%24 << " hours and " 
 			<< calculateEventDurationInHours().minutes() << " minutes" << endl;
 		}
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-		oss << "Time left: " << calculateDaysFromToday() << " days "<< endl;
+		oss << "Time to event: " << "\t\t|" << calculateDaysFromToday() << " days "<< endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 	
-	oss	<< "Status: " << getStatus() << endl
-		<< "Tags: ";
+	oss	<< "Status: " << "\t\t|" << getStatus() << endl
+		<< "Tags: " << "\t\t\t|";
 	vector<string>::iterator tagIter;
 	for(tagIter = _tags.begin(); tagIter != _tags.end(); tagIter++){
 		oss << *tagIter << " ";
@@ -249,14 +251,14 @@ string Entry::getShortDisplay(){
 		if(_startTime.getTime() == _endTime.getTime()){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			eventType = "Deadline: ";
+			eventType = "Deadline:\t";
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		} else {
 			eventType = "Start Date & Time: ";
 		}
 		oss	<< eventType;
 		greg_weekday startDateToString = _startDate.getDate().day_of_week();
-		oss << " " << startDateToString.as_long_string()
+		oss << "\t|" << startDateToString.as_long_string()
 			<< " " << _startDate.getDay() << " "
 			<< _startDate.getMonth() << " "
 			<< _startDate.getYear() << FEEDBACK_AT
@@ -271,7 +273,7 @@ string Entry::getShortDisplay(){
 		else{
 			oss << "End Date & Time: ";
 			greg_weekday endDateToString = _endDate.getDate().day_of_week();
-			oss << "   " << endDateToString.as_long_string() 
+			oss << "\t|" << endDateToString.as_long_string() 
 			<< " " << _endDate.getDay() << " "
 			<< _endDate.getMonth() << " "
 			<< _endDate.getYear() << FEEDBACK_AT

@@ -3,20 +3,17 @@
 
 using namespace std;
 
-ClashInspector::ClashInspector(vector<Entry> scheduledEntry){
-	_scheduledEntryList = scheduledEntry;
+ClashInspector::ClashInspector(vector<Entry> entryVector){
+	_entryVector = entryVector;
 }
 
 void ClashInspector::compareEntry(Entry inputEntry, int count, bool& clashExists, bool printClash){
 	vector<Entry>::iterator iter;
 	clashExists = false;
-	int listCount = 0;
-	for(iter = _scheduledEntryList.begin(); iter != _scheduledEntryList.end(); iter++){
-		if(listCount!=count){
-			Entry anotherEntry = *iter;
-			inspectEntries(inputEntry, anotherEntry, (listCount+1), clashExists, printClash);
+	for(int i = 0; i < _entryVector.size(); i++){
+		if(i + 1 != count){
+			inspectEntries(inputEntry, _entryVector[i], _entryVector[i].getEntryNumber(), clashExists, printClash);
 		}
-		listCount++;
 	}
 }
 

@@ -13,10 +13,12 @@ private:
 	int _year;
 	bool _hasDate;
 	bool _inThePast;
+	bool _loading;
 	date _entryDate;
 
 public:
 	Date();
+	Date(bool);
 	
 	//input day, month and year into a Date object
 	void insertDay(int);

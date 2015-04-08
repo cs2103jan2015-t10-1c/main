@@ -567,7 +567,7 @@ void SearchEntries::initialisePaging(int& numberOfPages, vector<Entry> searchRes
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
 	//prevent abort for number of entries less than 5
-	if(searchResult.size() < ENTRY_PERPAGE){
+	if(searchResult.size() <= ENTRY_PERPAGE){
 		lastEntry = searchResult.size();	
 	}
 }

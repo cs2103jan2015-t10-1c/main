@@ -11,6 +11,7 @@ const string Main::COMMAND_HELP = "help";
 const string Main::COMMAND_UNDO = "undo";
 const string Main::COMMAND_EXIT = "exit";
 const string Main::COMMAND_RESIZE = "resize";
+const string Main::COMMAND_BORDER = "_________________________________________________________";
 
 Main::Main(){
 	_userInput = "";
@@ -32,6 +33,7 @@ void Main::welcomeMessage(){
 	_commandInterface.displayCurrentDateTime();
 }
 void Main::loadScheduledEntries(){
+	_loadingEntries = true;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 	cout << "Loading existing entries..." << endl << endl;
@@ -61,8 +63,8 @@ void Main::loadScheduledEntries(){
 		parse.extractTag(stringTags, tags);
 
 		//initialise start and end dates, start and end times
-			Date startDate;
-			Date endDate;
+			Date startDate(_loadingEntries);
+			Date endDate(_loadingEntries);
 			Time startTime;
 			Time endTime;
 			initialiseDateTime(startDate, _intStartDay, _intStartMonth, _intStartYear, startTime, _intStartHour, _intStartMinute,
@@ -82,6 +84,7 @@ void Main::loadScheduledEntries(){
 }
 
 void Main::loadFloatingEntries(){
+	_loadingEntries = true;
 	ifstream readFloat("FastAddFloat.txt");
 	while (getline(readFloat, _userInput)){
 		Entry newEntry;
@@ -96,8 +99,8 @@ void Main::loadFloatingEntries(){
 			parse.extractTag(stringTags, tags);
 
 			//initialise start and end dates, start and end times
-			Date startDate;
-			Date endDate;
+			Date startDate(_loadingEntries);
+			Date endDate(_loadingEntries);
 			Time startTime;
 			Time endTime;
 			initialiseDateTime(startDate, 0, 0, 0, startTime, 0, 0, endDate, 0, 0, 0, endTime, 0, 0);
@@ -121,11 +124,12 @@ void Main::loadFloatingEntries(){
 }
 
 void Main::operateFastAdd(){
+	_loadingEntries = false;
 	while(_running){
-		cout << "_____________________________________________" << endl << endl
+		cout << COMMAND_BORDER << endl << endl
 			<< COMMAND_PROMPT;
 		getline(cin, _userInput);
-		cout << "_____________________________________________" << endl << endl;
+		cout << COMMAND_BORDER << endl << endl;
 
 		_command = _commandInterface.findCommand(_userInput);
 		_userInput = _commandInterface.removeCommand(_userInput);
@@ -219,8 +223,8 @@ void Main::executeAddFunction(string userInput){
 	}
 			
 	//initialise start and end dates, start and end times
-	Date startDate;	
-	Date endDate;
+	Date startDate(_loadingEntries);	
+	Date endDate(_loadingEntries);
 	Time startTime;
 	Time endTime;
 
@@ -298,7 +302,7 @@ void Main::executeSearchFunction(string userInput){
 
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList(), _atScheduledEntries);
-	display.execute(userInput, _atScheduledEntries, _pageNumber, _viewingClashes);
+	display.execute(userInput, _atScheduledEntries, _pageNumber, _lastPage, _viewingClashes);
 }
 
 void Main::executeDeleteFunction(string userInput){

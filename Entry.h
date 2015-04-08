@@ -14,7 +14,6 @@ using namespace boost::posix_time;
 class Entry{
 private:
 	int _entryNumber;
-
 	static const string FEEDBACK_AT;
 
 	string _name;
