@@ -8,7 +8,7 @@ const string EntryAdd::BY_MARKER = "by";
 const string EntryAdd::BLANK_SPACE = " ";
 const string EntryAdd::FROM_MARKER = "from";
 const string EntryAdd::FULLSTOP_MARKER = ".";
-const string EntryAdd::ON_MARKER = "";
+const string EntryAdd::ON_MARKER = "on";
 const string EntryAdd::TAG_MARKER = "#";
 const string EntryAdd::TO_MARKER = "to";
 
