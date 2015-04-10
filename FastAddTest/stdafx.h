@@ -11,7 +11,7 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
-/*#include "ClashInspector.h"
+#include "ClashInspector.h"
 #include "ClashInspector.h"
 #include "Date.h" 
 #include "DateTimeInitialiser.h"
@@ -25,9 +25,9 @@
 #include "SearchEntries.h" 
 #include "StringConvertor.h"
 #include "TextUI.h"
-#include "Time.h"
+#include "MyTime.h"
 #include "UndoActions.h"
 #include <string.h>
 #include <boost\date_time\posix_time\posix_time.hpp>
-#include <boost\date_time\gregorian\gregorian.hpp>*/
+#include <boost\date_time\gregorian\gregorian.hpp>
 

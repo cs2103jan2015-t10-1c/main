@@ -2,7 +2,7 @@
 #define ENTRY_H
 
 #include "Date.h"
-#include "Time.h"
+#include "MyTime.h"
 
 #include <vector>
 #include <sstream>

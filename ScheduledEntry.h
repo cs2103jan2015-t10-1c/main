@@ -2,7 +2,7 @@
 #define SCHEDULEDENTRY_H
 
 #include "Date.h"
-#include "Time.h"
+#include "MyTime.h"
 #include "Entry.h"
 #include "UndoActions.h"
 #include "EntryEdit.h"

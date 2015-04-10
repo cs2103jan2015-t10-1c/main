@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7AFBFAFE-56FF-41BA-89EE-79A82F8BCFB7}</ProjectGuid>
-    <RootNamespace>FastAdd</RootNamespace>
+    <ProjectGuid>{FA6DCF15-F74C-4334-B995-1A385CAB6315}</ProjectGuid>
+    <RootNamespace>FastAddEXE</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -43,11 +43,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>M:\NUS\Semester 4 - 2015\CS2103\Others\boost_1_57_0\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Debug;M:\NUS\Semester 4 - 2015\CS2103\Others\boost_1_57_0\boost_1_57_0;M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>M:\NUS\Semester 4 - 2015\CS2103\Others\boost_1_57_0\boost_1_57_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>M:\NUS\Semester 4 - 2015\CS2103\Others\boost_1_57_0\boost_1_57_0\stage\lib;M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -56,6 +57,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -64,39 +66,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ClashInspector.h" />
-    <ClInclude Include="Date.h" />
-    <ClInclude Include="DateTimeInitialiser.h" />
-    <ClInclude Include="DateTimeInspector.h" />
-    <ClInclude Include="DisplayEntries.h" />
-    <ClInclude Include="Entry.h" />
-    <ClInclude Include="EntryEdit.h" />
-    <ClInclude Include="Main.h" />
-    <ClInclude Include="ScheduledEntry.h" />
-    <ClInclude Include="EntryAdd.h" />
-    <ClInclude Include="SearchEntries.h" />
-    <ClInclude Include="StringConvertor.h" />
-    <ClInclude Include="TextUI.h" />
-    <ClInclude Include="MyTime.h" />
-    <ClInclude Include="UndoActions.h" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClashInspector.cpp" />
-    <ClCompile Include="Date.cpp" />
-    <ClCompile Include="DateTimeInitialiser.cpp" />
-    <ClCompile Include="DateTimeInspector.cpp" />
-    <ClCompile Include="DisplayEntries.cpp" />
-    <ClCompile Include="Entry.cpp" />
-    <ClCompile Include="EntryEdit.cpp" />
-    <ClCompile Include="FastAdd.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ScheduledEntry.cpp" />
-    <ClCompile Include="EntryAdd.cpp" />
-    <ClCompile Include="SearchEntries.cpp" />
-    <ClCompile Include="StringConvertor.cpp" />
-    <ClCompile Include="TextUI.cpp" />
-    <ClCompile Include="MyTime.cpp" />
-    <ClCompile Include="UndoActions.cpp" />
+    <ProjectReference Include="..\FastAdd.vcxproj">
+      <Project>{7afbfafe-56ff-41ba-89ee-79a82f8bcfb7}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

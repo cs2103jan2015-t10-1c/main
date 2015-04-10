@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FastAdd", "FastAdd.vcxproj", "{7AFBFAFE-56FF-41BA-89EE-79A82F8BCFB7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FastAddTest", "FastAddTest\FastAddTest.vcxproj", "{F0C6AC5F-946D-47E2-94EC-44289D1FEF96}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FastAddEXE", "FastAddEXE\FastAddEXE.vcxproj", "{FA6DCF15-F74C-4334-B995-1A385CAB6315}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +17,14 @@ Global
 		{7AFBFAFE-56FF-41BA-89EE-79A82F8BCFB7}.Debug|Win32.Build.0 = Debug|Win32
 		{7AFBFAFE-56FF-41BA-89EE-79A82F8BCFB7}.Release|Win32.ActiveCfg = Release|Win32
 		{7AFBFAFE-56FF-41BA-89EE-79A82F8BCFB7}.Release|Win32.Build.0 = Release|Win32
+		{F0C6AC5F-946D-47E2-94EC-44289D1FEF96}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0C6AC5F-946D-47E2-94EC-44289D1FEF96}.Debug|Win32.Build.0 = Debug|Win32
+		{F0C6AC5F-946D-47E2-94EC-44289D1FEF96}.Release|Win32.ActiveCfg = Release|Win32
+		{F0C6AC5F-946D-47E2-94EC-44289D1FEF96}.Release|Win32.Build.0 = Release|Win32
+		{FA6DCF15-F74C-4334-B995-1A385CAB6315}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FA6DCF15-F74C-4334-B995-1A385CAB6315}.Debug|Win32.Build.0 = Debug|Win32
+		{FA6DCF15-F74C-4334-B995-1A385CAB6315}.Release|Win32.ActiveCfg = Release|Win32
+		{FA6DCF15-F74C-4334-B995-1A385CAB6315}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
