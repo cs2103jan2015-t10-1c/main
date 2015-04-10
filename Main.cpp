@@ -37,9 +37,9 @@ void Main::welcomeMessage(){
 void Main::loadScheduledEntries(){
 	_loadingEntries = true;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ));
+	SetConsoleTextAttribute(hConsole, 11);
 	cout << "Loading existing entries..." << endl << endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	SetConsoleTextAttribute(hConsole, 15);
 
 	//load existing scheduled entries
 	ifstream readSched("FastAddSched.txt");
@@ -120,9 +120,10 @@ void Main::loadFloatingEntries(){
 	_newList.emptyCounter();
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	SetConsoleTextAttribute(hConsole, 11);
 	cout << endl << "Loading done..." << endl << endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	SetConsoleTextAttribute(hConsole, 15);
+
 }
 
 void Main::operateFastAdd(){
@@ -197,7 +198,7 @@ void Main::executeResizeFunction(){
 	cout << "Your choice: ";
 	cin >> choice;
 	if (choice == 1){
-		system("mode 55,50");   //Set mode to ensure window does not exceed buffer size
+		system("mode 60,50");   //Set mode to ensure window does not exceed buffer size
 		SMALL_RECT WinRect = {0, 0, 80, 25};   //New dimensions for window in 8x12 pixel chars
 		SMALL_RECT* WinSize = &WinRect;
 		SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
