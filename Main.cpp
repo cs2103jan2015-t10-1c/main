@@ -33,6 +33,14 @@ Main::Main(){
 void Main::welcomeMessage(){
 	_commandInterface.displayWelcomeMessage();
 }
+
+void Main::readPath(){
+	ifstream readPath("Path.txt");
+	readPath >> _scheduledPath;
+	readPath >> _floatingPath;
+	readPath.close();
+}
+
 void Main::loadScheduledEntries(){
 	_loadingEntries = true;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -41,7 +49,7 @@ void Main::loadScheduledEntries(){
 	SetConsoleTextAttribute(hConsole, 15);
 
 	//load existing scheduled entries
-	ifstream readSched("FastAddSched.txt");
+	ifstream readSched(_scheduledPath);
 	while (getline(readSched, _userInput)){
 		Entry newEntry;
 		string stringTags;
@@ -86,7 +94,7 @@ void Main::loadScheduledEntries(){
 
 void Main::loadFloatingEntries(){
 	_loadingEntries = true;
-	ifstream readFloat("FastAddFloat.txt");
+	ifstream readFloat(_floatingPath);
 	while (getline(readFloat, _userInput)){
 		Entry newEntry;
 		string stringTags;

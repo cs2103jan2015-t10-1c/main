@@ -31,7 +31,6 @@ private:
 	static const string COMMAND_RESIZE;
 	static const string COMMAND_BORDER;
 
-
 	string _userInput;
 	string _entryName;
 	string _stringStartDate;
@@ -48,22 +47,28 @@ private:
 	int _intEndHour; int _intEndMinute;
 
 	bool _running;
+	
 	bool _viewingScheduledList;
 	bool _viewingFloatingList;
 	bool _viewingPastEntries;
 	bool _viewingClashes;
-
 	int _pageNumber;
 	int _lastPage;
+	
+	//loading
 	bool _loadingEntries;
+	string _scheduledPath;
+	string _floatingPath;
+	
 	EntryLists _newList;
-	//TextUI
+	
 	TextUI _commandInterface;
 	DateTimeInitialiser _initialiser;
 
 public:
 	Main();
 	void welcomeMessage();
+	void readPath();
 	void loadScheduledEntries();
 	void loadFloatingEntries();
 	void resetStringValues();

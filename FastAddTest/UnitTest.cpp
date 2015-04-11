@@ -65,7 +65,7 @@ namespace FastAddTest
 				
 			Entry testScheduled; 
 			Entry testFloating;	
-			ScheduledEntry testInfo;
+			EntryLists testInfo;
 	
 			testScheduled.insertName("b");
 			testInfo.addEntry(testScheduled);
