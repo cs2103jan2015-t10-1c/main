@@ -85,7 +85,8 @@ void Main::loadScheduledEntries(){
 				endDate, _intEndDay, _intEndMonth, _intEndYear, endTime, _intEndHour, _intEndMinute);
 				//initialise entry
 			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, entryStatus, tags);
-			_newList.addEntry(newEntry);
+			int dummy;
+			_newList.addEntry(newEntry, dummy);
 		}
 	}
 	readSched.close();
@@ -123,7 +124,8 @@ void Main::loadFloatingEntries(){
 						
 			//initialise entry
 			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, entryStatus, tags);
-			_newList.addEntry(newEntry);
+			int dummy;
+			_newList.addEntry(newEntry, dummy);
 		}
 	}
 	readFloat.close();
@@ -282,9 +284,9 @@ void Main::executeAddFunction(string userInput){
 		//initialise entry
 		Entry newEntry;
 		initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, "undone", tags);
-		//add new entry to the list
-		_newList.addEntry(newEntry);
-		_newList.showAddFeedback(newEntry);
+		int newEntryIndex;
+		_newList.addEntry(newEntry, newEntryIndex);
+		_newList.showAddFeedback(newEntry, newEntryIndex);
 	}
 }
 

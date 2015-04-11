@@ -103,7 +103,6 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 	
 	//display clashing scheduled entries
 	else if (_userInput == TYPE_CLASH){
-		_viewingClashes = false;
 		_viewingScheduledList = false;
 		_viewingFloatingList = false;
 		_viewingPastEntries = false;

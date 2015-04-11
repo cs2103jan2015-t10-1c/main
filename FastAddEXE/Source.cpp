@@ -9,6 +9,7 @@ int main(){
 	Main RunFA;
 	RunFA.readPath();
 	RunFA.welcomeMessage();
+	RunFA.readPath();
 	RunFA.loadScheduledEntries();
 	RunFA.loadFloatingEntries();
 	RunFA.operateFastAdd();
