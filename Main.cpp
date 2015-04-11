@@ -1,5 +1,6 @@
 #include "Main.h"
-#include <windows.h>
+
+using namespace std;
 
 const string Main::COMMAND_PROMPT = "command: ";
 const string Main::COMMAND_ADD = "add";
@@ -189,34 +190,7 @@ void Main::operateFastAdd(){
 }
 
 void Main::executeResizeFunction(){
-	cout << "Please select the size of the console (choose the number):" << endl;
-	cout << "1. Small" << endl;
-	cout << "2. Medium" << endl;
-	cout << "3. Large" << endl;
-	int choice;
-	cout << "Your choice: ";
-	cin >> choice;
-	if (choice == 1){
-		system("mode 60,50");   //Set mode to ensure window does not exceed buffer size
-		SMALL_RECT WinRect = {0, 0, 80, 25};   //New dimensions for window in 8x12 pixel chars
-		SMALL_RECT* WinSize = &WinRect;
-		SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
-	}
-	else if (choice == 2){
-		system("mode 110,50");   //Set mode to ensure window does not exceed buffer size
-		SMALL_RECT WinRect = {0, 0, 160, 50};   //New dimensions for window in 8x12 pixel chars
-		SMALL_RECT* WinSize = &WinRect;
-		SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
-	}
-	else if (choice == 3){
-		system("mode 180,70");   //Set mode to ensure window does not exceed buffer size
-		SMALL_RECT WinRect = {0, 0, 180, 70};   //New dimensions for window in 8x12 pixel chars
-		SMALL_RECT* WinSize = &WinRect;
-		SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);  //Set new size for window
-	}
-	else {
-		cout << "Your choice is invalid. Please re-enter" << endl;
-	}
+	_commandInterface.displayResizeOptions();
 }
 
 void Main::executeAddFunction(string userInput){

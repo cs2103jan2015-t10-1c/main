@@ -154,4 +154,42 @@ void TextUI::displayErrorFeedback(){
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+void TextUI::displayResizeOptions(){
+	int resizeChoice;
+	string resizeChoiceInput;
+	HWND hWnd=GetConsoleWindow();
+	cout << "Please choose one of the resize options below by entering the number" << endl;
+	cout << "1. Small" << endl;
+	cout << "2. Large" << endl;
+	cout << "3. Back to default" << endl;
+	cout << BORDER << endl;
+	cout << "Your choice is ";
+	getline(cin, resizeChoiceInput);
+	cout << BORDER << endl << endl;
+	istringstream convertResizeChoice(resizeChoiceInput);
+	if (!(convertResizeChoice >> resizeChoice)) {
+		resizeChoice = 0;  
+	}
+
+	switch (resizeChoice){
+	case 0:
+		break;
+	case 1:
+		MoveWindow(hWnd,400,0,520,400, TRUE);
+		break;
+	case 2:
+		MoveWindow(hWnd,300,0,1020,720, TRUE);
+		break;
+	case 3:
+		MoveWindow(hWnd,400,0,520,730, TRUE);
+		break;
+	default:
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "Wrong input. Try again";
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		break;
+	}
+}
+
 

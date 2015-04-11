@@ -12,6 +12,7 @@
 #include "SearchEntries.h"
 #include "UndoActions.h"
 #include <assert.h>
+#include <windows.h>
 
 using namespace std;
 using namespace boost::gregorian;
