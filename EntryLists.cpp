@@ -32,7 +32,7 @@ const string EntryLists::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 const string EntryLists::STATUS_DONE = "done";
 const string EntryLists::STATUS_UNDONE = "undone";
 
-const string EntryLists::SPECIFY_STORAGE_PROMPT = "Please specify where you want to store your lists: ";
+const string EntryLists::SPECIFY_STORAGE_PROMPT = "Please specify where you want to store your: ";
 const string EntryLists::SCHEDULED_ENTRIES_PROMPT = "Scheduled entries";
 const string EntryLists::FLOATING_ENTRIES_PROMPT = "Floating entries";
 
@@ -421,18 +421,14 @@ void EntryLists::undo(){
 
 void EntryLists::exit(bool& running){
 	cout << SPECIFY_STORAGE_PROMPT << endl;
-	string path;
-	cin >> path;
-
-	ofstream writePath("Path.txt");
-	string scheduledPath = path + SCHEDULED_FILE_NAME;
-	writePath << scheduledPath << endl;
-	string floatingPath = path + FLOATING_FILE_NAME;;
-	writePath << floatingPath;
-	writePath.close();
-
+	
 	//write scheduled
-	ofstream writeSched(scheduledPath);
+	ofstream writeSched;
+	string scheduledPath;
+	cout << SCHEDULED_ENTRIES_PROMPT << ": ";
+	cin >> scheduledPath;
+	scheduledPath = scheduledPath + SCHEDULED_FILE_NAME;
+	writeSched.open(scheduledPath);
 	vector<Entry>::iterator iterSched;
 
 	for (iterSched = _scheduledList.begin(); iterSched != _scheduledList.end(); iterSched++){
@@ -445,7 +441,12 @@ void EntryLists::exit(bool& running){
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
 	//write floating
-	ofstream writeFloat(floatingPath);
+	ofstream writeFloat;
+	string floatingPath;
+	cout << FLOATING_ENTRIES_PROMPT << ": ";
+	cin >> floatingPath;
+	floatingPath = floatingPath + FLOATING_FILE_NAME;
+	writeFloat.open(floatingPath);
 	vector<Entry>::iterator iterFloat;
 
 	for (iterFloat = _floatingList.begin(); iterFloat != _floatingList.end(); iterFloat++){
