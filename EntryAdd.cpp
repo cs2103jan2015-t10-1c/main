@@ -106,6 +106,9 @@ void EntryAdd::extractName(string& entryComponents, string& entryName){
 	entryName = entryComponents.substr(1, endOfName);
 	int startOfRemainder = endOfName + FULLSTOP_MARKER.size() + BLANK_SPACE_COUNT + 1;
 	int endOfRemainder = entryComponents.size() - 1;
+	if(startOfRemainder > endOfRemainder){
+		return;
+	}
 	entryComponents = entryComponents.substr(startOfRemainder, endOfRemainder);
 }
 

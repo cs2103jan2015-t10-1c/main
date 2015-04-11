@@ -27,11 +27,12 @@ private:
 	static const string BORDER;
 
 	StringConvertor _datetimeParser;
-	int _pageNumber;
+	int _scheduledPageNumber;
+	int _floatingPageNumber;
 public:
 
 	SearchEntries(vector<Entry>, vector<Entry>);
-	void execute(string input, int&, string&);
+	void execute(string input, int&, int&, string&);
 	void searchTag(string);
 	void searchName(string);
 	void searchLocation(string);
@@ -39,9 +40,10 @@ public:
 	void searchDate(string);
 	void searchTime(string);
 	void searchAll(string);
-	void initialisePaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
-	void closingMessage(int, int, int);
-
+	void initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
+	void initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
+	void closingScheduledMessage(int, int, int);
+	void closingFloatingMessage(int, int, int);
 };
 #endif
 

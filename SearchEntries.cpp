@@ -13,7 +13,7 @@ const string SearchEntries::ALL_MARKER = "all";
 const string SearchEntries::NEXT_MARKER = "next";
 const string SearchEntries::PREV_MARKER = "prev";
 const int SearchEntries::ENTRY_PERPAGE = 3;
-const string SearchEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - -";
+const string SearchEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
 
 
 inline bool caseInsCharCompSingle(char a, char b) {
@@ -35,18 +35,22 @@ string::const_iterator caseInsFind(string& s, const string& p) {
 SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries){
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
-	_pageNumber = 1;
+	_scheduledPageNumber = 1;
+	_floatingPageNumber = 1;
 
 }
 
-void SearchEntries::execute(string userInput, int& pageNumber, string& previousSearchInput){
-	_pageNumber = pageNumber;
+void SearchEntries::execute(string userInput, int& scheduledPageNumber, int& floatingPageNumber, string& previousSearchInput){
+	_scheduledPageNumber = scheduledPageNumber;
+	_floatingPageNumber = floatingPageNumber;
 	userInput = userInput.substr(1);
 	if (userInput == NEXT_MARKER){
-		_pageNumber++;
+		_scheduledPageNumber++;
+		_floatingPageNumber++;
 		userInput = previousSearchInput;
 	} else if (userInput == PREV_MARKER){
-		_pageNumber--;
+		_scheduledPageNumber--;
+		_floatingPageNumber--;
 		userInput = previousSearchInput;
 	} else{
 		previousSearchInput = userInput;
@@ -81,7 +85,8 @@ void SearchEntries::execute(string userInput, int& pageNumber, string& previousS
 			cout << "Wrong search input is given!" << endl << endl;
 		}*/
 	}
-	pageNumber = _pageNumber;
+	scheduledPageNumber = _scheduledPageNumber;
+	floatingPageNumber = _floatingPageNumber;
 }
 
 void SearchEntries::searchTag(string keyword){
@@ -115,7 +120,7 @@ void SearchEntries::searchTag(string keyword){
 		<< endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-	initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+	initialiseScheduledPaging(numberOfPages, searchResult, firstEntry, lastEntry);
 
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
@@ -125,7 +130,7 @@ void SearchEntries::searchTag(string keyword){
 	}
 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	//__________________________________________________________________________//
@@ -174,7 +179,7 @@ void SearchEntries::searchName(string inputName){
 		cout << "Scheduled Entries containing " << inputName << " in their name:" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-		initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+		initialiseScheduledPaging(numberOfPages, searchResult, firstEntry, lastEntry);
 
 		for (int i = firstEntry; i < lastEntry; i++){
 			cout << BORDER << endl
@@ -183,7 +188,7 @@ void SearchEntries::searchName(string inputName){
 				<< BORDER << endl;
 			}
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-		cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+		cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		/*count = 0;
@@ -234,7 +239,7 @@ void SearchEntries::searchLocation(string inputLocation){
 		cout << "Scheduled Entries containing " << inputLocation << " in their location:" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-		initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+		initialiseScheduledPaging(numberOfPages, searchResult, firstEntry, lastEntry);
 		for (int i = firstEntry; i < lastEntry; i++){
 			cout << BORDER << endl
 				<< searchResult[i].getEntryNumber() << ". "
@@ -242,7 +247,7 @@ void SearchEntries::searchLocation(string inputLocation){
 				<< BORDER << endl;
 			}
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-		cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+		cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
@@ -261,25 +266,24 @@ void SearchEntries::searchLocation(string inputLocation){
 }
 
 void SearchEntries::searchStatus(string inputStatus){
-		/*vector<Entry>::iterator iterScheduledEntry;
-		vector<Entry>::iterator iterFloatingEntry;*/
-		vector<Entry> searchResult;
-		int numberOfPages;
-		int firstEntry;
-		int lastEntry;
+		vector<Entry> searchScheduledResult;
+		int numberOfScheduledPages;
+		int firstScheduledEntry;
+		int lastScheduledEntry;
 		//initialise search results
 		for(unsigned int i = 0; i < _scheduledList.size(); i++){
 			bool statusMatches = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			if(inputStatus == _scheduledList[i].getStatus()){
 				statusMatches = true;
-				searchResult.push_back(_scheduledList[i]);
+				searchScheduledResult.push_back(_scheduledList[i]);
 			}
 		}
-
-		cout << searchResult.size() << endl;
-
-		if(searchResult.empty()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << "Scheduled Entries that is/are " << inputStatus << ":" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		if(searchScheduledResult.empty()){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
@@ -287,34 +291,54 @@ void SearchEntries::searchStatus(string inputStatus){
 			return;
 		}
 
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-		cout << "Scheduled Entries that is/are " << inputStatus << ":" << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-
-		initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
-		for (int i = firstEntry; i < lastEntry; i++){
+		initialiseScheduledPaging(numberOfScheduledPages, searchScheduledResult, firstScheduledEntry, lastScheduledEntry);
+		for (int i = firstScheduledEntry; i < lastScheduledEntry; i++){
 			cout << BORDER << endl
-				<< searchResult[i].getEntryNumber() << ". "
-				<< searchResult[i].getShortDisplay() << endl
+				<< searchScheduledResult[i].getEntryNumber() << ". "
+				<< searchScheduledResult[i].getShortDisplay() << endl
 				<< BORDER << endl;
 			}
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-		cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
-			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
+		closingScheduledMessage(numberOfScheduledPages, firstScheduledEntry, lastScheduledEntry);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << endl << endl;
+
+		//Floating Search Result
+		vector<Entry> searchFloatingResult;
+		int numberOfFloatingPages;
+		int firstFloatingEntry;
+		int lastFloatingEntry;
+		//initialise search results
+		for(unsigned int i = 0; i < _floatingList.size(); i++){
+			bool statusMatches = false;
+			_floatingList[i].insertEntryNumber(i+1);
+			if(inputStatus == _floatingList[i].getStatus()){
+				statusMatches = true;
+				searchFloatingResult.push_back(_floatingList[i]);
+			}
+		}
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << "Floating Entries that is/are " << inputStatus << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-		/*count = 1;
-		cout << "Floating Entries that is/are " << inputStatus << ":" << endl;
-		for (iterFloatingEntry = _floatingList.begin(); iterFloatingEntry != _floatingList.end(); iterFloatingEntry++){
-			if (iterFloatingEntry->getStatus() == inputStatus){
-				cout << "- - - - - - - - - - - - - - -" << endl;
-				cout << count << ". " << iterFloatingEntry->getShortDisplay();
-				cout << "- - - - - - - - - - - - - - -" << endl;				
-				cout << endl;
+		if(searchFloatingResult.empty()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+			cout << "Entries are not found" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		initialiseFloatingPaging(numberOfFloatingPages, searchFloatingResult, firstFloatingEntry, lastFloatingEntry);
+		for (int i = firstFloatingEntry; i < lastFloatingEntry; i++){
+			cout << BORDER << endl
+				<< searchFloatingResult[i].getEntryNumber() << ". "
+				<< searchFloatingResult[i].getShortDisplay() << endl
+				<< BORDER << endl;
 			}
-			count++;
-		}*/
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		closingFloatingMessage(numberOfFloatingPages, firstFloatingEntry, lastFloatingEntry);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << endl << endl;
 }
 
 void SearchEntries::searchDate(string userInput){
@@ -369,7 +393,7 @@ void SearchEntries::searchDate(string userInput){
 		":" << endl << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-	initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+	initialiseScheduledPaging(numberOfPages, searchResult, firstEntry, lastEntry);
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
 			<< searchResult[i].getEntryNumber() << ". "
@@ -377,7 +401,7 @@ void SearchEntries::searchDate(string userInput){
 			<< BORDER << endl;
 		}
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
@@ -440,7 +464,7 @@ void SearchEntries::searchTime(string userInput){
 		<< " :" << endl << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-	initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+	initialiseScheduledPaging(numberOfPages, searchResult, firstEntry, lastEntry);
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
 			<< searchResult[i].getEntryNumber() << ". "
@@ -449,7 +473,7 @@ void SearchEntries::searchTime(string userInput){
 		}
 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
@@ -500,7 +524,7 @@ void SearchEntries::searchAll(string userInput){
 		cout << "Scheduled Entries with keyword " << userInput << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-		initialisePaging(numberOfPages, searchResult, firstEntry, lastEntry);
+		initialiseFloatingPaging(numberOfPages, searchResult, firstEntry, lastEntry);
 		for (int i = firstEntry; i < lastEntry; i++){
 			cout << BORDER << endl
 				<< searchResult[i].getEntryNumber() << ". "
@@ -508,7 +532,7 @@ void SearchEntries::searchAll(string userInput){
 				<< BORDER << endl;
 			}
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-		cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+		cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 			<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
@@ -544,7 +568,7 @@ void SearchEntries::searchAll(string userInput){
 		}*/
 }
 
-void SearchEntries::initialisePaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
+void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
 	//initialise search result parameters
 	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
 	int numberOfEntriesOnLastPage = searchResult.size()%ENTRY_PERPAGE;
@@ -552,30 +576,66 @@ void SearchEntries::initialisePaging(int& numberOfPages, vector<Entry> searchRes
 		numberOfPages++;
 	}
 	//prevent abort for exceeding page
-	if(_pageNumber > numberOfPages){
+	if(_scheduledPageNumber > numberOfPages){
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Page does not exist!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-		_pageNumber--;
+		_scheduledPageNumber--;
 	}
-	firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
+	firstEntry = ENTRY_PERPAGE*(_scheduledPageNumber-1);
 	lastEntry = firstEntry + ENTRY_PERPAGE;
 	//case for the last page
-	if(_pageNumber == numberOfPages){
+	if(_scheduledPageNumber == numberOfPages){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
-	//prevent abort for number of entries less than 5
+	//prevent abort for number of entries less than maximum page
 	if(searchResult.size() <= ENTRY_PERPAGE){
 		lastEntry = searchResult.size();	
 	}
 }
 
-void SearchEntries::closingMessage(int numberOfPages, int firstEntry, int lastEntry){
+void SearchEntries::initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
+	//initialise search result parameters
+	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = searchResult.size()%ENTRY_PERPAGE;
+	if(numberOfEntriesOnLastPage > 0){
+		numberOfPages++;
+	}
+	//prevent abort for exceeding page
+	if(_floatingPageNumber > numberOfPages){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "Page does not exist!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
+		_floatingPageNumber--;
+	}
+	firstEntry = ENTRY_PERPAGE*(_floatingPageNumber-1);
+	lastEntry = firstEntry + ENTRY_PERPAGE;
+	//case for the last page
+	if(_floatingPageNumber == numberOfPages){
+		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+	}
+	//prevent abort for number of entries less than maximum page
+	if(searchResult.size() <= ENTRY_PERPAGE){
+		lastEntry = searchResult.size();	
+	}
+}
+
+void SearchEntries::closingScheduledMessage(int numberOfPages, int firstEntry, int lastEntry){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
+	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
+		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+void SearchEntries::closingFloatingMessage(int numberOfPages, int firstEntry, int lastEntry){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << "Page: " << _floatingPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }

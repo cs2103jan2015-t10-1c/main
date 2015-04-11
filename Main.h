@@ -54,6 +54,8 @@ private:
 	bool _viewingClashes;
 
 	int _pageNumber;
+	int _searchScheduledPageNumber;
+	int _searchFloatingPageNumber;
 	int _lastPage;
 	bool _loadingEntries;
 	EntryLists _newList;
