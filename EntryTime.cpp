@@ -1,4 +1,4 @@
-#include "MyTime.h"
+#include "EntryTime.h"
 
 Time::Time(){
 	_hour = 99;

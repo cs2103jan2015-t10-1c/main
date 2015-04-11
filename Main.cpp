@@ -32,13 +32,12 @@ Main::Main(){
 
 void Main::welcomeMessage(){
 	_commandInterface.displayWelcomeMessage();
-	_commandInterface.displayCurrentDateTime();
 }
 void Main::loadScheduledEntries(){
 	_loadingEntries = true;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 11);
-	cout << "Loading existing entries..." << endl << endl;
+	SetConsoleTextAttribute(hConsole, 10);
+	cout << "Loading existing entries..." << endl;
 	SetConsoleTextAttribute(hConsole, 15);
 
 	//load existing scheduled entries
@@ -120,7 +119,7 @@ void Main::loadFloatingEntries(){
 	_newList.emptyCounter();
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 11);
+	SetConsoleTextAttribute(hConsole, 10);
 	cout << endl << "Loading done..." << endl << endl;
 	SetConsoleTextAttribute(hConsole, 15);
 

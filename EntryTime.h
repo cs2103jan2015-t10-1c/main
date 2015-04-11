@@ -1,5 +1,5 @@
-#ifndef MYTIME_H
-#define MYTIME_H
+#ifndef ENTRYTIME_H
+#define ENTRYTIME_H
 #include <string>
 #include <boost\date_time\posix_time\posix_time.hpp>
 #include <boost\date_time\gregorian\gregorian.hpp>

@@ -23,11 +23,11 @@ void TextUI::displayWelcomeMessage(){
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << WELCOME_TO_FASTADD << endl
 		<< CURRENT_VERSION << endl
-		<< KEY_IN_COMMANDS << endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		<< KEY_IN_COMMANDS << endl << endl;
+	displayCurrentDateTime();
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 	cout << HELP_FOR_INFORMATION << endl
 		<< endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void TextUI::displayCurrentDateTime(){
@@ -75,16 +75,17 @@ void TextUI::displayHelp(){
 			<< "deadline on <one date> and <one time>:" << endl
 			<< "add UPC2209 essay deadline. by 19 may 15 23.59 #deadline" << endl << endl
 			<< "floating entry without <date> or <time> " << endl
-			<< "add return John's thumbdrive. at Cinnamon #friendship #lend" << endl 
-			<< BORDER << endl << endl;
+			<< "add return John's thumbdrive. at Cinnamon #friendship #lend" << endl;
 		break;
 	case 2:
-		cout << "2. Display - "
+		cout << "2. Display - " << endl
 			<< "to display the scheduled entries: display scheduled" << endl << endl
 			<< "to display the floating entries: display floating" << endl << endl
 			<< "to display clashes between scheduled entries: display clashes" << endl << endl
 			<< "to display past events: display past" << endl 
-			<< BORDER << endl << endl;
+			<< "to navigate through the list: display next or display prev" << endl
+			<< "to display a specific entry: display <entry number>" << endl
+			<< "to display a specific page: display page <page number>" << endl;
 		break;
 	case 3:
 		cout << "3. Delete - " << endl
@@ -113,8 +114,7 @@ void TextUI::displayHelp(){
 			<< "editing multiple parts is also possible, in any orders." << endl
 			<< "each part is separated by full stop" << endl
 			<< "e.g. edit 18 name Case Competition Deadline. date 18 feb 15. time 2359." << endl
-			<< "place school. add #casecompetition #deadline" << endl 
-			<< BORDER << endl << endl;
+			<< "place school. add #casecompetition #deadline" << endl;
 
 		break;
 	case 5:
@@ -124,8 +124,7 @@ void TextUI::displayHelp(){
 			<< "search status \"done\"" << endl
 			<< "search status \"undone\"" << endl
 			<< "search date <DD Month YYYY>" << endl
-			<< "search time <HH.MM>" << endl
-			<< BORDER << endl << endl;
+			<< "search time <HH.MM>" << endl;
 						
 		break;
 	default:
