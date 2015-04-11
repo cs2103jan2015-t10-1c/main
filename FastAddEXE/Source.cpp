@@ -7,6 +7,7 @@ int main(){
 	HWND hWnd=GetConsoleWindow();
     MoveWindow(hWnd,400,0,520,750,TRUE);
 	Main RunFA;
+	RunFA.readPath();
 	RunFA.welcomeMessage();
 	RunFA.loadScheduledEntries();
 	RunFA.loadFloatingEntries();

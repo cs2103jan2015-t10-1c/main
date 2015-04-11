@@ -123,7 +123,10 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 	else if (_userInput.substr(0, TYPE_SPECIFICPAGE.size()) == TYPE_SPECIFICPAGE){
 		int inputPageNumber;
 		if(_userInput.substr(TYPE_SPECIFICPAGE.size()).empty()){
-			cout << "page number is missing! " << endl;
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << "Page number is missing! " << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
 		_userInput = _userInput.substr(TYPE_SPECIFICPAGE.size() + BLANKSPACE_COUNT);
@@ -333,7 +336,10 @@ void DisplayEntries::displayClashes(){
 	clashExists = false;
 	printClash = true;
 	ClashInspector checkSearchResult(listOfClashes);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 	cout << "Entry clashes in the future: " << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
 			<< listOfClashes[i].getEntryNumber() << ". "
@@ -341,7 +347,6 @@ void DisplayEntries::displayClashes(){
 		checkSearchResult.compareEntry(listOfClashes[i], i + 1, clashExists, printClash);
 		cout << BORDER << endl;
 	}
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
@@ -399,9 +404,9 @@ void DisplayEntries::displayPrevPage(){
 		if(_pageNumber < 1){
 			_pageNumber = 1;
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << "You are on the first page ";
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 		if(_viewingClashes){
 			displayClashes();

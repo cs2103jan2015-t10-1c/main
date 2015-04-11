@@ -25,9 +25,10 @@ void TextUI::displayWelcomeMessage(){
 		<< CURRENT_VERSION << endl
 		<< KEY_IN_COMMANDS << endl << endl;
 	displayCurrentDateTime();
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 	cout << HELP_FOR_INFORMATION << endl
 		<< endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 }
 
 void TextUI::displayCurrentDateTime(){
@@ -61,65 +62,75 @@ void TextUI::displayHelp(){
 	if (!(convertHelpChoice >> helpChoice)) {
 		helpChoice = 0;  
 	}
-	
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	switch (helpChoice){
 	case 0:
 		break;
 	case 1:
-		cout << "1. Add - " << endl
-			<< "scheduled entry with <start date and time> and <end date and time>:" << endl
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "1. Add - " << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << "Scheduled entry with <start date and time> and <end date and time>:" << endl
 			<< "add holiday. from 2 jun 15 10.30 to 27 Jun 2015 "<< endl 
 			<< "20.30 at Europe #holiday" << endl << endl
-			<< "scheduled entry on <one date> with <start time> and <end time>:" << endl
+			<< "Scheduled entry on <one date> with <start time> and <end time>:" << endl
 			<< "add career fair. on 14 Mar 2015 9.30 to 20.30  at NUS #careerfair #NUS" << endl << endl
-			<< "deadline on <one date> and <one time>:" << endl
+			<< "Deadline on <one date> and <one time>:" << endl
 			<< "add UPC2209 essay deadline. by 19 may 15 23.59 #deadline" << endl << endl
-			<< "floating entry without <date> or <time> " << endl
+			<< "Floating entry without <date> or <time> " << endl
 			<< "add return John's thumbdrive. at Cinnamon #friendship #lend" << endl;
 		break;
 	case 2:
-		cout << "2. Display - " << endl
-			<< "to display the scheduled entries: display scheduled" << endl << endl
-			<< "to display the floating entries: display floating" << endl << endl
-			<< "to display clashes between scheduled entries: display clashes" << endl << endl
-			<< "to display past events: display past" << endl 
-			<< "to navigate through the list: display next or display prev" << endl
-			<< "to display a specific entry: display <entry number>" << endl
-			<< "to display a specific page: display page <page number>" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "2. Display - " << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << "To display the scheduled entries: display scheduled" << endl << endl
+			<< "To display the floating entries: display floating" << endl << endl
+			<< "To display clashes between scheduled entries: display clashes" << endl << endl
+			<< "To display past events: display past" << endl 
+			<< "To navigate through the list: display next or display prev" << endl
+			<< "To display a specific entry: display <entry number>" << endl
+			<< "To display a specific page: display page <page number>" << endl;
 		break;
 	case 3:
-		cout << "3. Delete - " << endl
-			<< "delete <entry number>" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "3. Delete - " << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << "delete <entry number>" << endl;
 		break;
 	case 4:
-		cout << "4. Edit - " << endl
-			<< "edit entry name: edit <entry number> name <new name> " << endl
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "4. Edit - " << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << "Edit entry name: edit <entry number> name <new name> " << endl
 			<< "e.g. edit 10 name dinner with John" << endl << endl
-			<< "edit entry time. editing both one or two timings are enabled" << endl
+			<< "Edit entry time. editing both one or two timings are enabled" << endl
 			<< "edit <entry number> time <new time> <new time> " << endl
 			<< "e.g. edit 2 time 10.30 or edit 2 time 10.30 11.30" << endl 
-			<< "editing the time of a floating entry will move it to the scheduled entry" << endl << endl
-			<< "edit entry date. editing both one or two dates are enabled" << endl
+			<< "Editing the time of a floating entry will move it to the scheduled entry" << endl << endl
+			<< "Edit entry date. editing both one or two dates are enabled" << endl
 			<< "edit <entry number> date <new date> <new date>" << endl
 			<< "e.g. edit 30 date 13 mar 16 or edit 30 date 13 mar 16 17 mar 16" << endl
-			<< "editing the date of a floating entry will move it to the scheduled entry" << endl << endl
-			<< "edit entry location - edit <entry number> place <new location>" << endl
+			<< "Editing the date of a floating entry will move it to the scheduled entry" << endl << endl
+			<< "Edit entry location - edit <entry number> place <new location>" << endl
 			<< "e.g. edit 41 place NUS" << endl << endl
-			<< "edit entry status (done/undone)" << endl
+			<< "Edit entry status (done/undone)" << endl
 			<< "edit <entry number> status <done/undone> " << endl
 			<< "e.g. edit 5 status done or edit 5 status undone" << endl << endl
-			<< "edit entry tags. both adding and removing tags are enabled" << endl
+			<< "Edit entry tags. both adding and removing tags are enabled" << endl
 			<< "<entry number> add <# new tag> or remove <# new tag>" << endl
 			<< "e.g. edit 21 add #girlfriend remove #friend" << endl << endl
-			<< "editing multiple parts is also possible, in any orders." << endl
-			<< "each part is separated by full stop" << endl
+			<< "Editing multiple parts is also possible, in any orders." << endl
+			<< "Each part is separated by full stop" << endl
 			<< "e.g. edit 18 name Case Competition Deadline. date 18 feb 15. time 2359." << endl
 			<< "place school. add #casecompetition #deadline" << endl;
 
 		break;
 	case 5:
-		cout << "5. Search -" << endl
-			<< "search name <name of event>" << endl
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "5. Search -" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		cout << "search name <name of event>" << endl
 			<< "search place <location> " << endl
 			<< "search status \"done\"" << endl
 			<< "search status \"undone\"" << endl
@@ -128,7 +139,6 @@ void TextUI::displayHelp(){
 						
 		break;
 	default:
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Wrong input. Try again";
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
