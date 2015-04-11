@@ -17,23 +17,23 @@ namespace FastAddTest
 			Date Someday;
 
 			Someday.insertDay(27);
-			/*int expectedDate=27;
+			int expectedDate=27;
 			int actualDate=Someday.getDay();
-			Assert::AreEqual(expectedDate, actualDate);*/
+			Assert::AreEqual(expectedDate, actualDate);
 
 			Someday.insertMonth(9);
-			/*int expectedMonthNumber=9;
+			int expectedMonthNumber=9;
 			int actualMonthNumber=Someday.getMonthNumber();
-			Assert::AreEqual(expectedMonthNumber, actualMonthNumber);*/
+			Assert::AreEqual(expectedMonthNumber, actualMonthNumber);
 
 			string expectedMonth="Sep";
-			/*string actualMonth=Someday.getMonth();
-			Assert::AreEqual(expectedMonth, actualMonth);*/
+			string actualMonth=Someday.getMonth();
+			Assert::AreEqual(expectedMonth, actualMonth);
 			
 			Someday.insertYear(2013);
-			/*int expectedYear=2013;
+			int expectedYear=2013;
 			int actualYear=Someday.getYear();
-			Assert::AreEqual(expectedYear, actualYear);*/
+			Assert::AreEqual(expectedYear, actualYear);
 
 			Assert::IsTrue(Someday.getDateStatus());				
 		}
@@ -41,16 +41,19 @@ namespace FastAddTest
 		TEST_METHOD(TimeTest) 
 		{	
 			Time Sometime;
-
+			date today(day_clock::local_day());
 			int expectedHour=20;
+			int expectedMinute=20;
 			Sometime.insertHour(expectedHour);
-			int actualHour=Sometime.getHour();
-			//Assert::AreEqual(expectedHour, actualHour);
-
-			int expectedMinute=33;
 			Sometime.insertMinute(expectedMinute);
+			Sometime.initialiseTime(today);
+			int actualHour=Sometime.getHour();
+			Assert::AreEqual(expectedHour, actualHour);
+
+			/*int expectedMinute=33;
+			Sometime.insertMinute(expectedMinute);*/
 			int actualMinute=Sometime.getMinute();
-			//Assert::AreEqual(expectedMinute, actualMinute);
+			Assert::AreEqual(expectedMinute, actualMinute);
 
 			Assert::IsTrue(Sometime.getTimeStatus());				
 		}
@@ -65,7 +68,7 @@ namespace FastAddTest
 				
 			Entry testScheduled; 
 			Entry testFloating;	
-			ScheduledEntry testInfo;
+			EntryLists testInfo;
 	
 			testScheduled.insertName("b");
 			testInfo.addEntry(testScheduled);

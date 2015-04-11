@@ -13,7 +13,7 @@
 // TODO: reference additional headers your program requires here
 #include "ClashInspector.h"
 #include "ClashInspector.h"
-#include "Date.h" 
+#include "EntryDate.h" 
 #include "DateTimeInitialiser.h"
 #include "DateTimeInspector.h" 
 #include "DisplayEntries.h" 
@@ -21,11 +21,11 @@
 #include "EntryAdd.h"//nguyen
 #include "EntryEdit.h"//nguyen
 #include "Main.h"
-#include "ScheduledEntry.h"
+#include "EntryLists.h"
 #include "SearchEntries.h" 
 #include "StringConvertor.h"
 #include "TextUI.h"
-#include "MyTime.h"
+#include "EntryTime.h"
 #include "UndoActions.h"
 #include <string.h>
 #include <boost\date_time\posix_time\posix_time.hpp>
