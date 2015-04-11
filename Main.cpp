@@ -27,6 +27,8 @@ Main::Main(){
 	_viewingPastEntries = false;
 	_viewingClashes = false;
 	_pageNumber = 1;
+	_searchScheduledPageNumber = 1;
+	_searchFloatingPageNumber = 1;
 	_previousSearchInput = "";
 }
 
@@ -322,8 +324,8 @@ void Main::executeEditFunction(string userInput){
 }
 
 void Main::executeSearchFunction(string userInput){
-	SearchEntries search(_newList.getScheduledList(), _newList.getScheduledList());
-	search.execute(userInput, _pageNumber, _previousSearchInput);
+	SearchEntries search(_newList.getScheduledList(), _newList.getFloatingList());
+	search.execute(userInput, _searchScheduledPageNumber, _searchFloatingPageNumber,_previousSearchInput);
 }
 
 void Main::executeDisplayFunction(string userInput){

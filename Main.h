@@ -53,6 +53,8 @@ private:
 	bool _viewingPastEntries;
 	bool _viewingClashes;
 	int _pageNumber;
+	int _searchScheduledPageNumber;
+	int _searchFloatingPageNumber;
 	int _lastPage;
 	
 	//loading
