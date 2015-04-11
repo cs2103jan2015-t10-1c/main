@@ -93,9 +93,9 @@ public:
 					 string, int&, int&,
 					 string, int&, int&, int&,
 					 string, int&, int&);
-	void initialiseEntry(Entry& newEntry, string entryName, Date startDate, 
-					Date endDate, Time startTime, Time endTime, string entryLocation,
-					vector<string>& tags);
+	void initialiseEntry(Entry&, string, Date, 
+					Date, Time, Time, string,
+					string, vector<string>&);
 	void initialiseDateTime(Date&, int, int, int, Time&, int, int,
 						Date&, int, int, int, Time& , int, int);
 };

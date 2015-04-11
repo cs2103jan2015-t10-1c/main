@@ -315,7 +315,7 @@ string Entry::storeEntry(){
 	}
 
 	oss	<< _location << endl
-
+		<< getStatus() << endl
 		<< getTags() << endl;
 	
 	return oss.str();
