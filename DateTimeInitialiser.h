@@ -1,8 +1,8 @@
 #ifndef DATETIMEINITIALISER_H
 #define DATETIMEINITIALISER_H
 
-#include "Date.h"
-#include "MyTime.h"
+#include "EntryDate.h"
+#include "EntryTime.h"
 #include <boost\date_time\gregorian\gregorian.hpp>
 #include <boost\date_time\posix_time\posix_time.hpp>
 

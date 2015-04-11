@@ -1,8 +1,8 @@
 #ifndef ENTRY_H
 #define ENTRY_H
 
-#include "Date.h"
-#include "MyTime.h"
+#include "EntryDate.h"
+#include "EntryTime.h"
 
 #include <vector>
 #include <sstream>

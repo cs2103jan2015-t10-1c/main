@@ -20,7 +20,7 @@ class TextUI{
 		static const string CURRENT_VERSION;
 		static const string KEY_IN_COMMANDS;
 		static const string HELP_FOR_INFORMATION;
-
+		static const string BORDER; 
 
 	public:
 		TextUI();

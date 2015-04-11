@@ -1,8 +1,8 @@
 #ifndef SCHEDULEDENTRY_H
 #define SCHEDULEDENTRY_H
 
-#include "Date.h"
-#include "MyTime.h"
+#include "EntryDate.h"
+#include "EntryTime.h"
 #include "Entry.h"
 #include "UndoActions.h"
 #include "EntryEdit.h"
@@ -70,7 +70,7 @@ public:
 	void addEntry(Entry);
 	void showAddFeedback(Entry);
 	string getEntryDisplay(bool, int);
-	void removeEntry(bool, int, string&);
+	void removeEntry(bool, unsigned int, string&);
 	void editEntry(bool, string, string&);
 	void moveScheduledFloating(bool, int, Entry);
 	void undo();

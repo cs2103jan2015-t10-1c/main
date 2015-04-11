@@ -91,7 +91,7 @@ void SearchEntries::searchTag(string keyword){
 	int lastEntry;
 	bool print = false;
 	//initialise search results
-	for(int i = 0; i < _scheduledList.size(); i++){
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 		bool tagFound = false;
 		_scheduledList[i].insertEntryNumber(i+1);
 		_scheduledList[i].searchEntryTag(keyword, tagFound);
@@ -149,7 +149,7 @@ void SearchEntries::searchName(string inputName){
 		int firstEntry;
 		int lastEntry;
 		//initialise search results
-		for(int i = 0; i < _scheduledList.size(); i++){
+		for(unsigned int i = 0; i < _scheduledList.size(); i++){
 			bool nameFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			string entryName = _scheduledList[i].getName();
@@ -209,7 +209,7 @@ void SearchEntries::searchLocation(string inputLocation){
 		int firstEntry;
 		int lastEntry;
 		//initialise search results
-		for(int i = 0; i < _scheduledList.size(); i++){
+		for(unsigned int i = 0; i < _scheduledList.size(); i++){
 			bool locationFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			string entryLocation = _scheduledList[i].getLocation();
@@ -268,7 +268,7 @@ void SearchEntries::searchStatus(string inputStatus){
 		int firstEntry;
 		int lastEntry;
 		//initialise search results
-		for(int i = 0; i < _scheduledList.size(); i++){
+		for(unsigned int i = 0; i < _scheduledList.size(); i++){
 			bool statusMatches = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			if(inputStatus == _scheduledList[i].getStatus()){
@@ -343,7 +343,7 @@ void SearchEntries::searchDate(string userInput){
 	int firstEntry;
 	int lastEntry;
 	//initialise search results
-	for(int i = 0; i < _scheduledList.size(); i++){
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 		bool dateFound = false;
 		_scheduledList[i].insertEntryNumber(i+1);
 		Date entryStartDate = _scheduledList[i].getStartDate();
@@ -409,7 +409,7 @@ void SearchEntries::searchTime(string userInput){
 	}
 	_initialiser.initialiseTime(inputTime, inputHour, inputMinute, today);
 
-	for(int i = 0; i < _scheduledList.size(); i++){
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 		bool timeFound = false;
 		_scheduledList[i].insertEntryNumber(i+1);
 		Time entryStartTime;
@@ -463,7 +463,7 @@ void SearchEntries::searchAll(string userInput){
 		int firstEntry;
 		int lastEntry;
 		//initialise search results
-		for(int i = 0; i < _scheduledList.size(); i++){
+		for(unsigned int i = 0; i < _scheduledList.size(); i++){
 			_scheduledList[i].insertEntryNumber( i + 1);
 			bool allFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);

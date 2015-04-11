@@ -312,7 +312,7 @@ void DisplayEntries::displayClashes(){
 	bool clashExists;
 	bool printClash;
 
-	for(int i = 0; i < _scheduledList.size(); i++){
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 		if(!isInThePast(_scheduledList[i].getStartTime().getTime())){
 			clashExists = false;
 			printClash = false;

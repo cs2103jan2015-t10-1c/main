@@ -10,7 +10,7 @@ ClashInspector::ClashInspector(vector<Entry> entryVector){
 void ClashInspector::compareEntry(Entry inputEntry, int count, bool& clashExists, bool printClash){
 	vector<Entry>::iterator iter;
 	clashExists = false;
-	for(int i = 0; i < _entryVector.size(); i++){
+	for(unsigned int i = 0; i < _entryVector.size(); i++){
 		if(i + 1 != count){
 			inspectEntries(inputEntry, _entryVector[i], _entryVector[i].getEntryNumber(), clashExists, printClash);
 		}

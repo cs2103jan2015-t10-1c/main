@@ -114,7 +114,7 @@ string ScheduledEntry::getEntryDisplay(bool isScheduled, int index){
 	return oss.str();
 }
 
-void ScheduledEntry::removeEntry(bool isScheduled, int index, string& deleteFeedback){
+void ScheduledEntry::removeEntry(bool isScheduled, unsigned int index, string& deleteFeedback){
 	deleteFeedback = "";
 	ostringstream oss;
 
