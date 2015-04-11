@@ -132,7 +132,7 @@ void SearchEntries::searchTag(string keyword){
 		<< "Floating Entries containing tag: " << keyword
 		<< endl;
 	if(_floatingSearchResult.empty()){
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << "Entries are not found" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	} else {
@@ -461,7 +461,7 @@ void SearchEntries::searchAll(string userInput){
 			}
 		}
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << "Scheduled Entries with keyword " << userInput << ":" << endl;
+		cout << "Floating Entries with keyword " << userInput << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		if(_floatingSearchResult.empty()){
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
