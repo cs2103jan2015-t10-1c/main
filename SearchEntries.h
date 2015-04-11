@@ -27,14 +27,15 @@ private:
 	static const string DATE_MARKER;
 	static const string TIME_MARKER;
 	static const int ENTRY_PERPAGE;
-
 	static const string ALL_MARKER;
 	static const string NEXT_MARKER;
 	static const string PREV_MARKER;
 	static const string DAY_MARKER;
-
 	static const string BORDER;
-
+	static const string DAYSOFWEEK[7];
+	static const string SYSTEMDAYSOFWEEK[7];
+	static const string MON, TUE, WED, THU, FRI, SAT, SUN;
+	static const string SYSTEMMON, SYSTEMTUE, SYSTEMWED, SYSTEMTHU, SYSTEMFRI, SYSTEMSAT, SYSTEMSUN;
 	StringConvertor _datetimeParser;
 	int _scheduledPageNumber;
 	int _floatingPageNumber;
@@ -51,6 +52,7 @@ public:
 	void searchDate(string);
 	void searchTime(string);
 	void searchAll(string);
+	void searchDay(string);
 	void initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
 	void initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
 	void closingScheduledMessage(int, int, int);

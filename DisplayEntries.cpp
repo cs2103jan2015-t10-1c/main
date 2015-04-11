@@ -202,23 +202,25 @@ void DisplayEntries::displayScheduledEntryShort(){
 	_printNextWeek = false;
 	_printThisMonth = false;
 	_printNextMonth = false;
+	//initialise vector for entries from today onwards
+	vector<Entry> presentAndFutureEntries;
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate >= _today){
+			presentAndFutureEntries.push_back(_scheduledList[i]);
+		}
+	}
 	//initialise for paging
 	int numberOfPages;
 	int firstEntry;
 	int lastEntry;
 	int number;
-	initialisePaging(_scheduledList, numberOfPages, firstEntry, lastEntry, number);
+	initialisePaging(presentAndFutureEntries, numberOfPages, firstEntry, lastEntry, number);
 
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl;
-		date entryStartDate = _scheduledList[i].getStartDate().getDate();
-		if(entryStartDate < _today && _printInThePast == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events in the past:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printInThePast = true;
-		}
+		date entryStartDate = presentAndFutureEntries[i].getStartDate().getDate();
 		if(entryStartDate == _today && _printToday == false){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
@@ -262,12 +264,14 @@ void DisplayEntries::displayScheduledEntryShort(){
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printNextMonth = true;
 		}
-		_scheduledList[i].insertEntryNumber(number);
-		cout << BORDER << endl
-			<< _scheduledList[i].getEntryNumber() << ". "
-			<< _scheduledList[i].getShortDisplay() << endl;
-		cout << BORDER << endl;
-		number++;
+		if(_today <= entryStartDate){
+			_scheduledList[i].insertEntryNumber(number);
+			cout << BORDER << endl
+				<< presentAndFutureEntries[i].getEntryNumber() << ". "
+				<< presentAndFutureEntries[i].getShortDisplay() << endl;
+			cout << BORDER << endl;
+			number++;
+		}
 	}
 	closingMessage(numberOfPages, firstEntry, lastEntry);
 }

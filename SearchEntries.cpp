@@ -15,7 +15,22 @@ const string SearchEntries::PREV_MARKER = "prev";
 const string SearchEntries::DAY_MARKER = "day";
 const int SearchEntries::ENTRY_PERPAGE = 3;
 const string SearchEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
-
+const string SearchEntries::MON = "mon";
+const string SearchEntries::TUE = "tue";
+const string SearchEntries::WED = "wed";
+const string SearchEntries::THU = "thu";
+const string SearchEntries::FRI = "fri";
+const string SearchEntries::SAT = "sat";
+const string SearchEntries::SUN = "sun";
+const string SearchEntries::DAYSOFWEEK[7] = {MON, TUE, WED, THU, FRI, SAT, SUN};
+const string SearchEntries::SYSTEMMON = "Monday";
+const string SearchEntries::SYSTEMTUE = "Tuesday";
+const string SearchEntries::SYSTEMWED = "Wednesday";
+const string SearchEntries::SYSTEMTHU = "Thursday";
+const string SearchEntries::SYSTEMFRI = "Friday";
+const string SearchEntries::SYSTEMSAT = "Saturday";
+const string SearchEntries::SYSTEMSUN = "Sunday";
+const string SearchEntries::SYSTEMDAYSOFWEEK[7] = {SYSTEMMON, SYSTEMTUE, SYSTEMWED, SYSTEMTHU, SYSTEMFRI, SYSTEMSAT, SYSTEMSUN};
 
 inline bool caseInsCharCompSingle(char a, char b) {
    return(toupper(a) == b);
@@ -102,7 +117,6 @@ void SearchEntries::searchTag(string keyword){
 			_scheduledSearchResult.push_back(_scheduledList[i]);
 		}
 	}
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << endl << endl
 		<< "Scheduled Entries containing tag: " << keyword
@@ -285,8 +299,8 @@ void SearchEntries::searchStatus(string inputStatus){
 }
 
 void SearchEntries::searchDate(string userInput){
+	initialiseSearchPagingAttributes();
 	DateTimeInitialiser _initialiser;
-
 	vector<Entry>::iterator iterScheduledEntry;
 	//Date initialisation
 	Date inputDate;
@@ -313,12 +327,6 @@ void SearchEntries::searchDate(string userInput){
 			dateFound = true;
 			_scheduledSearchResult.push_back(_scheduledList[i]);
 		}
-	}
-	if(_scheduledSearchResult.empty()){
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-		cout << "Entries are not found" << endl << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		return;
 	}
 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
@@ -358,7 +366,7 @@ void SearchEntries::searchTime(string userInput){
 	} else {
 		_initialiser.initialiseTime(inputTime, inputHour, inputMinute, today);
 	}
-
+	//initialise scheduled
 	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 		bool timeFound = false;
 		_scheduledList[i].insertEntryNumber(i+1);
@@ -374,13 +382,6 @@ void SearchEntries::searchTime(string userInput){
 			if (isInBetweenStartTimeAndEndTime){
 				_scheduledSearchResult.push_back(_scheduledList[i]);
 			}
-	}
-
-	if(_scheduledSearchResult.empty()){
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-		cout << "Entries are not found" << endl << endl;
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		return;
 	}
 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
@@ -399,9 +400,8 @@ void SearchEntries::searchTime(string userInput){
 
 
 void SearchEntries::searchAll(string userInput){
-		//initialise search results
-
-		for(unsigned int i = 0; i < _scheduledList.size(); i++){
+	initialiseSearchPagingAttributes();
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 			_scheduledList[i].insertEntryNumber( i + 1);
 			bool allFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
@@ -423,7 +423,7 @@ void SearchEntries::searchAll(string userInput){
 			if (allFound){
 				_scheduledSearchResult.push_back(_scheduledList[i]);
 			}
-		}
+	}
 
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Scheduled Entries with keyword " << userInput << ":" << endl;
@@ -461,7 +461,7 @@ void SearchEntries::searchAll(string userInput){
 			}
 		}
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << "Scheduled Entries with keyword " << userInput << ":" << endl;
+		cout << "Floating Entries with keyword " << userInput << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		if(_floatingSearchResult.empty()){
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
@@ -470,6 +470,27 @@ void SearchEntries::searchAll(string userInput){
 		} else {
 			loadFloatingSearchResult();
 		}
+}
+
+void SearchEntries::searchDay(string keyDay){
+	int dayOfWeek;
+	string keyDayOfWeek;
+	unsigned int i;
+	for(i = 0; i < 7; i++){
+		if(keyDay == DAYSOFWEEK[i]){
+			dayOfWeek = i;
+		}
+	}
+	keyDayOfWeek = SYSTEMDAYSOFWEEK[i];
+	//initalised scheduled
+	for(i = 0; i < _scheduledList.size(); i++){
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		greg_weekday startDateToString = entryStartDate.day_of_week();
+		string startDayString = startDateToString.as_long_string();
+		date entryEndDate = _scheduledList[i].getEndDate().getDate();
+		greg_weekday endDateToString = entryEndDate.day_of_week();
+		string endDayString = endDateToString.as_long_string();
+	}
 }
 
 void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
@@ -571,6 +592,7 @@ void SearchEntries::loadScheduledSearchResult(){
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	closingScheduledMessage(_numberOfPagesScheduledResult, _firstScheduledEntry, _lastScheduledEntry);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << endl;
 }
 
 void SearchEntries::loadFloatingSearchResult(){
