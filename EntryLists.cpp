@@ -1,7 +1,7 @@
 #include "EntryLists.h"
 
 //Static variables that cannot be initialised in the header file
-const string EntryLists::FEEDBACK_ADDED = "added ";
+const string EntryLists::FEEDBACK_ADDED_AT_NUMBER = "added at number ";
 const string EntryLists::FEEDBACK_FROM = " from ";
 const string EntryLists::FEEDBACK_TO = " to ";
 const string EntryLists::FEEDBACK_AT = " at ";
@@ -20,6 +20,7 @@ const string EntryLists::FEEDBACK_TAGS_REMOVED = "Tags removed: ";
 const string EntryLists::FEEDBACK_MOVED_TO = "Moved to ";
 const string EntryLists::FEEDBACK_SCHEDULED_LIST = "Scheduled list.";
 const string EntryLists::FEEDBACK_FLOATING_LIST = "Floating list.";
+const string EntryLists::FEEDBACK_CURRENT_ENTRY_NUMBER = "Current entry number: ";
 
 const string EntryLists::FEEDBACK_DELETED = "This entry has been deleted:";
 const string EntryLists::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
@@ -48,24 +49,19 @@ void EntryLists::emptyCounter(){
 	_counter.emptyUndoStack();
 }
 
-void EntryLists::addEntry(Entry newEntry){
-	int latestEntryIndex;
-	//scheduled entry
-	if (newEntry.getDateStatus()){
+void EntryLists::addEntry(Entry newEntry, int& latestEntryIndex) {
+	if (newEntry.getDateStatus()) {
 		_scheduledList.push_back(newEntry);
 		sort(latestEntryIndex);
 		_counter.counterAdd(true, latestEntryIndex);
-	}
-
-	//floating entry
-	else {
+	} else {
 		_floatingList.push_back(newEntry);
 		latestEntryIndex = _floatingList.size();
 		_counter.counterAdd(false, latestEntryIndex);
 	}
 }
 
-void EntryLists::showAddFeedback(Entry newEntry){
+void EntryLists::showAddFeedback(Entry newEntry, int latestEntryIndex) {
 	string entryName = newEntry.getName();
 	Date entryStartDate = newEntry.getStartDate();
 	Date entryEndDate = newEntry.getEndDate();
@@ -75,7 +71,7 @@ void EntryLists::showAddFeedback(Entry newEntry){
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN |  FOREGROUND_INTENSITY));
-	cout << FEEDBACK_ADDED << entryName;
+	cout << FEEDBACK_ADDED_AT_NUMBER << latestEntryIndex << ". " << entryName;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if (newEntry.getDateStatus()){
 		cout << FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
@@ -278,7 +274,7 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 	}
 
 	//update time
-	if (editComponent.getTimeEditStatus()){
+	if (editComponent.getTimeEditStatus()) {
 		oss << FEEDBACK_TIME ;
 		Time currentStartTime = iter->getStartTime();
 		int currentStartHour = currentStartTime.getHour();
@@ -328,7 +324,7 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		iter->insertEndTime(newEndTime);
 		oss << FEEDBACK_ARROW;
 		oss << inputStartHour << ".";
-		if (inputStartMinute < 10){
+		if (inputStartMinute < 10) {
 			oss << '0';
 		}
 		oss << inputStartMinute;
@@ -355,13 +351,13 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 
 	//update status
 	string newStatus = editComponent.getStatus();
-	if (newStatus != ""){
-		if (newStatus == STATUS_DONE){
+	if (newStatus != "") {
+		if (newStatus == STATUS_DONE) {
 		oss << FEEDBACK_STATUS << iter->getStatus();
 		iter->changeStatus();
 		oss << FEEDBACK_ARROW << iter->getStatus() << endl; 
 		}
-		else if (newStatus == STATUS_UNDONE){
+		else if (newStatus == STATUS_UNDONE) {
 			oss << FEEDBACK_STATUS << iter->getStatus();
 			iter->initialiseStatus();
 			oss << FEEDBACK_ARROW << iter->getStatus() << endl;
@@ -369,13 +365,13 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 	}
 
 	//update added tags
-	if (editComponent.getTagAddedStatus()){
+	if (editComponent.getTagAddedStatus()) {
 		oss << FEEDBACK_TAGS_ADDED;
 		editComponent.addTag(*iter, oss);
 	}
 
 	//update removed tags
-	if (editComponent.getTagRemovedStatus()){
+	if (editComponent.getTagRemovedStatus()) {
 		oss << FEEDBACK_TAGS_REMOVED;
 		editComponent.removeTag(*iter, oss);
 	}
@@ -385,34 +381,35 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 	bool dateEditedSort = editComponent.getDateEditStatus() && isScheduled && inputStartDay != 0;
 	//if time editing is done on scheduled list. there is no need to check the time as time must have been edited properly
 	bool timeEditedSort = editComponent.getTimeEditStatus() && isScheduled;
-	if (dateEditedSort || timeEditedSort){
+	if (dateEditedSort || timeEditedSort) {
 		Entry newEntry = *iter;
 		string dummy;
 		removeEntry(isScheduled, entryNumber, dummy);
-		addEntry(newEntry);
+		addEntry(newEntry, entryNumber);
 	}
 
 	//move entry from floating to scheduled list and vice versa
 	bool isScheduledToFloating = isScheduled && editComponent.getDateEditStatus() && (inputStartDay == 0);
 	bool isFloatingToScheduled = !isScheduled && editComponent.getDateEditStatus() && editComponent.getTimeEditStatus();
-	if (isScheduledToFloating || isFloatingToScheduled){
+	if (isScheduledToFloating || isFloatingToScheduled) {
 		moveScheduledFloating(isScheduled, entryNumber, *iter);
 		oss << FEEDBACK_MOVED_TO;
-		if (isScheduled){
+		if (isScheduled) {
 			oss << FEEDBACK_FLOATING_LIST << endl;
-		}
-		else {
+		} else {
 			oss << FEEDBACK_SCHEDULED_LIST << endl;
 		}
 	}
 
+	oss << FEEDBACK_CURRENT_ENTRY_NUMBER << entryNumber << endl;
+
 	editFeedback = oss.str();
 }
 
-void EntryLists::moveScheduledFloating(bool isScheduled, int entryNumber, Entry movedEntry){
+void EntryLists::moveScheduledFloating(bool isScheduled, int& entryNumber, Entry movedEntry){
 	string dummy;
 	removeEntry(isScheduled, entryNumber, dummy);
-	addEntry(movedEntry);
+	addEntry(movedEntry, entryNumber);
 }
 
 void EntryLists::undo(){

@@ -21,7 +21,7 @@ private:
 	UndoActions _counter;
 
 	//Feedback to the users
-	static const string FEEDBACK_ADDED;
+	static const string FEEDBACK_ADDED_AT_NUMBER;
 	static const string FEEDBACK_FROM;
 	static const string FEEDBACK_TO;
 	static const string FEEDBACK_AT;
@@ -41,6 +41,7 @@ private:
 	static const string FEEDBACK_MOVED_TO;
 	static const string FEEDBACK_SCHEDULED_LIST;
 	static const string FEEDBACK_FLOATING_LIST;
+	static const string FEEDBACK_CURRENT_ENTRY_NUMBER;
 
 	static const string FEEDBACK_DELETED;
 	static const string FEEDBACK_NO_ENTRIES_LEFT;
@@ -67,12 +68,12 @@ private:
 public:
 	EntryLists();
 	void emptyCounter();
-	void addEntry(Entry);
-	void showAddFeedback(Entry);
+	void addEntry(Entry, int&);
+	void showAddFeedback(Entry, int);
 	string getEntryDisplay(bool, int);
 	void removeEntry(bool, unsigned int, string&);
 	void editEntry(bool, string, string&);
-	void moveScheduledFloating(bool, int, Entry);
+	void moveScheduledFloating(bool, int&, Entry);
 	void undo();
 	void exit(bool&);
 	void sort(int&);

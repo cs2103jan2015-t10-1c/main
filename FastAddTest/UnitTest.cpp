@@ -70,12 +70,13 @@ namespace FastAddTest
 			Entry testFloating;	
 			EntryLists testInfo;
 	
+			int dummy;
 			testScheduled.insertName("b");
-			testInfo.addEntry(testScheduled);
+			testInfo.addEntry(testScheduled, dummy);
 			testScheduled.insertName("c");
-			testInfo.addEntry(testScheduled);
+			testInfo.addEntry(testScheduled, dummy);
 			testScheduled.insertName("d");
-			testInfo.addEntry(testScheduled);
+			testInfo.addEntry(testScheduled, dummy);
 		
 			//testInfo.removeEntry(true, 1);
 			vector<Entry> actualResult;
