@@ -28,12 +28,22 @@ Main::Main(){
 	_viewingPastEntries = false;
 	_viewingClashes = false;
 	_pageNumber = 1;
+	_searchScheduledPageNumber = 1;
+	_searchFloatingPageNumber = 1;
 	_previousSearchInput = "";
 }
 
 void Main::welcomeMessage(){
 	_commandInterface.displayWelcomeMessage();
 }
+
+void Main::readPath(){
+	ifstream readPath("Path.txt");
+	readPath >> _scheduledPath;
+	readPath >> _floatingPath;
+	readPath.close();
+}
+
 void Main::loadScheduledEntries(){
 	_loadingEntries = true;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -42,9 +52,10 @@ void Main::loadScheduledEntries(){
 	SetConsoleTextAttribute(hConsole, 15);
 
 	//load existing scheduled entries
-	ifstream readSched("FastAddSched.txt");
+	ifstream readSched(_scheduledPath);
 	while (getline(readSched, _userInput)){
 		Entry newEntry;
+		string entryStatus;
 		string stringTags;
 		vector<string> tags;
 		if (_userInput != ""){
@@ -54,6 +65,7 @@ void Main::loadScheduledEntries(){
 			getline(readSched, _stringEndDate);
 			getline(readSched, _stringEndTime);
 			getline(readSched, _entryLocation);
+			getline(readSched, entryStatus);
 			getline(readSched, stringTags);
 
 		//set integer values to 0
@@ -72,7 +84,7 @@ void Main::loadScheduledEntries(){
 			initialiseDateTime(startDate, _intStartDay, _intStartMonth, _intStartYear, startTime, _intStartHour, _intStartMinute,
 				endDate, _intEndDay, _intEndMonth, _intEndYear, endTime, _intEndHour, _intEndMinute);
 				//initialise entry
-			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, tags);
+			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, entryStatus, tags);
 			_newList.addEntry(newEntry);
 		}
 	}
@@ -87,14 +99,16 @@ void Main::loadScheduledEntries(){
 
 void Main::loadFloatingEntries(){
 	_loadingEntries = true;
-	ifstream readFloat("FastAddFloat.txt");
+	ifstream readFloat(_floatingPath);
 	while (getline(readFloat, _userInput)){
 		Entry newEntry;
+		string entryStatus;
 		string stringTags;
 		vector<string> tags;
 		if (_userInput != ""){
 			_entryName = _userInput;
 			getline(readFloat, _entryLocation);
+			getline(readFloat, entryStatus);
 			getline(readFloat, stringTags);
 
 			EntryAdd parse;
@@ -108,7 +122,7 @@ void Main::loadFloatingEntries(){
 			initialiseDateTime(startDate, 0, 0, 0, startTime, 0, 0, endDate, 0, 0, 0, endTime, 0, 0);
 						
 			//initialise entry
-			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, tags);
+			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, entryStatus, tags);
 			_newList.addEntry(newEntry);
 		}
 	}
@@ -267,7 +281,7 @@ void Main::executeAddFunction(string userInput){
 	if(timeIsOkay){
 		//initialise entry
 		Entry newEntry;
-		initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, tags);
+		initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, "undone", tags);
 		//add new entry to the list
 		_newList.addEntry(newEntry);
 		_newList.showAddFeedback(newEntry);
@@ -284,8 +298,8 @@ void Main::executeEditFunction(string userInput){
 }
 
 void Main::executeSearchFunction(string userInput){
-	SearchEntries search(_newList.getScheduledList(), _newList.getScheduledList());
-	search.execute(userInput, _pageNumber, _previousSearchInput);
+	SearchEntries search(_newList.getScheduledList(), _newList.getFloatingList());
+	search.execute(userInput, _searchScheduledPageNumber, _searchFloatingPageNumber,_previousSearchInput);
 }
 
 void Main::executeDisplayFunction(string userInput){
@@ -360,13 +374,19 @@ void Main::convertDateTime(EntryAdd& parse, string stringStartDate, int& intStar
 	parse.convertTime(stringEndTime, intEndHour, intEndMinute);
 }
 
-void Main::initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime, string entryLocation, vector<string>& tags){
+void Main::initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime,
+						   string entryLocation, string entryStatus, vector<string>& tags){
 	newEntry.insertName(entryName);
 	newEntry.insertStartDate(startDate);
 	newEntry.insertEndDate(endDate);
 	newEntry.insertStartTime(startTime);
 	newEntry.insertEndTime(endTime);
 	newEntry.insertLocation(entryLocation);
+	if (entryStatus == "done") {
+		newEntry.changeStatus();
+	} else if (entryStatus == "undone") {
+		newEntry.initialiseStatus();
+	}
 	newEntry.insertTags(tags);
 }
 
