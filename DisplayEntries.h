@@ -3,7 +3,7 @@
 
 #include <string>
 #include <boost\date_time\gregorian\gregorian.hpp>
-#include "ScheduledEntry.h"
+#include "EntryLists.h"
 #include "StringConvertor.h"
 #include "ClashInspector.h"
 #include <windows.h>

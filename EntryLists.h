@@ -1,5 +1,5 @@
-#ifndef SCHEDULEDENTRY_H
-#define SCHEDULEDENTRY_H
+#ifndef ENTRYLISTS_H
+#define ENTRYLISTS_H
 
 #include "EntryDate.h"
 #include "EntryTime.h"
@@ -14,7 +14,7 @@
 #include <fstream>
 #include <Windows.h>
 
-class ScheduledEntry{
+class EntryLists{
 private:
 	vector<Entry> _scheduledList;
 	vector<Entry> _floatingList;
@@ -65,7 +65,7 @@ private:
 	static const string BORDER;
 
 public:
-	ScheduledEntry();
+	EntryLists();
 	void emptyCounter();
 	void addEntry(Entry);
 	void showAddFeedback(Entry);

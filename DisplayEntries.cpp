@@ -122,6 +122,10 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 	//display specified page
 	else if (_userInput.substr(0, TYPE_SPECIFICPAGE.size()) == TYPE_SPECIFICPAGE){
 		int inputPageNumber;
+		if(_userInput.substr(TYPE_SPECIFICPAGE.size()).empty()){
+			cout << "page number is missing! " << endl;
+			return;
+		}
 		_userInput = _userInput.substr(TYPE_SPECIFICPAGE.size() + BLANKSPACE_COUNT);
 		convert.convertStringToNumber(_userInput, inputPageNumber);
 		_pageNumber = inputPageNumber;

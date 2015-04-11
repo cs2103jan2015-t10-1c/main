@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <sstream>
-#include "ScheduledEntry.h"
+#include "EntryLists.h"
 #include "EntryAdd.h"
 #include "TextUI.h"
 #include "EntryEdit.h"
@@ -56,7 +56,7 @@ private:
 	int _pageNumber;
 	int _lastPage;
 	bool _loadingEntries;
-	ScheduledEntry _newList;
+	EntryLists _newList;
 	//TextUI
 	TextUI _commandInterface;
 	DateTimeInitialiser _initialiser;

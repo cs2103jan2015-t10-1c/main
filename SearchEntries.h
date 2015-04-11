@@ -3,7 +3,7 @@
 
 #include <string>
 #include <boost\date_time\gregorian\gregorian.hpp>
-#include "ScheduledEntry.h"
+#include "EntryLists.h"
 #include "DateTimeInitialiser.h"
 #include "DateTimeInspector.h"
 using namespace std;

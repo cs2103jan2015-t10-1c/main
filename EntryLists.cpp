@@ -1,55 +1,54 @@
-#include "ScheduledEntry.h"
+#include "EntryLists.h"
 
 //Static variables that cannot be initialised in the header file
-const string ScheduledEntry::FEEDBACK_ADDED = "added ";
-const string ScheduledEntry::FEEDBACK_FROM = " from ";
-const string ScheduledEntry::FEEDBACK_TO = " to ";
-const string ScheduledEntry::FEEDBACK_AT = " at ";
+const string EntryLists::FEEDBACK_ADDED = "added ";
+const string EntryLists::FEEDBACK_FROM = " from ";
+const string EntryLists::FEEDBACK_TO = " to ";
+const string EntryLists::FEEDBACK_AT = " at ";
+const string EntryLists::FEEDBACK_EDITED = "edited ";
+const string EntryLists::FEEDBACK_ARROW = " --> ";
+const string EntryLists::FEEDBACK_NAME = "Name: ";
+const string EntryLists::FEEDBACK_DATE = "Date: ";
+const string EntryLists::FEEDBACK_NO_DATE = "No date";
+const string EntryLists::FEEDBACK_REMOVED = "removed";
+const string EntryLists::FEEDBACK_TIME = "Time: ";
+const string EntryLists::FEEDBACK_NO_TIME = "No time";
+const string EntryLists::FEEDBACK_LOCATION = "Location: ";
+const string EntryLists::FEEDBACK_STATUS = "Status: ";
+const string EntryLists::FEEDBACK_TAGS_ADDED = "Tags added: ";
+const string EntryLists::FEEDBACK_TAGS_REMOVED = "Tags removed: ";
+const string EntryLists::FEEDBACK_MOVED_TO = "Moved to ";
+const string EntryLists::FEEDBACK_SCHEDULED_LIST = "Scheduled list.";
+const string EntryLists::FEEDBACK_FLOATING_LIST = "Floating list.";
 
-const string ScheduledEntry::FEEDBACK_EDITED = "edited ";
-const string ScheduledEntry::FEEDBACK_ARROW = " --> ";
-const string ScheduledEntry::FEEDBACK_NAME = "Name: ";
-const string ScheduledEntry::FEEDBACK_DATE = "Date: ";
-const string ScheduledEntry::FEEDBACK_NO_DATE = "No date";
-const string ScheduledEntry::FEEDBACK_REMOVED = "removed";
-const string ScheduledEntry::FEEDBACK_TIME = "Time: ";
-const string ScheduledEntry::FEEDBACK_NO_TIME = "No time";
-const string ScheduledEntry::FEEDBACK_LOCATION = "Location: ";
-const string ScheduledEntry::FEEDBACK_STATUS = "Status: ";
-const string ScheduledEntry::FEEDBACK_TAGS_ADDED = "Tags added: ";
-const string ScheduledEntry::FEEDBACK_TAGS_REMOVED = "Tags removed: ";
-const string ScheduledEntry::FEEDBACK_MOVED_TO = "Moved to ";
-const string ScheduledEntry::FEEDBACK_SCHEDULED_LIST = "Scheduled list.";
-const string ScheduledEntry::FEEDBACK_FLOATING_LIST = "Floating list.";
+const string EntryLists::FEEDBACK_DELETED = "This entry has been deleted:";
+const string EntryLists::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
+const string EntryLists::FEEDBACK_OUT_OF_BOUND = "Entry number is out of bound.";
 
-const string ScheduledEntry::FEEDBACK_DELETED = "This entry has been deleted:";
-const string ScheduledEntry::FEEDBACK_NO_ENTRIES_LEFT = "No entries left.";
-const string ScheduledEntry::FEEDBACK_OUT_OF_BOUND = "Entry number is out of bound.";
+const string EntryLists::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
 
-const string ScheduledEntry::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
+const string EntryLists::FEEDBACK_WRONG_COMMAND = "Wrong command!";
 
-const string ScheduledEntry::FEEDBACK_WRONG_COMMAND = "Wrong command!";
+const string EntryLists::STATUS_DONE = "done";
+const string EntryLists::STATUS_UNDONE = "undone";
 
-const string ScheduledEntry::STATUS_DONE = "done";
-const string ScheduledEntry::STATUS_UNDONE = "undone";
+const string EntryLists::SPECIFY_STORAGE_PROMPT = "Please specify where you want to store your: ";
+const string EntryLists::SCHEDULED_ENTRIES_PROMPT = "Scheduled entries";
+const string EntryLists::FLOATING_ENTRIES_PROMPT = "Floating entries";
 
-const string ScheduledEntry::SPECIFY_STORAGE_PROMPT = "Please specify where you want to store your: ";
-const string ScheduledEntry::SCHEDULED_ENTRIES_PROMPT = "Scheduled entries";
-const string ScheduledEntry::FLOATING_ENTRIES_PROMPT = "Floating entries";
+const string EntryLists::SCHEDULED_FILE_NAME = "\\FastAddSched.txt";
+const string EntryLists::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
 
-const string ScheduledEntry::SCHEDULED_FILE_NAME = "\\FastAddSched.txt";
-const string ScheduledEntry::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
+const string EntryLists::BORDER = "- - - - - - - - - - - - - - - - -";
 
-const string ScheduledEntry::BORDER = "- - - - - - - - - - - - - - - - -";
-
-ScheduledEntry::ScheduledEntry(){
+EntryLists::EntryLists(){
 }
 
-void ScheduledEntry::emptyCounter(){
+void EntryLists::emptyCounter(){
 	_counter.emptyUndoStack();
 }
 
-void ScheduledEntry::addEntry(Entry newEntry){
+void EntryLists::addEntry(Entry newEntry){
 	int latestEntryIndex;
 	//scheduled entry
 	if (newEntry.getDateStatus()){
@@ -66,7 +65,7 @@ void ScheduledEntry::addEntry(Entry newEntry){
 	}
 }
 
-void ScheduledEntry::showAddFeedback(Entry newEntry){
+void EntryLists::showAddFeedback(Entry newEntry){
 	string entryName = newEntry.getName();
 	Date entryStartDate = newEntry.getStartDate();
 	Date entryEndDate = newEntry.getEndDate();
@@ -96,7 +95,7 @@ void ScheduledEntry::showAddFeedback(Entry newEntry){
 }
 
 
-string ScheduledEntry::getEntryDisplay(bool isScheduled, int index){
+string EntryLists::getEntryDisplay(bool isScheduled, int index){
 	ostringstream oss;
 	oss << endl
 		<< BORDER << endl
@@ -114,7 +113,7 @@ string ScheduledEntry::getEntryDisplay(bool isScheduled, int index){
 	return oss.str();
 }
 
-void ScheduledEntry::removeEntry(bool isScheduled, unsigned int index, string& deleteFeedback){
+void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& deleteFeedback){
 	deleteFeedback = "";
 	ostringstream oss;
 
@@ -160,7 +159,7 @@ void ScheduledEntry::removeEntry(bool isScheduled, unsigned int index, string& d
 	}
 }
 
-void ScheduledEntry::editEntry(bool isScheduled, string userInput, string& editFeedback){
+void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedback){
 	editFeedback = "";
 	ostringstream oss;
 	
@@ -410,17 +409,17 @@ void ScheduledEntry::editEntry(bool isScheduled, string userInput, string& editF
 	editFeedback = oss.str();
 }
 
-void ScheduledEntry::moveScheduledFloating(bool isScheduled, int entryNumber, Entry movedEntry){
+void EntryLists::moveScheduledFloating(bool isScheduled, int entryNumber, Entry movedEntry){
 	string dummy;
 	removeEntry(isScheduled, entryNumber, dummy);
 	addEntry(movedEntry);
 }
 
-void ScheduledEntry::undo(){
+void EntryLists::undo(){
 	_counter.execute(_scheduledList, _floatingList);
 }
 
-void ScheduledEntry::exit(bool& running){
+void EntryLists::exit(bool& running){
 	cout << SPECIFY_STORAGE_PROMPT << endl;
 	
 	//write scheduled
@@ -461,7 +460,7 @@ void ScheduledEntry::exit(bool& running){
 	running = false;
 }
 
-void ScheduledEntry::sort(int& latestEntryIndex){
+void EntryLists::sort(int& latestEntryIndex){
 	latestEntryIndex = _scheduledList.size();
 	vector<Entry>::iterator firstIter;
 	vector<Entry>::iterator secondIter;
@@ -492,12 +491,12 @@ void ScheduledEntry::sort(int& latestEntryIndex){
 	}
 }
 
-vector<Entry> ScheduledEntry::getScheduledList(){
+vector<Entry> EntryLists::getScheduledList(){
 	vector<Entry> ScheduledEntries = _scheduledList;
 	return ScheduledEntries;
 }
 
-vector<Entry> ScheduledEntry::getFloatingList(){
+vector<Entry> EntryLists::getFloatingList(){
 	vector<Entry> FloatingEntries = _floatingList;
 	return FloatingEntries;
 }
