@@ -68,6 +68,8 @@ void EntryLists::addEntry(Entry newEntry, int& latestEntryIndex) {
 }
 
 //@author A0115902N
+
+//output feedback after entry add execution
 void EntryLists::showAddFeedback(Entry newEntry, int latestEntryIndex) {
 	string entryName = newEntry.getName();
 	Date entryStartDate = newEntry.getStartDate();
@@ -98,18 +100,18 @@ void EntryLists::showAddFeedback(Entry newEntry, int latestEntryIndex) {
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
-
+//display either display or floating entry number
 string EntryLists::getEntryDisplay(bool isScheduled, int index){
 	ostringstream oss;
 	oss << endl
 		<< BORDER << endl
 		<< index << ". ";
-	//scheduled entry
+	//when viewing scheduled display
 	if (isScheduled){	
 		oss << _scheduledList[index-1].getFullDisplay();
 	}
-	//floating entry
-	else {
+	//when viewing floating display
+	else { 
 		oss << _floatingList[index-1].getFullDisplay();
 	}
 	oss << BORDER;
@@ -117,6 +119,7 @@ string EntryLists::getEntryDisplay(bool isScheduled, int index){
 	return oss.str();
 }
 
+//remove a scheduled or floating entry based on entry number
 void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& deleteFeedback){
 	deleteFeedback = "";
 	ostringstream oss;
@@ -251,12 +254,6 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		int inputEndMonth;
 		int inputEndYear;		
 		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear, inputEndDay, inputEndMonth, inputEndYear);
-		/*DateTimeInspector inspector;
-		if(!inspector.dateIsValid(inputStartDay, inputStartMonth, inputStartYear)
-			|| !inspector.dateIsValid(inputEndDay, inputEndMonth, inputEndYear)){
-			editFeedback = "Invalid date\n";
-			return;
-		}*/
 
 		Date newStartDate;
 		newStartDate.insertDay(inputStartDay);
@@ -456,6 +453,8 @@ void EntryLists::exit(bool& running) {
 }
 
 //@author A0115902N
+
+//sort the scheduled list based on date and time of event
 void EntryLists::sort(int& latestEntryIndex){
 	latestEntryIndex = _scheduledList.size();
 	vector<Entry>::iterator firstIter;
@@ -487,11 +486,12 @@ void EntryLists::sort(int& latestEntryIndex){
 	}
 }
 
+//return the list of scheduled entries
 vector<Entry> EntryLists::getScheduledList(){
 	vector<Entry> ScheduledEntries = _scheduledList;
 	return ScheduledEntries;
 }
-
+//return the list of floating entries
 vector<Entry> EntryLists::getFloatingList(){
 	vector<Entry> FloatingEntries = _floatingList;
 	return FloatingEntries;

@@ -45,6 +45,8 @@ private:
 	static const string PATH_FILE_NAME;
 	static const string SCHEDULED_FILE_NAME;
 	static const string FLOATING_FILE_NAME;
+	static const string DONE;
+	static const string UNDONE;
 
 	HANDLE hConsole;
 
@@ -57,6 +59,7 @@ private:
 	string _entryLocation;
 	string _command;
 	string _previousSearchInput;
+
 
 	int _intStartDay; int _intStartMonth; int _intStartYear;
 	int _intEndDay; int _intEndMonth; int _intEndYear;

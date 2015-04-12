@@ -317,6 +317,8 @@ void SearchEntries::searchStatus(string inputStatus) {
 }
 
 //@author A0115902N
+
+//return all entries which consists of the input date
 void SearchEntries::searchDate(string userInput){
 	initialiseSearchPagingAttributes();
 	DateTimeInitialiser _initialiser;
@@ -364,6 +366,7 @@ void SearchEntries::searchDate(string userInput){
 	}
 }
 
+//return all entries which consists of the input time
 void SearchEntries::searchTime(string userInput){
 	initialiseSearchPagingAttributes();
 	DateTimeInitialiser _initialiser;
@@ -501,6 +504,7 @@ void SearchEntries::searchAll(string userInput) {
 }
 
 //@author A0115902N
+//return all entries which occurs on a specific key day
 void SearchEntries::searchDay(string keyDay){
 	initialiseSearchPagingAttributes();
 	int dayOfWeek;
@@ -512,7 +516,7 @@ void SearchEntries::searchDay(string keyDay){
 		}
 	}
 	keyDayOfWeek = SYSTEMDAYSOFWEEK[dayOfWeek];
-	//initalised scheduled
+	//initalised search results
 	for(i = 0; i < _scheduledList.size(); i++){
 		_scheduledList[i].insertEntryNumber(i + 1);
 		//start date
@@ -535,7 +539,6 @@ void SearchEntries::searchDay(string keyDay){
 		":" << endl << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if(_scheduledSearchResult.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << "Entries are not found" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -544,6 +547,7 @@ void SearchEntries::searchDay(string keyDay){
 	}
 }
 
+//return all the free slots in a day 
 void SearchEntries::searchSlot(string inputDate){
 	StringConvertor convertDate; 
 	DateTimeInitialiser dateInitialiser;
@@ -613,6 +617,7 @@ void SearchEntries::searchSlot(string inputDate){
 	cout << oss.str();
 }
 
+//initialise parameters related to the paging of the scheduled search results
 void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
 	//initialise search result parameters
 	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
@@ -622,7 +627,6 @@ void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> 
 	}
 	//prevent abort for exceeding page
 	if(_scheduledPageNumber > numberOfPages){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Page does not exist!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -641,6 +645,7 @@ void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> 
 	}
 }
 
+//initialise parameters related to the paging of the floating search results
 void SearchEntries::initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
 	//initialise search result parameters
 	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
@@ -650,7 +655,6 @@ void SearchEntries::initialiseFloatingPaging(int& numberOfPages, vector<Entry> s
 	}
 	//prevent abort for exceeding page
 	if(_floatingPageNumber > numberOfPages){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Page does not exist!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -669,6 +673,7 @@ void SearchEntries::initialiseFloatingPaging(int& numberOfPages, vector<Entry> s
 	}
 }
 
+//output results from a vector of the search results
 void SearchEntries::displaySearchResults(vector<Entry> searchResult, int firstEntry, int lastEntry){
 	for (int i = firstEntry; i < lastEntry; i++){
 			cout << BORDER << endl
@@ -678,8 +683,8 @@ void SearchEntries::displaySearchResults(vector<Entry> searchResult, int firstEn
 	}
 }
 
+//output closing message to help in the navigation of the scheduled search result
 void SearchEntries::closingScheduledMessage(int numberOfPages, int firstEntry, int lastEntry){
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	if(_scheduledPageNumber == numberOfPages && numberOfPages!=1){
 		cout <<  "<<< search prev"  << endl << endl;
@@ -694,8 +699,8 @@ void SearchEntries::closingScheduledMessage(int numberOfPages, int firstEntry, i
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+//output closing message to help in the navigation of the floating search result
 void SearchEntries::closingFloatingMessage(int numberOfPages, int firstEntry, int lastEntry){
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	if(_floatingPageNumber == numberOfPages && numberOfPages!=1){
 		cout << "<<< search prev" << endl << endl;
@@ -710,6 +715,7 @@ void SearchEntries::closingFloatingMessage(int numberOfPages, int firstEntry, in
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+//initialise all variables related to search paging
 void SearchEntries::initialiseSearchPagingAttributes(){
 	_scheduledSearchResult.clear();
 	_floatingSearchResult.clear();
@@ -721,6 +727,7 @@ void SearchEntries::initialiseSearchPagingAttributes(){
 	_numberOfPagesFloatingResult = 1;
 }
 
+//steps taken in presenting the scheduled search results
 void SearchEntries::loadScheduledSearchResult(){
 	initialiseScheduledPaging(_numberOfPagesScheduledResult, _scheduledSearchResult, _firstScheduledEntry, _lastScheduledEntry);
 	displaySearchResults(_scheduledSearchResult, _firstScheduledEntry, _lastScheduledEntry);
@@ -731,6 +738,7 @@ void SearchEntries::loadScheduledSearchResult(){
 	cout << endl;
 }
 
+//steps taken in presenting the floating search results
 void SearchEntries::loadFloatingSearchResult(){
 	initialiseFloatingPaging(_numberOfPagesFloatingResult, _floatingSearchResult, _firstFloatingEntry, _lastFloatingEntry);
 	displaySearchResults(_floatingSearchResult, _firstFloatingEntry, _lastFloatingEntry);
@@ -740,6 +748,7 @@ void SearchEntries::loadFloatingSearchResult(){
 	cout << endl;
 }
 
+//returns an integer difference between two names of days e.g. 3 between monday and thursday
 int SearchEntries::calculateDifferenceBetweenTwoWeekDays(string firstDay, string secondDay){
 	int intFirstDay = 0;
 	int intSecondDay = 0;

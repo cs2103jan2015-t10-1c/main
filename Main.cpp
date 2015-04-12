@@ -15,6 +15,8 @@ const string Main::COMMAND_SAVE_AT = "saveat";
 const string Main::COMMAND_EXIT = "exit";
 const string Main::COMMAND_RESIZE = "resize";
 const string Main::COMMAND_BORDER = "_________________________________________________________";
+const string Main::DONE = "done";
+const string Main::UNDONE = "undone";
 
 const string Main::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
 
@@ -316,7 +318,8 @@ void Main::executeSearchFunction(string userInput) {
 
 //@author A0115902N
 //Executes various kinds of display for the entries in the list
-//display also allows the user to toggle between 'scheduled' and 'floating' mode
+//display allows the user to toggle between 'scheduled', 'floating', 'clashes', and 'past entries' mode
+//bool values are stored in main
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList());
 	display.execute(userInput, _pageNumber, _lastPage, _viewingScheduledList, _viewingFloatingList, _viewingPastEntries, _viewingClashes);
@@ -397,6 +400,7 @@ void Main::executeExitFunction() {
 }
 
 //@author A0115902N
+//reset string values for a new operation
 void Main::resetStringValues() {
 	_userInput = "";
 	_entryName = "";
@@ -407,7 +411,7 @@ void Main::resetStringValues() {
 	_entryLocation = "";
 	_command = "";
 }
-
+//reset integer values for a new operation
 void Main::resetIntegerValues(){
 	_intStartDay = 0; _intStartMonth = 0; _intStartYear = 0;
 	_intEndDay = 0; _intEndMonth = 0; _intEndYear = 0;
@@ -415,21 +419,25 @@ void Main::resetIntegerValues(){
 	_intEndHour = 0; _intEndMinute = 0;
 }
 
+//insert integer values of day, month and year into the Date object
 void Main::initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
-	int year = inputYear;
-	int month = inputMonth;
 	int day = inputDay;
+	int month = inputMonth;
+	int year = inputYear;
 	
 	inputDate.insertDay(inputDay);
 	inputDate.insertMonth(inputMonth);
 	inputDate.insertYear(inputYear);
 }
 
+//insert integer values of hours and minute into the Time object
 void Main::initialiseTime(Time& inputTime, int inputHour, int inputMinute){
 	inputTime.insertHour(inputHour);
 	inputTime.insertMinute(inputMinute);
 }
 
+//convert a string containing start date and time and end date and time 
+//into their respective integer values
 void Main::convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
 					 string stringStartTime, int& intStartHour, int& intStartMinute,
 					 string stringEndDate, int& intEndDay, int& intEndMonth, int& intEndYear,
@@ -440,6 +448,7 @@ void Main::convertDateTime(EntryAdd& parse, string stringStartDate, int& intStar
 	parse.convertTime(stringEndTime, intEndHour, intEndMinute);
 }
 
+//insert integer and string values needed into the new Entry object
 void Main::initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime,
 						   string entryLocation, string entryStatus, vector<string>& tags){
 	newEntry.insertName(entryName);
@@ -448,14 +457,15 @@ void Main::initialiseEntry(Entry& newEntry, string entryName, Date startDate, Da
 	newEntry.insertStartTime(startTime);
 	newEntry.insertEndTime(endTime);
 	newEntry.insertLocation(entryLocation);
-	if (entryStatus == "done") {
+	if (entryStatus == DONE) {
 		newEntry.changeStatus();
-	} else if (entryStatus == "undone") {
+	} else if (entryStatus == UNDONE) {
 		newEntry.initialiseStatus();
 	}
 	newEntry.insertTags(tags);
 }
 
+//insert integer values to the respective date and time objects
 void Main::initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
 						Date& endDate, int intEndDay, int intEndMonth, int intEndYear, Time& endTime, int intEndHour, int intEndMinute){
 	initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);

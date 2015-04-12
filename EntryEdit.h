@@ -64,7 +64,6 @@ public:
 	void extractRemainder(int, string&, bool&);
 
 	//@author A0115902N
-	int convertToNumber(string);
 	string getName();
 	void getDate(int&, int&, int&, int&, int&, int&);
 	void getTime(int&, int&, int&, int&);
