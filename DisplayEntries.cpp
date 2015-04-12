@@ -203,7 +203,7 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 }
 
 //@author A0116660L
-void DisplayEntries::displayScheduledEntryShort(){
+void DisplayEntries::displayScheduledEntryShort() {
 	//marking the boundaries
 	_printInThePast = false;
 	_printToday = false;
@@ -212,15 +212,18 @@ void DisplayEntries::displayScheduledEntryShort(){
 	_printNextWeek = false;
 	_printThisMonth = false;
 	_printNextMonth = false;
+
 	//initialise vector for entries from today onwards
 	vector<Entry> presentAndFutureEntries;
-	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
+	int fromLocationToIndex = 1;
+	for (unsigned int i = 0; i < _scheduledList.size(); i++) {
 		date entryStartDate = _scheduledList[i].getStartDate().getDate();
-		_scheduledList[i].insertEntryNumber(i + 1);
-		if(entryStartDate >= _today){
+		_scheduledList[i].insertEntryNumber(i + fromLocationToIndex);
+		if (entryStartDate >= _today) {
 			presentAndFutureEntries.push_back(_scheduledList[i]);
 		}
 	}
+
 	//initialise for paging
 	int numberOfPages;
 	int firstEntry;
@@ -228,52 +231,52 @@ void DisplayEntries::displayScheduledEntryShort(){
 	int number;
 	initialisePaging(presentAndFutureEntries, numberOfPages, firstEntry, lastEntry, number);
 
-	for (int i = firstEntry; i < lastEntry; i++){
+	for (int i = firstEntry; i < lastEntry; i++) {
 		cout << endl;
 		date entryStartDate = presentAndFutureEntries[i].getStartDate().getDate();
-		if(entryStartDate == _today && _printToday == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		if (entryStartDate == _today && _printToday == false) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events today:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printToday = true;
 		}
-		if(entryStartDate == _tomorrow && _printTomorrow == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (entryStartDate == _tomorrow && _printTomorrow == false) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events tomorrow:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printTomorrow = true;
 		}
-		if(entryStartDate <= _thisWeek && entryStartDate > _tomorrow && _printThisWeek == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (entryStartDate <= _thisWeek && entryStartDate > _tomorrow && _printThisWeek == false) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events This Week:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printThisWeek = true;
 		}
-		if(entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events Next Week:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printNextWeek = true;
 		}
-		if(entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events This Month:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printThisMonth = true;
 		}
-		if(entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events Next Month:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printNextMonth = true;
 		}
-		if(_today <= entryStartDate){
+
+		if (_today <= entryStartDate) {
 			_scheduledList[i].insertEntryNumber(number);
 			cout << BORDER << endl
 				<< presentAndFutureEntries[i].getEntryNumber() << ". "
@@ -282,15 +285,16 @@ void DisplayEntries::displayScheduledEntryShort(){
 			number++;
 		}
 	}
+
 	closingMessage(numberOfPages, firstEntry, lastEntry);
 }
 
-void DisplayEntries::displayOneScheduledEntry(int index){
+void DisplayEntries::displayOneScheduledEntry(int index) {
 	cout << endl
-		<< BORDER << endl
-		<< index << ". "
-		<< _scheduledList[index-1].getFullDisplay()
-		<< BORDER;
+		 << BORDER << endl
+		 << index << ". "
+		 << _scheduledList[index-1].getFullDisplay()
+		 << BORDER;
 }
 
 //@author A0115902N
