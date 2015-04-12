@@ -485,7 +485,7 @@ void DisplayEntries::initialisePaging(vector<Entry> entryVector, int& numberOfPa
 	firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
 	lastEntry = firstEntry + ENTRY_PERPAGE;
 	//case for the last page
-	if(_pageNumber == numberOfPages){
+	if(_pageNumber == numberOfPages && numberOfEntriesOnLastPage != 0){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
 	//prevent abort for number of entries less than 5
