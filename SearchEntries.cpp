@@ -92,7 +92,9 @@ void SearchEntries::execute(string userInput, int& scheduledPageNumber, int& flo
 		else if (marker == TIME_MARKER){
 			searchTime(userInput);
 		}
-		
+		else if (marker == DAY_MARKER){
+			searchDay(userInput);
+		}
 		else {
 			searchAll(userInput);
 		}
@@ -473,6 +475,7 @@ void SearchEntries::searchAll(string userInput){
 }
 
 void SearchEntries::searchDay(string keyDay){
+	initialiseSearchPagingAttributes();
 	int dayOfWeek;
 	string keyDayOfWeek;
 	unsigned int i;
@@ -481,15 +484,36 @@ void SearchEntries::searchDay(string keyDay){
 			dayOfWeek = i;
 		}
 	}
-	keyDayOfWeek = SYSTEMDAYSOFWEEK[i];
+	keyDayOfWeek = SYSTEMDAYSOFWEEK[dayOfWeek];
 	//initalised scheduled
 	for(i = 0; i < _scheduledList.size(); i++){
+		_scheduledList[i].insertEntryNumber(i + 1);
+		//start date
 		date entryStartDate = _scheduledList[i].getStartDate().getDate();
 		greg_weekday startDateToString = entryStartDate.day_of_week();
 		string startDayString = startDateToString.as_long_string();
+		//end date
 		date entryEndDate = _scheduledList[i].getEndDate().getDate();
 		greg_weekday endDateToString = entryEndDate.day_of_week();
 		string endDayString = endDateToString.as_long_string();
+		//difference between start date and end date
+		date_duration entryDuration = entryEndDate - entryStartDate;
+		long dayDifference = entryDuration.days();
+		if(dayDifference > 7 || startDayString == keyDayOfWeek || calculateDifferenceBetweenTwoWeekDays(startDayString, keyDayOfWeek) < dayDifference){
+			_scheduledSearchResult.push_back(_scheduledList[i]);
+		}
+	}
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << "Scheduled Entries on the day " << keyDayOfWeek << " "
+		":" << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(_scheduledSearchResult.empty()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << "Entries are not found" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		loadScheduledSearchResult();
 	}
 }
 
@@ -602,4 +626,24 @@ void SearchEntries::loadFloatingSearchResult(){
 	closingFloatingMessage(_numberOfPagesFloatingResult, _firstFloatingEntry, _lastFloatingEntry);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	cout << endl;
+}
+
+int SearchEntries::calculateDifferenceBetweenTwoWeekDays(string firstDay, string secondDay){
+	int intFirstDay = 0;
+	int intSecondDay = 0;
+	int difference = 0;
+	for(int i = 0; i < 7; i++){
+		if(firstDay == SYSTEMDAYSOFWEEK[i]){
+			intFirstDay = i + 1;
+		}
+		if(secondDay == SYSTEMDAYSOFWEEK[i]){
+			intSecondDay = i + 1;
+		}
+	}
+
+	difference = intSecondDay - intFirstDay;
+	if(difference < 0){
+		difference = difference + 7;
+	}
+	return difference;
 }

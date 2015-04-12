@@ -62,6 +62,8 @@ public:
 	void loadScheduledSearchResult();
 	void loadFloatingSearchResult();
 
+	int calculateDifferenceBetweenTwoWeekDays(string, string);
+
 };
 #endif
 
