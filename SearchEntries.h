@@ -6,6 +6,7 @@
 #include "EntryLists.h"
 #include "DateTimeInitialiser.h"
 #include "DateTimeInspector.h"
+#include "StringConvertor.h"
 using namespace std;
 using namespace boost::gregorian;
 
@@ -36,6 +37,7 @@ private:
 	static const string SYSTEMDAYSOFWEEK[7];
 	static const string MON, TUE, WED, THU, FRI, SAT, SUN;
 	static const string SYSTEMMON, SYSTEMTUE, SYSTEMWED, SYSTEMTHU, SYSTEMFRI, SYSTEMSAT, SYSTEMSUN;
+	static const string SLOT_MARKER;
 	StringConvertor _datetimeParser;
 	int _scheduledPageNumber;
 	int _floatingPageNumber;
@@ -53,6 +55,7 @@ public:
 	void searchTime(string);
 	void searchAll(string);
 	void searchDay(string);
+	void searchSlot(string);
 	void initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
 	void initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
 	void closingScheduledMessage(int, int, int);

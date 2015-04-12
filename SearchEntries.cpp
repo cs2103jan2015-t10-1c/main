@@ -13,6 +13,7 @@ const string SearchEntries::ALL_MARKER = "all";
 const string SearchEntries::NEXT_MARKER = "next";
 const string SearchEntries::PREV_MARKER = "prev";
 const string SearchEntries::DAY_MARKER = "day";
+const string SearchEntries::SLOT_MARKER = "slot";
 const int SearchEntries::ENTRY_PERPAGE = 3;
 const string SearchEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
 const string SearchEntries::MON = "mon";
@@ -95,13 +96,15 @@ void SearchEntries::execute(string userInput, int& scheduledPageNumber, int& flo
 		else if (marker == DAY_MARKER){
 			searchDay(userInput);
 		}
-		else {
+		else if (marker == SLOT_MARKER){
+			searchSlot(userInput);
+		}
+		else if (marker == ALL_MARKER){
 			searchAll(userInput);
 		}
-
-		/*else {
+		else {
 			cout << "Wrong search input is given!" << endl << endl;
-		}*/
+		}
 	}
 	scheduledPageNumber = _scheduledPageNumber;
 	floatingPageNumber = _floatingPageNumber;
@@ -517,6 +520,62 @@ void SearchEntries::searchDay(string keyDay){
 	}
 }
 
+void SearchEntries::searchSlot(string inputDate){
+	initialiseSearchPagingAttributes();
+	StringConvertor convertDate; 
+	DateTimeInitialiser dateInitialiser;
+	Date keyDate;
+	int inputDay;
+	int inputMonth;
+	int inputYear;
+	ptime start;
+	ptime end;
+	vector<Entry> entriesOfDate;
+	convertDate.convertDate(inputDate, inputDay, inputMonth, inputYear);
+	dateInitialiser.initialiseDate(keyDate, inputDay, inputMonth, inputYear);
+	keyDate.initialiseDate();
+	//initialise search result
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		cout << "iteration" << i << "error" << endl;
+		date entryDate = _scheduledList[i].getStartDate().getDate();
+		if(_scheduledList[i].getStartDate().getDate() == keyDate.getDate() 
+			&& _scheduledList[i].getEndDate().getDate() == keyDate.getDate() ){
+			entriesOfDate.push_back(_scheduledList[i]);
+		}
+	}
+	cout << "iteration here 1 error" << endl;
+	if(entriesOfDate.empty()){
+		cout << "The whole day is available" << endl;
+		return;
+	} else{
+		end = entriesOfDate[0].getStartTime().getTime();
+	}
+	cout << "iteration here 2 error" << endl;
+	date entryDate = keyDate.getDate();
+	vector<ptime> unoccupiedTimeOfDate;
+	ptime endOfDay;
+	endOfDay = ptime(entryDate + days(1), hours(0) + minutes(0));
+	start = ptime(entryDate, hours(0) + minutes(0));
+	cout << "iteration here 3 error" << endl;
+
+	//initialise unoccupied
+	for (unsigned int i = 0; i < entriesOfDate.size(); i++){
+		unoccupiedTimeOfDate.push_back(start);
+		unoccupiedTimeOfDate.push_back(end);
+		start = entriesOfDate[i].getEndTime().getTime();
+		if(i != entriesOfDate.size()){
+			end = entriesOfDate[i + 1].getStartTime().getTime();
+		} else {
+			unoccupiedTimeOfDate.push_back(endOfDay);
+		}
+	}
+	cout << "iteration here 4 error" << endl;
+
+	for (unsigned int i = 0; i < unoccupiedTimeOfDate.size(); i++){
+		cout << unoccupiedTimeOfDate[i] << endl;
+	}
+}
+
 void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
 	//initialise search result parameters
 	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
@@ -587,6 +646,7 @@ void SearchEntries::closingScheduledMessage(int numberOfPages, int firstEntry, i
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+	cout << "<<< search prev \t \t search next >>>" << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
@@ -595,6 +655,7 @@ void SearchEntries::closingFloatingMessage(int numberOfPages, int firstEntry, in
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << "Page: " << _floatingPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+	cout << "<<< search prev \t \t search next >>>" << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
