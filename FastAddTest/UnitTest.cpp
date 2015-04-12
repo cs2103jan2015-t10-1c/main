@@ -61,7 +61,7 @@ namespace FastAddTest
 		TEST_METHOD(EntryListEditNameTest) 
 		{
 			//vector<string> expectedAnswer;
-			string expectedAnswer="k. from 17 Feb 2014 12.13 to 26 Feb 2014 14.15 at utown #study";
+			string expectedAnswer="k";
 			//expectedAnswer.push_back(expected);
 			
 			Entry testScheduled; 
@@ -109,7 +109,7 @@ namespace FastAddTest
 			string dummyString;
 			testInfo.editEntry(true, userInput, dummyString);		
 			string actualResult;
-			actualResult = testInfo.getEntryDisplay(true, 1);
+			actualResult = testScheduled.getName();
 			//testInfo.getName();
 
 			Assert::AreEqual(expectedAnswer, actualResult);
