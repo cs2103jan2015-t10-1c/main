@@ -83,22 +83,24 @@ Time Entry::getEndTime(){
 }
 
 //@author A0116660L
-void Entry::initialiseStatus(){
+void Entry::initialiseStatus() {
 	_status = false;
 }
 
-void Entry::changeStatus(){
+void Entry::changeStatus() {
 	_status = true;
 }
 
-string Entry::getStatus(){
+string Entry::getStatus() {
 	string printStatus;
-	if (_status == true){
+	if (_status == true) {
 		printStatus = "done";
 	}
-	if (_status == false){
+
+	if (_status == false) {
 		printStatus = "undone";
 	}
+
 	return printStatus;
 }
 
@@ -112,15 +114,15 @@ string Entry::getLocation (){
 }
 
 //@author A0116660L
-void Entry::insertTags(vector<string>& tags){
+void Entry::insertTags(vector<string>& tags) {
 	_tags = tags;
 }
 
-void Entry::searchEntryTag(string tag, bool& tagFound){
+void Entry::searchEntryTag(string tag, bool& tagFound) {
 	vector<string>::iterator iterTag;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+	for (iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
 		size_t found = iterTag->find(tag);
-		if(found != string::npos){
+		if (found != string::npos) {
 			tagFound = true;
 		}
 	}
