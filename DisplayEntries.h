@@ -54,6 +54,8 @@ private:
 
 	static const string BORDER;
 
+	HANDLE hConsole;
+
 
 public:
 	DisplayEntries(vector<Entry>, vector<Entry>);
@@ -80,8 +82,8 @@ public:
 
 	void initialisePaging(vector<Entry>, int&, int&, int&, int&);
 	void closingMessage(int, int, int);
-	/*void displayTodayAndTomorrow(int&, int&, bool&, bool&, bool&, bool&);*/
 	bool isInThePast(ptime);
+
 
 };
 

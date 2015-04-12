@@ -30,6 +30,7 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 	_viewingFloatingList = false;
 	_viewingPastEntries = false;
 	_viewingClashes = false;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 
