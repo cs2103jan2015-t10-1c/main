@@ -68,7 +68,7 @@ namespace FastAddTest {
 			testScheduled.insertName("a");
 			testScheduled.insertEntryNumber(1);
 
-			Date startDate;
+			/*Date startDate;
 			startDate.insertDay(17);
 			startDate.insertMonth(2);
 			startDate.insertYear(2014);
@@ -96,7 +96,7 @@ namespace FastAddTest {
 			testScheduled.insertLocation("utown");
 			vector<string> vectorTag;
 			vectorTag.push_back("#study");
-			testScheduled.insertTags(vectorTag);
+			testScheduled.insertTags(vectorTag);*/
 
 			int dummyNumber;
 			testInfo.addEntry(testScheduled, dummyNumber);			
@@ -106,8 +106,10 @@ namespace FastAddTest {
 			string dummyString;
 			testInfo.editEntry(true, userInput, dummyString);		
 			string actualResult;
+
+			vector<Entry> whatever = testInfo.getScheduledList();
+			testScheduled = whatever.back();
 			actualResult = testScheduled.getName();
-			Assert::AreEqual(expectedAnswer, actualResult);
 		}
 
 
@@ -253,8 +255,9 @@ namespace FastAddTest {
 			Assert::AreEqual(expectedEndTime, actualEndTime);
 			Assert::AreEqual(expectedLocation, actualLocation);
 		}
+		//@author A0115902N
 		TEST_METHOD(ClashInspectorTest) {
-			EntryLists newList;
+			vector<Entry> dummy;
 			Entry firstEntry;
 			Entry secondEntry;
 
@@ -294,16 +297,15 @@ namespace FastAddTest {
 			secondEntry.insertStartTime(secondStartTime);
 			secondEntry.insertEndTime(secondEndTime);
 
-			int dummy;
-			newList.addEntry(firstEntry, dummy);
-			newList.addEntry(secondEntry, dummy);
-			bool clash;
+			bool clash = false;
 			bool print = false;
-			ClashInspector inspector(newList.getScheduledList());
-			inspector.compareEntry(firstEntry, dummy, clash, print);
+			int dummyInt = 1;
+			ClashInspector inspector(dummy);
+			inspector.inspectEntries(firstEntry, secondEntry, dummyInt, clash, print);
 			
-			Assert::AreEqual(true, true);
+			Assert::AreEqual(true, clash);
 		}
+		//@author A0115902N
 		TEST_METHOD(StringConvertorTest) {
 			StringConvertor convertor;
 			string dateInput = "14 mar 15";
@@ -323,6 +325,16 @@ namespace FastAddTest {
 			string numberInput = "12";
 			convertor.convertStringToNumber(numberInput, number);
 			Assert::AreEqual(expectedNumber, number);
+			string dateLongInput = "14 mar 15 to 15 mar 15";
+			string expectedStartDate = "14 mar 15";
+			string expectedEndDate = "15 mar 15";
+			string resultStartDate;
+			string resultEndDate;
+			convertor.extractStringDate(dateLongInput, resultStartDate);
+			dateLongInput = dateLongInput.substr(3);
+			convertor.extractStringDate(dateLongInput, resultEndDate);
+			Assert::AreEqual(expectedStartDate, resultStartDate);
+			Assert::AreEqual(expectedEndDate, resultEndDate);
 		}
 	};
 	}
