@@ -36,10 +36,10 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 
 	if(startDateInputEntry == startDateAnotherEntry){
 		if(printClash){
-			if((endTimeAnotherEntry > startTimeInputEntry &&  startTimeAnotherEntry < startTimeInputEntry)
-				|| (endTimeAnotherEntry > endTimeInputEntry && startTimeAnotherEntry < endTimeInputEntry)
-				|| (startTimeInputEntry < startTimeAnotherEntry &&  endTimeInputEntry > startTimeAnotherEntry)
-				|| (startTimeInputEntry < endTimeAnotherEntry && endTimeInputEntry > endTimeAnotherEntry)){
+			if((endTimeAnotherEntry > startTimeInputEntry &&  startTimeAnotherEntry < startTimeInputEntry)//input start time is in between the other entry's 2 time values
+				|| (endTimeAnotherEntry > endTimeInputEntry && startTimeAnotherEntry < endTimeInputEntry)//input end time is in between the other entry's 2 time values
+				|| (startTimeInputEntry < startTimeAnotherEntry &&  endTimeInputEntry > startTimeAnotherEntry)//the other entry's start time is in between input entry's 2 time values
+				|| (startTimeInputEntry < endTimeAnotherEntry && endTimeInputEntry > endTimeAnotherEntry)){//the other entry's end time is in between input entry's 2 time values
 					if(printClash){
 						SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 						cout << CLASH_MESSAGE << listCount
@@ -52,10 +52,10 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 			}
 		}
 	}
-	else if( (endDateAnotherEntry > startDateInputEntry && startDateAnotherEntry < startDateInputEntry) 
-		|| (endDateAnotherEntry > endDateInputEntry && startDateAnotherEntry < endDateInputEntry)
-		|| (startDateInputEntry < startDateAnotherEntry && endDateInputEntry > startDateAnotherEntry) 
-		|| (startDateInputEntry < endDateAnotherEntry && endDateInputEntry > endDateAnotherEntry)){
+	else if( (endDateAnotherEntry > startDateInputEntry && startDateAnotherEntry < startDateInputEntry) //input start date is in between the other entry's 2 date values
+		|| (endDateAnotherEntry > endDateInputEntry && startDateAnotherEntry < endDateInputEntry)//input end date is in between the other entry's 2 date values
+		|| (startDateInputEntry < startDateAnotherEntry && endDateInputEntry > startDateAnotherEntry) //the other entry's start date is in between input entry's 2 date values
+		|| (startDateInputEntry < endDateAnotherEntry && endDateInputEntry > endDateAnotherEntry)){//the other entry's end date is in between input entry's 2 date values
 			if(printClash){
 				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 				cout << CLASH_MESSAGE << listCount 

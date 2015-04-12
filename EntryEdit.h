@@ -47,6 +47,7 @@ private:
 public:	
 	//@author A0115656A
 	EntryEdit(bool);
+	//@author A0100750Y
 	int getEntryNumber(string&);
 	//@author A0116660L
 	void extractMarkerInfo(string);

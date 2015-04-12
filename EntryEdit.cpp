@@ -12,7 +12,7 @@ const string EntryEdit::TAG_REMOVE_MARKER = "remove";
 const string EntryEdit::FULLSTOP_MARKER = ". ";
 
 //@author A0115656A
-EntryEdit::EntryEdit(bool isScheduled){
+EntryEdit::EntryEdit(bool isScheduled) {
 	_isScheduled = isScheduled;
 	_isEdited = true;
 	_dateEdited = false;
@@ -106,15 +106,15 @@ void EntryEdit::extractName(string& entryComponents, _NEW_CHANGES currentChange,
 	extractRemainder(endOfName, entryComponents, isEndOfEdit);
 }
 
-//@author A0115902N
-void EntryEdit::extractDate(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
+//@author A0115656A
+void EntryEdit::extractDate(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
 	//push current change into vector
 	currentChange._editedField = Date;
 	//remove the word 'date' and blank space
 	entryComponents = entryComponents.substr(DATE_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfDate = entryComponents.find(FULLSTOP_MARKER);
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfDate == string::npos){
+	if (endOfDate == string::npos) {
 		endOfDate = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfDate);
@@ -124,14 +124,14 @@ void EntryEdit::extractDate(string& entryComponents, _NEW_CHANGES currentChange,
 	extractRemainder(endOfDate, entryComponents, isEndOfEdit);
 }
 
-void EntryEdit::extractTime(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
+void EntryEdit::extractTime(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
 	//push current change into vector
 	currentChange._editedField = Time;
 	//remove the word 'time' and blank space
 	entryComponents = entryComponents.substr(TIME_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfTime = entryComponents.find(FULLSTOP_MARKER);
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfTime == string::npos){
+	if (endOfTime == string::npos) {
 		endOfTime = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfTime);
@@ -178,14 +178,14 @@ void EntryEdit::extractStatus(string& entryComponents, _NEW_CHANGES currentChang
 }
 
 //@author A0115656A
-void EntryEdit::extractAddedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
+void EntryEdit::extractAddedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
 	//push current change into vector
 	currentChange._editedField = TagAdd;
 	//remove the word 'add' and blank space
 	entryComponents = entryComponents.substr(TAG_ADD_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfAddedTag = entryComponents.find(FULLSTOP_MARKER);
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfAddedTag == string::npos){
+	if (endOfAddedTag == string::npos) {
 		endOfAddedTag = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfAddedTag);
@@ -196,14 +196,14 @@ void EntryEdit::extractAddedTag(string& entryComponents, _NEW_CHANGES currentCha
 	extractRemainder(endOfAddedTag, entryComponents, isEndOfEdit);
 }
 
-void EntryEdit::extractRemovedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
+void EntryEdit::extractRemovedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
 	//push current change into vector
 	currentChange._editedField = TagRemove;
 	//remove the word 'remove' and blank space
 	entryComponents = entryComponents.substr(TAG_REMOVE_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfRemovedTag = entryComponents.find(FULLSTOP_MARKER);
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfRemovedTag == string::npos){
+	if (endOfRemovedTag == string::npos) {
 		endOfRemovedTag = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfRemovedTag);
@@ -214,12 +214,11 @@ void EntryEdit::extractRemovedTag(string& entryComponents, _NEW_CHANGES currentC
 	extractRemainder(endOfRemovedTag, entryComponents, isEndOfEdit);
 }
 
-void EntryEdit::extractRemainder(int endOfField, string& entryComponents, bool& isEndOfEdit){
+void EntryEdit::extractRemainder(int endOfField, string& entryComponents, bool& isEndOfEdit) {
 	int startOfRemainder = endOfField + BLANK_SPACE_COUNT + 1;
-	if (startOfRemainder < entryComponents.size()){
+	if (startOfRemainder < entryComponents.size()) {
 		entryComponents = entryComponents.substr(startOfRemainder);
-	}
-	else {
+	} else {
 		isEndOfEdit = true;
 	}
 }
@@ -309,12 +308,13 @@ string EntryEdit::getStatus(){
 }
 
 //@author A0115656A
-void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss){
+//add tags to an entry
+void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss) {
 	string addedTags;
 	//store the added tags into the string addedTags
 	vector<_NEW_CHANGES>::iterator iter;
 	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
-		if (iter->_editedField == TagAdd){
+		if (iter->_editedField == TagAdd) {
 			addedTags = iter->_newInformation;
 			break;
 		}
@@ -324,8 +324,8 @@ void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss){
 	int endOfTag = addedTags.size();
 	string tag;
 	int tracker;
-	for (tracker = 0; tracker <= endOfTag; tracker++){
-		if (addedTags[tracker] == ' ' || tracker == endOfTag){
+	for (tracker = 0; tracker <= endOfTag; tracker++) {
+		if (addedTags[tracker] == ' ' || tracker == endOfTag) {
 			tag = addedTags.substr(0, tracker);
 			addedTags = addedTags.erase(0, tracker + BLANK_SPACE_COUNT);
 			tracker = 0;
@@ -335,12 +335,13 @@ void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss){
 	}
 }
 
-void EntryEdit::removeTag(Entry& editedEntry, ostringstream& oss){
+//remove tags from an entry
+void EntryEdit::removeTag(Entry& editedEntry, ostringstream& oss) {
 	string removedTags;
 	//store the removed tags into the string removedTags
 	vector<_NEW_CHANGES>::iterator iter;
-	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
-		if (iter->_editedField == TagRemove){
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++) {
+		if (iter->_editedField == TagRemove) {
 			removedTags = iter->_newInformation;
 			break;
 		}
@@ -350,8 +351,8 @@ void EntryEdit::removeTag(Entry& editedEntry, ostringstream& oss){
 	int endOfTag = removedTags.size();
 	string tag;
 	int tracker;
-	for (tracker = 0; tracker <= endOfTag; tracker++){
-		if (removedTags[tracker] == ' ' || tracker == endOfTag){
+	for (tracker = 0; tracker <= endOfTag; tracker++) {
+		if (removedTags[tracker] == ' ' || tracker == endOfTag) {
 			tag = removedTags.substr(0, tracker);
 			removedTags = removedTags.erase(0, tracker + BLANK_SPACE_COUNT);
 			tracker = 0;
@@ -361,22 +362,27 @@ void EntryEdit::removeTag(Entry& editedEntry, ostringstream& oss){
 	}
 }
 
-bool EntryEdit::getEditStatus(){
+//return true if status has been edited, false otherwise
+bool EntryEdit::getEditStatus() {
 	return _isEdited;
 }
 
-bool EntryEdit::getDateEditStatus(){
+//return true if date has been edited, false otherwise
+bool EntryEdit::getDateEditStatus() {
 	return _dateEdited;
 }
 
-bool EntryEdit::getTimeEditStatus(){
+//return true if time has been edited, false otherwise
+bool EntryEdit::getTimeEditStatus() {
 	return _timeEdited;
 }
 
-bool EntryEdit::getTagAddedStatus(){
+//return true if tags have been added, false otherwise
+bool EntryEdit::getTagAddedStatus() {
 	return _tagAdded;
 }
 
-bool EntryEdit::getTagRemovedStatus(){
+//return true if tags have been removed, false otherwise
+bool EntryEdit::getTagRemovedStatus() {
 	return _tagRemoved;
 }

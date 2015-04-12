@@ -48,6 +48,8 @@ private:
 	static const string DONE;
 	static const string UNDONE;
 
+	HANDLE hConsole;
+
 	string _userInput;
 	string _entryName;
 	string _stringStartDate;
@@ -93,6 +95,7 @@ public:
 	void readPath();
 	void loadScheduledEntries();
 	void loadFloatingEntries();
+	//@author A0115902N
 	void resetStringValues();
 	void resetIntegerValues();
 	//@author A0100750Y
@@ -140,8 +143,6 @@ public:
 						string, vector<string>&);
 	void initialiseDateTime(Date&, int, int, int, Time&, int, int,
 							Date&, int, int, int, Time& , int, int);
-
-	HANDLE hConsole;
 };
 
 #endif

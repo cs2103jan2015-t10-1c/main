@@ -47,8 +47,10 @@ const string EntryLists::BORDER = "- - - - - - - - - - - - - - - - -";
 EntryLists::EntryLists(){
 }
 
-//reset stack needed for undo actions
-void EntryLists::emptyCounter(){
+//@author A0115656A
+//Empties the _counter stack. The purpose of this function is such that additions of entries during loading
+//at the beginning of running the program cannot be undone
+void EntryLists::emptyCounter() {
 	_counter.emptyUndoStack();
 }
 
@@ -172,6 +174,8 @@ void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& delet
 }
 
 //@author A0115656A
+//Edits an entry in either the scheduled or floating list and return a string of feedback
+//editFeedback is initially empty. An EntryEdit object is created every time the function is called 
 void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedback){
 	editFeedback = "";
 	ostringstream oss;
@@ -235,7 +239,8 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 			bool diffStartEndDay = currentEndDay != currentStartDay;
 			bool diffStartEndMonth = currentEndMonth != currentStartMonth;
 			bool diffStartEndYear = currentEndYear != currentStartYear;
-			if (diffStartEndDay || diffStartEndMonth || diffStartEndYear){
+			bool diffDates = diffStartEndDay || diffStartEndMonth || diffStartEndYear;
+			if (diffDates) {
 				oss << FEEDBACK_TO << currentEndDay << " " << currentEndMonth << " " << currentEndYear;
 			}
 		}
@@ -275,7 +280,8 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 			bool diffStartEndDay = inputEndDay != inputStartDay;
 			bool diffStartEndMonth = inputEndMonthString != inputStartMonthString;
 			bool diffStartEndYear = inputEndYear != inputStartYear;
-			if (diffStartEndDay || diffStartEndMonth || diffStartEndYear){
+			bool diffDates = diffStartEndDay || diffStartEndMonth || diffStartEndYear;
+			if (diffDates) {
 				oss << FEEDBACK_TO << inputEndDay << " " << inputEndMonthString << " " << inputEndYear;
 			}
 			oss << endl;

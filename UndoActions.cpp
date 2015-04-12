@@ -1,5 +1,4 @@
 #include "UndoActions.h"
-#include <windows.h>
 
 const string UndoActions::NO_MORE_ACTION = "There is no more action left to undo.";
 const string UndoActions::ADDITION_UNDONE = "Addition undone";
@@ -96,6 +95,7 @@ void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedule
 void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
 	vector<Entry>::iterator iter;
 	if (latestAction._isScheduled) {
+		//getIter(latestAction, _scheduledList, iter);
 		if (latestAction._indexNumber > _scheduledList.size()) {
 			iter = _scheduledList.end();
 		} else {

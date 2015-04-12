@@ -3,7 +3,8 @@
 
 #include <stack>
 #include "Entry.h"
-#include <Windows.h>
+#include <windows.h>
+
 using namespace std;
 
 //@author A0115656A
@@ -35,10 +36,12 @@ private:
 		int _newIndexNumber;
 	};
 	stack<_ACTION_TO_UNDO> _undoStack;
+
 	static const string NO_MORE_ACTION;
 	static const string ADDITION_UNDONE;
 	static const string DELETION_UNDONE;
 	static const string EDITING_UNDONE;
+	
 	HANDLE hConsole;
 
 public:
