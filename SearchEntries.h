@@ -7,6 +7,7 @@
 #include "DateTimeInitialiser.h"
 #include "DateTimeInspector.h"
 #include "StringConvertor.h"
+
 using namespace std;
 using namespace boost::gregorian;
 
@@ -46,17 +47,26 @@ private:
 public:
 
 	//@author A0116660L
+	//Contructor of SearchEntries which takes in two vectors containing Scheduled and Floating lists
+	//The Search will be conducted on both list simultaneously
 	SearchEntries(vector<Entry>, vector<Entry>);
+	//The function to activate the whole chain of commands for search
+	//Used to distinguish different types of search such as search by name, location, date or time etc.
 	void execute(string input, int&, int&, string&);
+	//Function dedicated to search for the tag only
 	void searchTag(string);
+	//Function dedicated to search for the name only
 	void searchName(string);
+	//Function dedicated to search for the location only
 	void searchLocation(string);
+	//Function dedicated to search for the status only
 	void searchStatus(string);
 	//@author A0115902N
 	void searchDate(string);
 	void searchTime(string);
 	void searchDay(string);
 	//@author A0116660L
+	//Function dedicated to search for anything that contains the keyword given by the user
 	void searchAll(string);
 	//@author A0115902N
 	void searchSlot(string);

@@ -36,7 +36,6 @@ const string DisplayEntries::MESSAGE_PAGE = "Page: ";
 const string DisplayEntries::MESSAGE_OUTOF = " out of ";
 const string DisplayEntries::MESSAGE_DISPLAYENTRIES = "displaying entries ";
 const string DisplayEntries::MESSAGE_TO = " to ";
-const string DisplayEntries::MESSAGE_REMAININGTODAY = "Remaining entries for Today";
 const string DisplayEntries::MESSAGE_NOENTRIESTODAY = "You have no entries for today!"; 
 const string DisplayEntries::MESSAGE_DISPLAYINGTODAY = "Displaying all remaining entries for today";
 const string DisplayEntries::MESSAGE_ENTRIESTOMORROW = "Entries for tomorrow";
@@ -552,14 +551,17 @@ void DisplayEntries::displayToday(){
 			EventsToday.push_back(_scheduledList[i]);
 		}
 	}
-	cout << MESSAGE_REMAININGTODAY << endl << endl;
-	if(EventsToday.empty()){
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << MESSAGE_DISPLAYINGTODAY << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(EventsToday.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << MESSAGE_NOENTRIESTODAY << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
 	}
-	for (unsigned int i = 0; i < EventsToday.size(); i++){
+	for (unsigned int i = 0; i < EventsToday.size(); i++) {
 		cout << endl
 			<< BORDER << endl
 			<< (number) << ". "
@@ -567,9 +569,6 @@ void DisplayEntries::displayToday(){
 			<< BORDER;
 		number++;
 	}
-	cout << endl;
-	cout << MESSAGE_DISPLAYINGTODAY << endl;
-	cout << endl << endl;
 }
 
 void DisplayEntries::displayTomorrow(){
@@ -590,10 +589,12 @@ void DisplayEntries::displayTomorrow(){
 	if(lastEntry > EventsTomorrow.size()){
 		lastEntry = EventsTomorrow.size();
 	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY | FOREGROUND_GREEN));
 	cout << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if(EventsTomorrow.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << MESSAGE_NOENTRIESTOMORROW << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
@@ -607,8 +608,12 @@ void DisplayEntries::displayTomorrow(){
 			<< BORDER;
 		number++;
 	}
+
 	cout << endl;
-	cout << MESSAGE_DISPLAYING << lastEntry << MESSAGE_ENTRYFROM << EventsTomorrow.size() << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << MESSAGE_DISPLAYING << lastEntry << MESSAGE_ENTRYFROM << EventsTomorrow.size() 
+		 << " " << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	cout << endl << endl;
 }
 

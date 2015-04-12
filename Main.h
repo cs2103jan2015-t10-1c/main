@@ -2,6 +2,8 @@
 #define MAIN_H
 
 #include <sstream>
+#include <assert.h>
+#include <windows.h>
 #include "EntryLists.h"
 #include "EntryAdd.h"
 #include "TextUI.h"
@@ -11,14 +13,13 @@
 #include "DisplayEntries.h"
 #include "SearchEntries.h"
 #include "UndoActions.h"
-#include <assert.h>
-#include <windows.h>
+
 
 using namespace std;
 using namespace boost::gregorian;
 using namespace boost::posix_time;
 
-class Main{
+class Main {
 private:
 	static const string COMMAND_PROMPT;
 	static const string COMMAND_ADD;
@@ -99,6 +100,9 @@ public:
 	
 	//FastAdd CRUD
 	//@author A0116660L
+	//Function used to activate the whole chain of functions to add a new entry
+	//The string received is from the user without the command word
+	//The Command word has been removed through the TextUI
 	void executeAddFunction(string);
 	//@author A0115656A
 	void executeEditFunction(string);
@@ -108,6 +112,9 @@ public:
 	void executeDeleteFunction(string);
 	//FastAdd additional features
 	//@author A0116660L
+	//Function used to activate the whole chain of functions to search for a new entry
+	//The string received is from the user without the command word
+	//The Command word has been removed through the TextUI
 	void executeSearchFunction(string);
 	//@author A0100750Y
 	void executeHelpFunction();
@@ -117,20 +124,24 @@ public:
 	void executeSaveAtFunction();
 	void executeExitFunction();
 	//@author A0116660L
+	//Function used to resize the command prompt window size
+	//Two options available small and large
 	void executeResizeFunction();
 
 	//@author A0115902N
 	void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear);
 	void initialiseTime(Time& inputTime, int inputHour, int inputMinute);
 	void convertDateTime(EntryAdd&, string, int&, int&, int&,
-					 string, int&, int&,
-					 string, int&, int&, int&,
-					 string, int&, int&);
+						 string, int&, int&,
+						 string, int&, int&, int&,
+						 string, int&, int&);
 	void initialiseEntry(Entry&, string, Date, 
-					Date, Time, Time, string,
-					string, vector<string>&);
+						Date, Time, Time, string,
+						string, vector<string>&);
 	void initialiseDateTime(Date&, int, int, int, Time&, int, int,
-						Date&, int, int, int, Time& , int, int);
+							Date&, int, int, int, Time& , int, int);
+
+	HANDLE hConsole;
 };
 
 #endif
