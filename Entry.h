@@ -35,6 +35,7 @@ private:
 
 public:
 	Entry();
+	//@author A0115656A
 	void insertEntryNumber(int entryNumber);
 	int getEntryNumber();
 	//input name of entry into an Entry object
@@ -42,6 +43,7 @@ public:
 	//return the value of _name
 	string getName();
 	
+	//@author A0115902N
 	//Date
 	//input start date and end date into an Entry object
 	void insertStartDate(Date);
@@ -59,26 +61,33 @@ public:
 	Time getStartTime();
 	Time getEndTime();
 
+	//@author A0116660L
 	void initialiseStatus();
 	void changeStatus();
 	string getStatus();
 	
+	//@author A0115656A
 	//input location into an Entry object
 	void insertLocation(string);
 	//return the value of _location
 	string getLocation();
 	
+	//@author A0116660L
 	void insertTags(vector<string>&);
 	void searchEntryTag(string, bool&);
+	//@author A0115656A
 	string getTags();
 	void addTag(string);
 	void removeTag(string);
 
+	//@author A0115902N
 	date_duration calculateDaysFromToday();
 	date_duration calculateEventDurationInDays();
 	time_duration calculateEventDurationInHours();
 
+	//@author A0115656A
 	string storeEntry();
+	//@author A0115902N
 	string getFullDisplay();
 	string getShortDisplay();
 };

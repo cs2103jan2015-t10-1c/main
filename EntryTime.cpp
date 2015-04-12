@@ -1,5 +1,6 @@
 #include "EntryTime.h"
 
+//@author A0115902N
 Time::Time(){
 	_hour = 99;
 	_minute = 99;

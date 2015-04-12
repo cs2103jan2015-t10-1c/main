@@ -1,6 +1,7 @@
 #include "EntryDate.h"
 #include <Windows.h>
 
+//@author A0115902N
 Date::Date(){
 	_day = 0;
 	_month = 0;
@@ -51,6 +52,7 @@ void Date::initialiseDate(){
 }
 	
 
+//@author A0115656A
 int Date::getDay(){
 	return _entryDate.day();
 }

@@ -43,6 +43,7 @@ const string EntryLists::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
 
 const string EntryLists::BORDER = "- - - - - - - - - - - - - - - - -";
 
+//@author A0115902N
 EntryLists::EntryLists(){
 }
 
@@ -50,6 +51,7 @@ void EntryLists::emptyCounter(){
 	_counter.emptyUndoStack();
 }
 
+//@author A0116660L
 void EntryLists::addEntry(Entry newEntry, int& latestEntryIndex) {
 	if (newEntry.getDateStatus()) {
 		_scheduledList.push_back(newEntry);
@@ -62,6 +64,7 @@ void EntryLists::addEntry(Entry newEntry, int& latestEntryIndex) {
 	}
 }
 
+//@author A0115902N
 void EntryLists::showAddFeedback(Entry newEntry, int latestEntryIndex) {
 	string entryName = newEntry.getName();
 	Date entryStartDate = newEntry.getStartDate();
@@ -164,6 +167,7 @@ void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& delet
 	}
 }
 
+//@author A0115656A
 void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedback){
 	editFeedback = "";
 	ostringstream oss;
@@ -444,6 +448,7 @@ void EntryLists::exit(bool& running) {
 	running = false;
 }
 
+//@author A0115902N
 void EntryLists::sort(int& latestEntryIndex){
 	latestEntryIndex = _scheduledList.size();
 	vector<Entry>::iterator firstIter;

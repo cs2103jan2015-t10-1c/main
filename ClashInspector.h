@@ -1,3 +1,4 @@
+//@author A0115902N
 #ifndef CLASHINSPECTOR_H
 #define CLASHINSPECTOR_H
 #include <string>

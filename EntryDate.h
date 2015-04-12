@@ -20,12 +20,14 @@ public:
 	Date();
 	Date(bool);
 	
+	//@author A0115902N
 	//input day, month and year into a Date object
 	void insertDay(int);
 	void insertMonth(int);
 	void insertYear(int);
 	void initialiseDate();
 	
+	//@author A0115656A
 	//return the values of the private attributes
 	int getDay();
 	string getMonth();

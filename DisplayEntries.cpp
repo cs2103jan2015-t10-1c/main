@@ -34,6 +34,7 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 }
 
 
+//@author A0115902N
 void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, bool& viewingScheduledList, bool& viewingFloatingList, bool& viewingPast, bool& viewingClashes){
 	_lastPage = lastPage;
 	_pageNumber = pageNumber;
@@ -201,6 +202,7 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 	viewingClashes = _viewingClashes;
 }
 
+//@author A0116660L
 void DisplayEntries::displayScheduledEntryShort(){
 	//marking the boundaries
 	_printInThePast = false;
@@ -291,6 +293,7 @@ void DisplayEntries::displayOneScheduledEntry(int index){
 		<< BORDER;
 }
 
+//@author A0115902N
 void DisplayEntries::displayFloatingEntries(){
 	int numberOfPages;
 	int firstEntry;

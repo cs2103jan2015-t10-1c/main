@@ -6,6 +6,7 @@ const string UndoActions::ADDITION_UNDONE = "Addition undone";
 const string UndoActions::DELETION_UNDONE = "Deletion undone";
 const string UndoActions::EDITING_UNDONE = "Editing undone";
 
+//@author A0115656A
 UndoActions::UndoActions() {
 }
 

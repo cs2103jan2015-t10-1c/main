@@ -45,10 +45,12 @@ Main::Main(){
 	_previousSearchInput = "";
 }
 
+//@author A0100750Y
 void Main::welcomeMessage(){
 	_commandInterface.displayWelcomeMessage();
 }
 
+//@author A0115656A
 void Main::readPath(){
 	ifstream readPath(PATH_FILE_NAME);
 	getline(readPath, _scheduledPath);
@@ -154,6 +156,7 @@ void Main::loadFloatingEntries(){
 	loadEntries.displayTomorrow();
 }
 
+//@author A0100750Y
 void Main::operateFastAdd(){
 	_loadingEntries = false;
 	while(_running){
@@ -198,6 +201,7 @@ void Main::operateFastAdd(){
 	}
 }
 
+//@author A0116660L
 void Main::executeResizeFunction(){
 	_commandInterface.displayResizeOptions();
 }
@@ -290,6 +294,7 @@ void Main::executeAddFunction(string userInput){
 	}
 }
 
+//@author A0115656A
 void Main::executeEditFunction(string userInput){
 	string editFeedback;
 	_newList.editEntry(_viewingScheduledList, userInput, editFeedback);
@@ -299,17 +304,20 @@ void Main::executeEditFunction(string userInput){
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+//@author A0116660L
 void Main::executeSearchFunction(string userInput){
 	SearchEntries search(_newList.getScheduledList(), _newList.getFloatingList());
 	search.execute(userInput, _searchScheduledPageNumber, _searchFloatingPageNumber,_previousSearchInput);
 }
 
 //display allows the user to toggle between 'scheduled' and 'floating' mode
+//@author A0115902N
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList());
 	display.execute(userInput, _pageNumber, _lastPage, _viewingScheduledList, _viewingFloatingList, _viewingPastEntries, _viewingClashes);
 }
 
+//@author A0116660L
 void Main::executeDeleteFunction(string userInput) {
 	int indexNumber;
 	StringConvertor convertToNumber;
@@ -322,10 +330,12 @@ void Main::executeDeleteFunction(string userInput) {
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+//@author A0100750Y
 void Main::executeHelpFunction() {
 	_commandInterface.displayHelp();
 }
 
+//@author A0115656A
 void Main::executeUndoFunction() {
 	_newList.undo();
 }
@@ -379,6 +389,7 @@ void Main::executeExitFunction() {
 	_newList.exit(_running);
 }
 
+//@author A0115902N
 void Main::resetStringValues() {
 	_userInput = "";
 	_entryName = "";

@@ -8,6 +8,7 @@ Entry::Entry(){
 	initialiseStatus();
 }
 
+//@author A0115656A
 void Entry::insertName(string inputName){
 	_name = inputName;
 }
@@ -24,6 +25,7 @@ int Entry::getEntryNumber(){
 	return _entryNumber;
 }
 
+//@author A0115902N
 void Entry::insertStartDate(Date inputStartDate){
 	_hasDate = inputStartDate.getDateStatus();
 	
@@ -80,6 +82,7 @@ Time Entry::getEndTime(){
 	return _endTime;
 }
 
+//@author A0116660L
 void Entry::initialiseStatus(){
 	_status = false;
 }
@@ -99,6 +102,7 @@ string Entry::getStatus(){
 	return printStatus;
 }
 
+//@author A0115656A
 void Entry::insertLocation(string inputLocation){
 	_location = inputLocation;
 }
@@ -107,6 +111,7 @@ string Entry::getLocation (){
 	return _location;
 }
 
+//@author A0116660L
 void Entry::insertTags(vector<string>& tags){
 	_tags = tags;
 }
@@ -121,6 +126,7 @@ void Entry::searchEntryTag(string tag, bool& tagFound){
 	}
 }
 
+//@author A0115656A
 string Entry::getTags(){
 	ostringstream oss;
 	vector<string>::iterator iterTag;
@@ -155,6 +161,7 @@ void Entry::removeTag(string tag){
 	}
 }
 
+//@author A0115902N
 date_duration Entry::calculateDaysFromToday(){
 	date startDate = _startDate.getDate();
 	date today(day_clock::local_day());
@@ -293,6 +300,7 @@ string Entry::getShortDisplay(){
 	return oss.str();
 }
 
+//@author A0115656A
 string Entry::storeEntry(){
 	ostringstream oss;
 	

@@ -69,6 +69,7 @@ const string StringConvertor::LOWERCASE_MONTHLONG_ARRAY[12] = {LOWERCASE_MONTHLO
 
 
 
+//@author A0115902N
 StringConvertor::StringConvertor(){
 }
 
