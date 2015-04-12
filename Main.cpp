@@ -277,6 +277,13 @@ void Main::executeAddFunction(string userInput){
 		//initialise entry
 		Entry newEntry;
 		initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, "undone", tags);
+		if(newEntry.getStartDate().getDate() > newEntry.getEndDate().getDate()){
+			cout << "Warning: start date occurs after end date. repeat input" << endl << endl;
+			return;
+		} else if(newEntry.getStartTime().getTime() > newEntry.getEndTime().getTime()){
+			cout << "Warning: start time occurs after end time. repeat input" << endl << endl;
+			return;
+		}
 		int newEntryIndex;
 		_newList.addEntry(newEntry, newEntryIndex);
 		_newList.showAddFeedback(newEntry, newEntryIndex);
