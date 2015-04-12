@@ -28,7 +28,8 @@ int EntryEdit::getEntryNumber(string& entryComponents){
 	int pos = entryComponents.find_first_of(' ');
 	string numberString = entryComponents.substr(0, pos);
 	entryComponents.erase(0, pos+1);
-	_entryNumber = convertToNumber(numberString);
+	StringConvertor convertor;
+	convertor.convertStringToNumber(numberString, _entryNumber);
 	return _entryNumber;
 }
 
@@ -120,7 +121,6 @@ void EntryEdit::extractDate(string& entryComponents, _NEW_CHANGES currentChange,
 	_changesList.push_back(currentChange);
 	_dateEdited = true;
 
-	//extract remainder
 	extractRemainder(endOfDate, entryComponents, isEndOfEdit);
 }
 
@@ -225,15 +225,8 @@ void EntryEdit::extractRemainder(int endOfField, string& entryComponents, bool& 
 }
 
 //@author A0115902N
-int EntryEdit::convertToNumber(string numberString){
-	int number;
-	istringstream convertString(numberString);
-	if (!(convertString >> number)) {
-		number = 0; 
-	}
-	return number;
-}
 
+//return new name information
 string EntryEdit::getName(){
 	vector<_NEW_CHANGES>::iterator iter;
 	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
@@ -244,6 +237,7 @@ string EntryEdit::getName(){
 	return "";
 }
 
+//return new date information
 void EntryEdit::getDate(int& newStartDay, int& newStartMonth, int& newStartYear, int& newEndDay, int& newEndMonth, int& newEndYear){
 	string newDate;
 	//store the new date(s) into the string newDate
@@ -269,6 +263,7 @@ void EntryEdit::getDate(int& newStartDay, int& newStartMonth, int& newStartYear,
 	parseDate.convertDate(endDate, newEndDay, newEndMonth, newEndYear);
 }
 
+//return new time information
 void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour, int& newEndMinute){
 	string newTime;
 	//store the new date(s) into the string newDate

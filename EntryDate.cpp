@@ -10,6 +10,8 @@ Date::Date(){
 	_loading = false;
 }
 
+//a different constructor to support the loading of existing entries
+//when bool loading is true, printing of warning for past events will be disabled
 Date::Date(bool loading){
 	_day = 0;
 	_month = 0;
@@ -40,11 +42,13 @@ void Date::initialiseDate(){
 	date today(day_clock::local_day());
 	date thisDate(_year, _month, _day);
 	inThePast = thisDate < today;
+	//adding dates and times that are in the past will not block the addition of the entry
+	//a warning will be triggered
 	if (inThePast){
 		if(!_loading){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << endl << "Warning! Date is in the past" << endl << endl;
+			cout << endl << "Warning! Date is in the past" << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 	}

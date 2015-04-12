@@ -13,7 +13,7 @@ void Time::insertHour(int inputHour){
 
 void Time::insertMinute(int inputMinute){
 	_minute = inputMinute;
-
+	//check for a change to the default values
 	if (_hour != 99 && _minute != 99){
 		_hasTime = true;
 	}
@@ -32,6 +32,7 @@ bool Time::getTimeStatus(){
 	return _hasTime;
 }
 
+//initialise ptime object with the input values
 void Time::initialiseTime(date _entryDate){
 	_entryTime = ptime(_entryDate, hours(_hour) + minutes(_minute));
 }

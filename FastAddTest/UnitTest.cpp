@@ -55,6 +55,63 @@ namespace FastAddTest
 			Assert::IsTrue(Sometime.getTimeStatus());				
 		}
 
+		TEST_METHOD(EntryListEditNameTest) 
+		{
+			//vector<string> expectedAnswer;
+			string expectedAnswer="k";
+			//expectedAnswer.push_back(expected);
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+
+			Date startDate;
+			startDate.insertDay(17);
+			startDate.insertMonth(2);
+			startDate.insertYear(2014);
+			startDate.initialiseDate();
+			testScheduled.insertStartDate(startDate);
+
+			Date endDate;
+			endDate.insertDay(26);
+			endDate.insertMonth(2);
+			endDate.insertYear(2014);
+			endDate.initialiseDate();
+			testScheduled.insertEndDate(endDate);
+
+			Time startTime;
+			startTime.insertHour(12);
+			startTime.insertMinute(13);
+			testScheduled.insertStartTime(startTime);
+			
+			Time endTime;
+			startTime.insertHour(14);
+			startTime.insertMinute(16);
+			testScheduled.insertEndTime(endTime);
+	
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled, dummyNumber);			
+			
+			//vector<Entry> actualResult;
+			string userInput = "1 name k";
+			string dummyString;
+			testInfo.editEntry(true, userInput, dummyString);		
+			string actualResult;
+			actualResult = testScheduled.getName();
+			//testInfo.getName();
+
+			Assert::AreEqual(expectedAnswer, actualResult);
+		}
+
 
 		TEST_METHOD(EntryTest) 
 		{
@@ -174,10 +231,5 @@ namespace FastAddTest
 			Assert::AreEqual(expectedAnswer,actualResult);
 	
 		}
-
-		
-
-
-
 	};
 }

@@ -30,28 +30,29 @@ int Entry::getEntryNumber() {
 }
 
 //@author A0115902N
+
+//insert Date object as start date. initialise the date value
 void Entry::insertStartDate(Date inputStartDate){
 	_hasDate = inputStartDate.getDateStatus();
-	
 	_startDate = inputStartDate;
-	
 	if (_hasDate){
 		_startDate.initialiseDate();
 	}
 }
-
+//insert Date object as end date. initialise the date value
 void Entry::insertEndDate(Date inputEndDate){
 	_endDate = inputEndDate;
-	
 	if (_hasDate){
 		_endDate.initialiseDate();
 	}
 }
 
+//return Date object for start date
 Date Entry::getStartDate(){
 	return _startDate;
 }
 
+//return Date object for end date
 Date Entry::getEndDate(){
 	return _endDate;
 }
@@ -60,28 +61,29 @@ bool Entry::getDateStatus(){
 	return _hasDate;
 }
 
+//insert Time object as start time. initialise the ptime value
 void Entry::insertStartTime(Time inputStartTime){
 	_hasTime = inputStartTime.getTimeStatus();
-
 	_startTime = inputStartTime;
-	
 	if (_hasDate && _hasTime) {
 		_startTime.initialiseTime(_startDate.getDate());
 	}
 }
 
+//insert Time object as end time. initialise the ptime value
 void Entry::insertEndTime(Time inputEndTime){
 	_endTime = inputEndTime;
-	
 	if (_hasDate && _hasTime) {
 		_endTime.initialiseTime(_endDate.getDate());
 	}
 }
 
+//return Time object for start time
 Time Entry::getStartTime(){
 	return _startTime;
 }
 
+//return Time object for end time
 Time Entry::getEndTime(){
 	return _endTime;
 }
@@ -171,12 +173,15 @@ void Entry::removeTag(string tag) {
 }
 
 //@author A0115902N
+
+//return date_duration object. calculates day from today to start date
 date_duration Entry::calculateDaysFromToday(){
 	date startDate = _startDate.getDate();
 	date today(day_clock::local_day());
 	return startDate - today;
 }
 
+//return date_duration object. calculates length from start to end date
 date_duration Entry::calculateEventDurationInDays(){
 	date startDate = _startDate.getDate();
 	date endDate = _endDate.getDate();
@@ -184,6 +189,7 @@ date_duration Entry::calculateEventDurationInDays(){
 	return dayDifference;
 }
 
+//return time_duration object. calculates length from start to end time
 time_duration Entry::calculateEventDurationInHours(){
 	ptime startTime = _startTime.getTime();
 	ptime endTime = _endTime.getTime();
@@ -191,6 +197,9 @@ time_duration Entry::calculateEventDurationInHours(){
 	return timeDifference;
 }
 
+//return a complete list of an entry -
+//name, start date end date, start time end time
+//location, status, tags
 string Entry::getFullDisplay(){
 	ostringstream oss;
 	
@@ -262,6 +271,8 @@ string Entry::getFullDisplay(){
 	return oss.str();
 }
 
+//return a short display of an entry
+//name, start date end date, start time end time
 string Entry::getShortDisplay(){
 	ostringstream oss;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
