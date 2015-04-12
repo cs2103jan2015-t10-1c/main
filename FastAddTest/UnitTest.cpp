@@ -17,21 +17,24 @@ namespace FastAddTest
 			Date Someday;
 
 			Someday.insertDay(27);
+			Someday.insertMonth(9);
+			Someday.insertYear(2013);
+			Someday.initialiseDate();
+
 			int expectedDate=27;
+			int expectedMonthNumber=9;
+			string expectedMonth="Sep";
+			int expectedYear=2013;
+
 			int actualDate=Someday.getDay();
 			Assert::AreEqual(expectedDate, actualDate);
 
-			Someday.insertMonth(9);
-			int expectedMonthNumber=9;
 			int actualMonthNumber=Someday.getMonthNumber();
 			Assert::AreEqual(expectedMonthNumber, actualMonthNumber);
 
-			string expectedMonth="Sep";
 			string actualMonth=Someday.getMonth();
 			Assert::AreEqual(expectedMonth, actualMonth);
 			
-			Someday.insertYear(2013);
-			int expectedYear=2013;
 			int actualYear=Someday.getYear();
 			Assert::AreEqual(expectedYear, actualYear);
 
@@ -55,6 +58,63 @@ namespace FastAddTest
 			Assert::IsTrue(Sometime.getTimeStatus());				
 		}
 
+		TEST_METHOD(EntryListEditNameTest) 
+		{
+			//vector<string> expectedAnswer;
+			string expectedAnswer="k. from 17 Feb 2014 12.13 to 26 Feb 2014 14.15 at utown #study";
+			//expectedAnswer.push_back(expected);
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+
+			Date startDate;
+			startDate.insertDay(17);
+			startDate.insertMonth(2);
+			startDate.insertYear(2014);
+			startDate.initialiseDate();
+			testScheduled.insertStartDate(startDate);
+
+			Date endDate;
+			endDate.insertDay(26);
+			endDate.insertMonth(2);
+			endDate.insertYear(2014);
+			endDate.initialiseDate();
+			testScheduled.insertEndDate(endDate);
+
+			Time startTime;
+			startTime.insertHour(12);
+			startTime.insertMinute(13);
+			testScheduled.insertStartTime(startTime);
+			
+			Time endTime;
+			startTime.insertHour(14);
+			startTime.insertMinute(16);
+			testScheduled.insertEndTime(endTime);
+	
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled, dummyNumber);			
+			
+			//vector<Entry> actualResult;
+			string userInput = "1 name k";
+			string dummyString;
+			testInfo.editEntry(true, userInput, dummyString);		
+			string actualResult;
+			actualResult = testInfo.getEntryDisplay(true, 1);
+			//testInfo.getName();
+
+			Assert::AreEqual(expectedAnswer, actualResult);
+		}
+
 
 		TEST_METHOD(EntryTest) 
 		{
@@ -75,6 +135,8 @@ namespace FastAddTest
 			testInfo.insertLocation("utown");
 			actualAnswer=testInfo.getLocation();	
 			expectedAnswer="utown";
+
+
 			Assert::AreEqual(expectedAnswer,actualAnswer);
 		}
 
@@ -174,10 +236,5 @@ namespace FastAddTest
 			Assert::AreEqual(expectedAnswer,actualResult);
 	
 		}
-
-		
-
-
-
 	};
 }

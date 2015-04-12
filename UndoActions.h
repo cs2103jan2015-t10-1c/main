@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//@author A0115656A
 //UndoActions can only undo the effect of Add, Edit and Delete because only these 3 commands
 //modify the content of _scheduledList and _floatingList in ScheduledEntry
 class UndoActions {
@@ -41,7 +42,6 @@ private:
 	static const string EDITING_UNDONE;
 
 public:
-	//@author A0115656A
 	UndoActions();
 	void emptyUndoStack();
 	void counterAdd(bool, int);

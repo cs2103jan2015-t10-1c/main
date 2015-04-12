@@ -11,6 +11,7 @@
 using namespace std;
 
 class EntryEdit{
+//@author A0115656A
 public:
 	enum Field {
 		Name, Date, Time, Location, Status, TagAdd, TagRemove
@@ -44,7 +45,6 @@ private:
 	static const string FULLSTOP_MARKER;
 
 public:	
-	//@author A0115656A
 	EntryEdit(bool);
 	int getEntryNumber(string&);
 	//@author A0116660L

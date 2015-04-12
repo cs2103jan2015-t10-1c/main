@@ -127,33 +127,33 @@ void Entry::searchEntryTag(string tag, bool& tagFound){
 }
 
 //@author A0115656A
-string Entry::getTags(){
+string Entry::getTags() {
 	ostringstream oss;
 	vector<string>::iterator iterTag;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
 		oss << *iterTag << " ";
 	}
 
 	return oss.str();
 }
 
-void Entry::addTag(string tag){
+void Entry::addTag(string tag) {
 	_tags.push_back(tag);
 }
 
-void Entry::removeTag(string tag){
+void Entry::removeTag(string tag) {
 	vector<string>::iterator iterTag;
 	bool isFound = false;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
 		size_t found = iterTag->find(tag);
-		if(found != string::npos){
+		if(found != string::npos) {
 			_tags.erase(iterTag);
 			isFound = true;
 			break;
 		}
 	}
 
-	if (!isFound){
+	if (!isFound) {
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << tag << " does not exist" << endl;
@@ -301,18 +301,18 @@ string Entry::getShortDisplay(){
 }
 
 //@author A0115656A
-string Entry::storeEntry(){
+string Entry::storeEntry() {
 	ostringstream oss;
 	
 	oss << _name << endl;
 
-	if (_hasDate){
+	if (_hasDate) {
 		oss	<< _startDate.getDay() << " "
 			<< _startDate.getMonth() << " "
 			<< _startDate.getYear() << endl
 			
 			<< _startTime.getHour() << ".";
-		if (_startTime.getMinute() < 10){
+		if (_startTime.getMinute() < 10) {
 			oss << '0';
 		}	
 		oss	<< _startTime.getMinute() << endl 
@@ -322,7 +322,7 @@ string Entry::storeEntry(){
 			<< _endDate.getYear() << endl
 		
 			<< _endTime.getHour() << ".";
-		if (_endTime.getMinute() < 10){
+		if (_endTime.getMinute() < 10) {
 			oss << '0';
 		}
 		oss << _endTime.getMinute() << endl;
