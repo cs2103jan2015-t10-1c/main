@@ -47,6 +47,7 @@ private:
 
 public:	
 	EntryEdit(bool);
+	//@author A0100750Y
 	int getEntryNumber(string&);
 	//@author A0116660L
 	//extract the markers and strings of new information, and push them into _changesList vector

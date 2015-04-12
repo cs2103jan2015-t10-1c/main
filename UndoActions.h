@@ -3,6 +3,7 @@
 
 #include <stack>
 #include "Entry.h"
+#include <windows.h>
 
 using namespace std;
 
@@ -35,6 +36,8 @@ private:
 		int _newIndexNumber;
 	};
 	stack<_ACTION_TO_UNDO> _undoStack;
+
+	HANDLE hConsole;
 
 	static const string NO_MORE_ACTION;
 	static const string ADDITION_UNDONE;

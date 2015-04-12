@@ -71,7 +71,7 @@ namespace FastAddTest
 			testScheduled.insertName("a");
 			testScheduled.insertEntryNumber(1);
 
-			Date startDate;
+			/*Date startDate;
 			startDate.insertDay(17);
 			startDate.insertMonth(2);
 			startDate.insertYear(2014);
@@ -99,7 +99,7 @@ namespace FastAddTest
 			testScheduled.insertLocation("utown");
 			vector<string> vectorTag;
 			vectorTag.push_back("#study");
-			testScheduled.insertTags(vectorTag);
+			testScheduled.insertTags(vectorTag);*/
 
 			int dummyNumber;
 			testInfo.addEntry(testScheduled, dummyNumber);			
@@ -109,6 +109,8 @@ namespace FastAddTest
 			string dummyString;
 			testInfo.editEntry(true, userInput, dummyString);		
 			string actualResult;
+			vector<Entry> whatever = testInfo.getScheduledList();
+			testScheduled = whatever.back();
 			actualResult = testScheduled.getName();
 			//testInfo.getName();
 

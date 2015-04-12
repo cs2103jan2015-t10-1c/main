@@ -27,6 +27,7 @@ const string Main::SCHEDULED_FILE_NAME = "\\FastAddSched.txt";
 const string Main::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
 
 Main::Main(){
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	_userInput = "";
 	_entryName = "";
 	_stringStartDate = "";
@@ -51,7 +52,8 @@ void Main::welcomeMessage(){
 }
 
 //@author A0115656A
-void Main::readPath(){
+//read the path to scheduled and floating lists
+void Main::readPath() {
 	ifstream readPath(PATH_FILE_NAME);
 	getline(readPath, _scheduledPath);
 	getline(readPath, _floatingPath);
@@ -59,7 +61,8 @@ void Main::readPath(){
 	readPath.close();
 }
 
-void Main::loadScheduledEntries(){
+//
+void Main::loadScheduledEntries() {
 	_loadingEntries = true;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, 10);
@@ -67,12 +70,12 @@ void Main::loadScheduledEntries(){
 	SetConsoleTextAttribute(hConsole, 15);
 	//load existing scheduled entries
 	ifstream readSched(_scheduledPath);
-	while (getline(readSched, _userInput)){
+	while (getline(readSched, _userInput)) {
 		Entry newEntry;
 		string entryStatus;
 		string stringTags;
 		vector<string> tags;
-		if (_userInput != ""){
+		if (_userInput != "") {
 			_entryName = _userInput;
 			getline(readSched, _stringStartDate);
 			getline(readSched, _stringStartTime);
@@ -112,15 +115,15 @@ void Main::loadScheduledEntries(){
 	_newList.emptyCounter();
 }
 
-void Main::loadFloatingEntries(){
+void Main::loadFloatingEntries() {
 	_loadingEntries = true;
 	ifstream readFloat(_floatingPath);
-	while (getline(readFloat, _userInput)){
+	while (getline(readFloat, _userInput)) {
 		Entry newEntry;
 		string entryStatus;
 		string stringTags;
 		vector<string> tags;
-		if (_userInput != ""){
+		if (_userInput != "") {
 			_entryName = _userInput;
 			getline(readFloat, _entryLocation);
 			getline(readFloat, entryStatus);
@@ -295,10 +298,9 @@ void Main::executeAddFunction(string userInput){
 }
 
 //@author A0115656A
-void Main::executeEditFunction(string userInput){
+void Main::executeEditFunction(string userInput) {
 	string editFeedback;
 	_newList.editEntry(_viewingScheduledList, userInput, editFeedback);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << editFeedback;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -310,8 +312,9 @@ void Main::executeSearchFunction(string userInput){
 	search.execute(userInput, _searchScheduledPageNumber, _searchFloatingPageNumber,_previousSearchInput);
 }
 
-//display allows the user to toggle between 'scheduled' and 'floating' mode
 //@author A0115902N
+//Executes various kinds of display for the entries in the list
+//display also allows the user to toggle between 'scheduled' and 'floating' mode
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList());
 	display.execute(userInput, _pageNumber, _lastPage, _viewingScheduledList, _viewingFloatingList, _viewingPastEntries, _viewingClashes);
@@ -336,10 +339,12 @@ void Main::executeHelpFunction() {
 }
 
 //@author A0115656A
+//undo addition, deletion and editing of entries
 void Main::executeUndoFunction() {
 	_newList.undo();
 }
 
+//write the entries that are currently in _scheduledList and _floatingList into the .txt files at the specified location
 void Main::executeSaveFunction() {
 	//write scheduled
 	vector<Entry> scheduledList = _newList.getScheduledList();
@@ -350,7 +355,6 @@ void Main::executeSaveFunction() {
 		writeSched << iterSched->storeEntry() << endl;
 	}
 	writeSched.close();
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << SCHEDULED_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << _scheduledPath << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -369,6 +373,7 @@ void Main::executeSaveFunction() {
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+//choose where to store the entries that are currently in _scheduledList and _floatingList and store them
 void Main::executeSaveAtFunction() {
 	cout << SPECIFY_STORAGE_PROMPT << endl;
 	string path;
@@ -384,6 +389,7 @@ void Main::executeSaveAtFunction() {
 	executeSaveFunction();
 }
 
+//stop the running of the program and exit it
 void Main::executeExitFunction() {
 	executeSaveFunction();
 	_newList.exit(_running);

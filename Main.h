@@ -45,6 +45,8 @@ private:
 	static const string SCHEDULED_FILE_NAME;
 	static const string FLOATING_FILE_NAME;
 
+	HANDLE hConsole;
+
 	string _userInput;
 	string _entryName;
 	string _stringStartDate;
@@ -89,6 +91,7 @@ public:
 	void readPath();
 	void loadScheduledEntries();
 	void loadFloatingEntries();
+	//@author A0115902N
 	void resetStringValues();
 	void resetIntegerValues();
 	//@author A0100750Y
