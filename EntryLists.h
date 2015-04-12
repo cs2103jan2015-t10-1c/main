@@ -36,6 +36,7 @@ private:
 	static const string FEEDBACK_NO_TIME;
 	static const string FEEDBACK_LOCATION;
 	static const string FEEDBACK_STATUS;
+	static const string FEEDBACK_INVALID_STATUS;
 	static const string FEEDBACK_TAGS_ADDED;
 	static const string FEEDBACK_TAGS_REMOVED;
 	static const string FEEDBACK_MOVED_TO;

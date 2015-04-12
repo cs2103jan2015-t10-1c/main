@@ -15,6 +15,7 @@ const string EntryLists::FEEDBACK_TIME = "Time: ";
 const string EntryLists::FEEDBACK_NO_TIME = "No time";
 const string EntryLists::FEEDBACK_LOCATION = "Location: ";
 const string EntryLists::FEEDBACK_STATUS = "Status: ";
+const string EntryLists::FEEDBACK_INVALID_STATUS = "Invalid status!";
 const string EntryLists::FEEDBACK_TAGS_ADDED = "Tags added: ";
 const string EntryLists::FEEDBACK_TAGS_REMOVED = "Tags removed: ";
 const string EntryLists::FEEDBACK_MOVED_TO = "Moved to ";
@@ -368,11 +369,12 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		oss << FEEDBACK_STATUS << iter->getStatus();
 		iter->changeStatus();
 		oss << FEEDBACK_ARROW << iter->getStatus() << endl; 
-		}
-		else if (newStatus == STATUS_UNDONE) {
+		} else if (newStatus == STATUS_UNDONE) {
 			oss << FEEDBACK_STATUS << iter->getStatus();
 			iter->initialiseStatus();
 			oss << FEEDBACK_ARROW << iter->getStatus() << endl;
+		} else {
+			oss << FEEDBACK_INVALID_STATUS << endl;
 		}
 	}
 
