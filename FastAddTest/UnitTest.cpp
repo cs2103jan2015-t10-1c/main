@@ -6,14 +6,11 @@ using namespace boost::posix_time;
 using namespace boost::gregorian;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace FastAddTest
-{		
-	TEST_CLASS(UnitTest1)
-	{
+namespace FastAddTest {		
+	TEST_CLASS(UnitTest1) {
 	public:
 
-		TEST_METHOD(EntryDateTest) 
-		{	
+		TEST_METHOD(EntryDateTest) {	
 			Date Someday;
 
 			Someday.insertDay(27);
@@ -21,10 +18,10 @@ namespace FastAddTest
 			Someday.insertYear(2013);
 			Someday.initialiseDate();
 
-			int expectedDate=27;
-			int expectedMonthNumber=9;
-			string expectedMonth="Sep";
-			int expectedYear=2013;
+			int expectedDate = 27;
+			int expectedMonthNumber = 9;
+			string expectedMonth = "Sep";
+			int expectedYear = 2013;
 
 			int actualDate=Someday.getDay();
 			Assert::AreEqual(expectedDate, actualDate);
@@ -41,27 +38,25 @@ namespace FastAddTest
 			Assert::IsTrue(Someday.getDateStatus());				
 		}
 		
-		TEST_METHOD(EntryTimeTest) 
-		{	
+		TEST_METHOD(EntryTimeTest) {	
 			Time Sometime;
 			date today(day_clock::local_day());
-			int expectedHour=20;
-			int expectedMinute=20;
+			int expectedHour = 20;
+			int expectedMinute = 20;
 			Sometime.insertHour(expectedHour);
 			Sometime.insertMinute(expectedMinute);
 			Sometime.initialiseTime(today);
-			int actualHour=Sometime.getHour();
+			int actualHour = Sometime.getHour();
 			Assert::AreEqual(expectedHour, actualHour);
-			int actualMinute=Sometime.getMinute();
+			int actualMinute = Sometime.getMinute();
 			Assert::AreEqual(expectedMinute, actualMinute);
 
 			Assert::IsTrue(Sometime.getTimeStatus());				
 		}
 
-		TEST_METHOD(EntryListEditNameTest) 
-		{
+		TEST_METHOD(EntryListEditNameTest) {
 			//vector<string> expectedAnswer;
-			string expectedAnswer="k. from 17 Feb 2014 12.13 to 26 Feb 2014 14.15 at utown #study";
+			string expectedAnswer = "k. from 17 Feb 2014 12.13 to 26 Feb 2014 14.15 at utown #study";
 			//expectedAnswer.push_back(expected);
 			
 			Entry testScheduled; 
@@ -116,8 +111,7 @@ namespace FastAddTest
 		}
 
 
-		TEST_METHOD(EntryTest) 
-		{
+		TEST_METHOD(EntryTest) {
 			Entry testInfo;
 		
 			//test for name
@@ -134,25 +128,23 @@ namespace FastAddTest
 			//test for location
 			testInfo.insertLocation("utown");
 			actualAnswer=testInfo.getLocation();	
-			expectedAnswer="utown";
+			expectedAnswer = "utown";
 
 
 			Assert::AreEqual(expectedAnswer,actualAnswer);
 		}
 
-		TEST_METHOD(TestUITest) 
-		{
-			string testInfo="edit dinner with me";
+		TEST_METHOD(TestUITest) {
+			string testInfo = "edit dinner with me";
 			TextUI line(testInfo);
-			string expectedCommandWord="edit";
+			string expectedCommandWord = "edit";
 			string actualCommandWord=line.findCommand(testInfo);
 			Assert::AreEqual(expectedCommandWord, actualCommandWord);
 		}
 		
 
 		//addEntry for scheduled and floating
-		TEST_METHOD(EntryListAddScheduledTest) 
-		{
+		TEST_METHOD(EntryListAddScheduledTest) {
 			vector<string> expectedAnswser;
 			expectedAnswser.push_back("a");
 			expectedAnswser.push_back("b");
@@ -181,8 +173,7 @@ namespace FastAddTest
 		}
 
 		//removeEntry for scheduled and floating
-		TEST_METHOD(EntryListsRemoveTest) 
-		{
+		TEST_METHOD(EntryListsRemoveTest) {
 			vector<string> expectedAnswser;
 			expectedAnswser.push_back("a");
 			expectedAnswser.push_back("b");
@@ -213,9 +204,8 @@ namespace FastAddTest
 		}
 
 		//test for getEntryDisplay from Entrylists
-		TEST_METHOD(EntryListsGetEntryDisplayTest) 
-		{
-			string expectedAnswer= "b";
+		TEST_METHOD(EntryListsGetEntryDisplayTest) {
+			string expectedAnswer = "b";
 			Entry testScheduled; 
 			Entry testFloating;	
 			EntryLists testInfo;
@@ -235,6 +225,37 @@ namespace FastAddTest
 
 			Assert::AreEqual(expectedAnswer,actualResult);
 	
+		}
+
+		TEST_METHOD(EntryAddTest) {	
+			string expectedName = "testing";
+			string expectedLocation = "NUS ";
+			string expectedTag = "#meeting";
+			string expectedStatus = "done";
+			string expectedStartDate = "20 Apr 2015";
+			string expectedEndDate = "21 Apr 2015";
+			string expectedStartTime = "18.30";
+			string expectedEndTime = "21.45";
+			string input = " testing. from 20 Apr 2015 18.30 to 21 Apr 2015 21.45 at NUS #meeting";
+			string actualName;
+			string actualLocation;
+			vector<string> actualTag;
+			string actualStatus;
+			string actualStartDate;
+			string actualEndDate;
+			string actualStartTime;
+			string actualEndTime;
+
+			EntryAdd testDissectCommand;
+			testDissectCommand.dissectCommand(input,actualName, actualStartDate, actualStartTime, actualEndDate, 
+											  actualEndTime, actualLocation, actualTag);
+			Assert::AreEqual(expectedName, actualName);
+			Assert::AreEqual(expectedStartDate, actualStartDate);
+			Assert::AreEqual(expectedStartTime, actualStartTime);
+			Assert::AreEqual(expectedEndDate, actualEndDate);
+			Assert::AreEqual(expectedEndTime, actualEndTime);
+			Assert::AreEqual(expectedLocation, actualLocation);
+
 		}
 	};
 }

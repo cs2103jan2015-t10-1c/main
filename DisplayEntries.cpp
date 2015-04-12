@@ -532,10 +532,11 @@ void DisplayEntries::displayToday(){
 			EventsToday.push_back(_scheduledList[i]);
 		}
 	}
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << "Remaining entries for Today" << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if(EventsToday.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << "You have no entries for today!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
@@ -549,8 +550,6 @@ void DisplayEntries::displayToday(){
 		number++;
 	}
 	cout << endl;
-	cout << "displaying all remaining entries for today" << endl;
-	cout << endl << endl;
 }
 
 void DisplayEntries::displayTomorrow(){
@@ -571,10 +570,11 @@ void DisplayEntries::displayTomorrow(){
 	if(lastEntry > EventsTomorrow.size()){
 		lastEntry = EventsTomorrow.size();
 	}
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY | FOREGROUND_GREEN));
 	cout << "Entries for tomorrow" << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if(EventsTomorrow.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << "You have no entries for tomorrow!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;

@@ -26,7 +26,7 @@ const string Main::PATH_FILE_NAME = "Path.txt";
 const string Main::SCHEDULED_FILE_NAME = "\\FastAddSched.txt";
 const string Main::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
 
-Main::Main(){
+Main::Main() {
 	_userInput = "";
 	_entryName = "";
 	_stringStartDate = "";
@@ -202,11 +202,11 @@ void Main::operateFastAdd(){
 }
 
 //@author A0116660L
-void Main::executeResizeFunction(){
+void Main::executeResizeFunction() {
 	_commandInterface.displayResizeOptions();
 }
 
-void Main::executeAddFunction(string userInput){
+void Main::executeAddFunction(string userInput) {
 	resetIntegerValues();
 	resetStringValues();
 	EntryAdd parse;
@@ -214,13 +214,14 @@ void Main::executeAddFunction(string userInput){
 	bool dateIsOkay = true;
 	bool timeIsOkay = true;
 
-	parse.dissectCommand(userInput, _entryName, _stringStartDate, _stringStartTime, _stringEndDate, _stringEndTime, _entryLocation, tags);
+	parse.dissectCommand(userInput, _entryName, _stringStartDate, _stringStartTime, _stringEndDate, _stringEndTime, 
+						 _entryLocation, tags);
 
-	if (_stringStartDate != ""){
+	if (_stringStartDate != "") {
 			convertDateTime(parse, _stringStartDate, _intStartDay, _intStartMonth, 
-			_intStartYear, _stringStartTime, _intStartHour, _intStartMinute,
-			_stringEndDate, _intEndDay, _intEndMonth, _intEndYear,_stringEndTime, 
-			_intEndHour, _intEndMinute);
+							_intStartYear, _stringStartTime, _intStartHour, _intStartMinute,
+							_stringEndDate, _intEndDay, _intEndMonth, _intEndYear,_stringEndTime, 
+							_intEndHour, _intEndMinute);
 	}
 			
 	//initialise start and end dates, start and end times
@@ -231,63 +232,64 @@ void Main::executeAddFunction(string userInput){
 
 	//initialise start and end dates
 	DateTimeInspector DateInspector;
-	if(!DateInspector.dateIsValid(_intStartDay, _intStartMonth, _intStartYear)){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (!DateInspector.dateIsValid(_intStartDay, _intStartMonth, _intStartYear)) {
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Start Date is invalid!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		dateIsOkay = false;
-	}
-	else{
+	} else {
 		initialiseDate(startDate, _intStartDay, _intStartMonth, _intStartYear);
 	}
-	if(!DateInspector.dateIsValid(_intEndDay, _intEndMonth, _intEndYear)){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	if (!DateInspector.dateIsValid(_intEndDay, _intEndMonth, _intEndYear)) {
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "End Date is invalid!" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		dateIsOkay = false;
-	}
-	else{
+	} else {
 		initialiseDate(endDate, _intEndDay, _intEndMonth, _intEndYear);
 	}
+	
 	//only when date is ok
-	if(dateIsOkay){
+	if (dateIsOkay) {
 	//initialise start and end times
 		DateTimeInspector TimeInspector;
-		if(!TimeInspector.timeIsValid(_intStartHour, _intStartMinute)){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		if (!TimeInspector.timeIsValid(_intStartHour, _intStartMinute)) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Start Time is invalid!" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			timeIsOkay = false;
-		}
-		else{
+		} else {
 			initialiseTime(startTime, _intStartHour, _intStartMinute);
 		}
-		if(!DateInspector.timeIsValid(_intEndHour, _intEndMinute)){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (!DateInspector.timeIsValid(_intEndHour, _intEndMinute)) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "End Time is invalid!" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			timeIsOkay = false;
-		}
-		else{
+		} else {
 			initialiseTime(endTime, _intEndHour, _intEndMinute);
 		}
 	}
+
 	//only when time is okay
-	if(timeIsOkay){
+	if (timeIsOkay) {
 		//initialise entry
 		Entry newEntry;
 		initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, "undone", tags);
-		if(newEntry.getStartDate().getDate() > newEntry.getEndDate().getDate()){
+		if (newEntry.getStartDate().getDate() > newEntry.getEndDate().getDate()) {
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Warning: start date occurs after end date. repeat input" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
-		} else if(newEntry.getStartTime().getTime() > newEntry.getEndTime().getTime()){
+		} else if (newEntry.getStartTime().getTime() > newEntry.getEndTime().getTime()) {
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Warning: start time occurs after end time. repeat input" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
+
 		int newEntryIndex;
 		_newList.addEntry(newEntry, newEntryIndex);
 		_newList.showAddFeedback(newEntry, newEntryIndex);
@@ -305,7 +307,7 @@ void Main::executeEditFunction(string userInput){
 }
 
 //@author A0116660L
-void Main::executeSearchFunction(string userInput){
+void Main::executeSearchFunction(string userInput) {
 	SearchEntries search(_newList.getScheduledList(), _newList.getFloatingList());
 	search.execute(userInput, _searchScheduledPageNumber, _searchFloatingPageNumber,_previousSearchInput);
 }
@@ -324,7 +326,6 @@ void Main::executeDeleteFunction(string userInput) {
 	convertToNumber.convertStringToNumber(userInput, indexNumber);
 	string deleteFeedback;
 	_newList.removeEntry(_viewingScheduledList, indexNumber, deleteFeedback);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << deleteFeedback;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
