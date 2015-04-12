@@ -50,7 +50,6 @@ void Main::loadScheduledEntries(){
 	SetConsoleTextAttribute(hConsole, 10);
 	cout << "Loading existing entries..." << endl;
 	SetConsoleTextAttribute(hConsole, 15);
-
 	//load existing scheduled entries
 	ifstream readSched(_scheduledPath);
 	while (getline(readSched, _userInput)){
@@ -134,12 +133,12 @@ void Main::loadFloatingEntries(){
 
 	//empty the counter stack
 	_newList.emptyCounter();
-
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 10);
-	cout << endl << "Loading done..." << endl << endl;
-	SetConsoleTextAttribute(hConsole, 15);
-
+	cout << endl;
+	DisplayEntries loadEntries(_newList.getScheduledList(), _newList.getFloatingList());
+	cout << COMMAND_BORDER << endl << endl;
+	loadEntries.displayToday(); 
+	cout << COMMAND_BORDER << endl << endl;
+	loadEntries.displayTomorrow();
 }
 
 void Main::operateFastAdd(){
