@@ -13,6 +13,9 @@ public:
 	enum Command {
 		Add, Delete, Edit
 	};
+	enum SuppCommand {
+		BackToFloating, BackToScheduled, NoChange
+	};
 
 private:
 	struct _ACTION_TO_UNDO {
@@ -25,6 +28,10 @@ private:
 		Command _counterCommand;
 		int _indexNumber;
 		Entry _modifiedEntry;
+
+		//only for edit
+		SuppCommand _changeListCommand;
+		int _newIndexNumber;
 	};
 	stack<_ACTION_TO_UNDO> _undoStack;
 
@@ -38,14 +45,15 @@ public:
 	void emptyUndoStack();
 	void counterAdd(bool, int);
 	void counterDelete(bool, int, Entry);
-	void counterEdit(bool, int, Entry);
+	void counterEdit(bool, int, SuppCommand, int, Entry);
+	void removeCounter();
 
 	void execute(vector<Entry>&, vector<Entry>&);
 	void executeCounter(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
 	
 	void undoAdd(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
 	void undoDelete(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
-	void undoEdit(_ACTION_TO_UNDO);
+	void undoEdit(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
 };
 
 #endif

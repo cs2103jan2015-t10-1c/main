@@ -39,8 +39,9 @@ void Main::welcomeMessage(){
 
 void Main::readPath(){
 	ifstream readPath("Path.txt");
-	readPath >> _scheduledPath;
-	readPath >> _floatingPath;
+	getline(readPath, _scheduledPath);
+	getline(readPath, _floatingPath);
+	getline(readPath, _floatingPath);
 	readPath.close();
 }
 

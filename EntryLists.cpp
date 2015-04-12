@@ -15,6 +15,7 @@ const string EntryLists::FEEDBACK_TIME = "Time: ";
 const string EntryLists::FEEDBACK_NO_TIME = "No time";
 const string EntryLists::FEEDBACK_LOCATION = "Location: ";
 const string EntryLists::FEEDBACK_STATUS = "Status: ";
+const string EntryLists::FEEDBACK_INVALID_STATUS = "Invalid status!";
 const string EntryLists::FEEDBACK_TAGS_ADDED = "Tags added: ";
 const string EntryLists::FEEDBACK_TAGS_REMOVED = "Tags removed: ";
 const string EntryLists::FEEDBACK_MOVED_TO = "Moved to ";
@@ -184,6 +185,7 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		oss << FEEDBACK_EDITED << entryNumber << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
+	int oldEntryNumber = entryNumber;
 
 	//find the entry to be edited
 	vector<Entry>::iterator iter;
@@ -197,7 +199,7 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 	for (int i = 1; i < entryNumber; i++){
 			iter++;
 	}
-	_counter.counterEdit(isScheduled, entryNumber, *iter);
+	Entry oldEntry = *iter;
 
 	//update name
 	string newName = editComponent.getName();
@@ -367,11 +369,12 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		oss << FEEDBACK_STATUS << iter->getStatus();
 		iter->changeStatus();
 		oss << FEEDBACK_ARROW << iter->getStatus() << endl; 
-		}
-		else if (newStatus == STATUS_UNDONE) {
+		} else if (newStatus == STATUS_UNDONE) {
 			oss << FEEDBACK_STATUS << iter->getStatus();
 			iter->initialiseStatus();
 			oss << FEEDBACK_ARROW << iter->getStatus() << endl;
+		} else {
+			oss << FEEDBACK_INVALID_STATUS << endl;
 		}
 	}
 
@@ -396,31 +399,41 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		Entry newEntry = *iter;
 		string dummy;
 		removeEntry(isScheduled, entryNumber, dummy);
+		_counter.removeCounter();
 		addEntry(newEntry, entryNumber);
+		_counter.removeCounter();
 	}
 
 	//move entry from floating to scheduled list and vice versa
+	UndoActions::SuppCommand changeListCommand;
 	bool isScheduledToFloating = isScheduled && editComponent.getDateEditStatus() && (inputStartDay == 0);
 	bool isFloatingToScheduled = !isScheduled && editComponent.getDateEditStatus() && editComponent.getTimeEditStatus();
 	if (isScheduledToFloating || isFloatingToScheduled) {
 		moveScheduledFloating(isScheduled, entryNumber, *iter);
 		oss << FEEDBACK_MOVED_TO;
 		if (isScheduled) {
+			changeListCommand = UndoActions::BackToScheduled;
 			oss << FEEDBACK_FLOATING_LIST << endl;
 		} else {
+			changeListCommand = UndoActions::BackToFloating;
 			oss << FEEDBACK_SCHEDULED_LIST << endl;
 		}
+	} else {
+		changeListCommand = UndoActions::NoChange;
 	}
 
 	oss << FEEDBACK_CURRENT_ENTRY_NUMBER << entryNumber << endl;
-
+	_counter.counterEdit(isScheduled, oldEntryNumber, changeListCommand, entryNumber, oldEntry);
+	
 	editFeedback = oss.str();
 }
 
 void EntryLists::moveScheduledFloating(bool isScheduled, int& entryNumber, Entry movedEntry){
 	string dummy;
 	removeEntry(isScheduled, entryNumber, dummy);
+	_counter.removeCounter();
 	addEntry(movedEntry, entryNumber);
+	_counter.removeCounter();
 }
 
 void EntryLists::undo(){
@@ -430,7 +443,7 @@ void EntryLists::undo(){
 void EntryLists::exit(bool& running){
 	cout << SPECIFY_STORAGE_PROMPT << endl;
 	string path;
-	cin >> path;
+	getline(cin, path);
 
 	ofstream writePath("Path.txt");
 	string scheduledPath = path + SCHEDULED_FILE_NAME;

@@ -6,17 +6,17 @@ const string UndoActions::ADDITION_UNDONE = "Addition undone";
 const string UndoActions::DELETION_UNDONE = "Deletion undone";
 const string UndoActions::EDITING_UNDONE = "Editing undone";
 
-UndoActions::UndoActions(){
+UndoActions::UndoActions() {
 }
 
-void UndoActions::emptyUndoStack(){
-	while (!_undoStack.empty()){
+void UndoActions::emptyUndoStack() {
+	while (!_undoStack.empty()) {
 		_undoStack.pop();
 	}
 }
 
 //to counter addition, push delete command and index number into _undoStack
-void UndoActions::counterAdd(bool isScheduled, int latestEntryIndex){
+void UndoActions::counterAdd(bool isScheduled, int latestEntryIndex) {
 	_ACTION_TO_UNDO latestAction;
 	latestAction._isScheduled = isScheduled;
 	latestAction._counterCommand = Delete;
@@ -26,7 +26,7 @@ void UndoActions::counterAdd(bool isScheduled, int latestEntryIndex){
 }
 
 //to counter deletion, push add command, index number and the entry into _undoStack
-void UndoActions::counterDelete(bool isScheduled, int latestEntryIndex, Entry latestEntry){
+void UndoActions::counterDelete(bool isScheduled, int latestEntryIndex, Entry latestEntry) {
 	_ACTION_TO_UNDO latestAction;
 	latestAction._isScheduled = isScheduled;
 	latestAction._counterCommand = Add;
@@ -37,60 +37,52 @@ void UndoActions::counterDelete(bool isScheduled, int latestEntryIndex, Entry la
 }
 
 //to counter editing, push edit command, index number and the entry into _undoStack
-void UndoActions::counterEdit(bool isScheduled, int latestEntryIndex, Entry latestEntry){
+void UndoActions::counterEdit(bool isScheduled, int oldEntryIndex, SuppCommand changeListCommand, int latestEntryIndex, Entry latestEntry) {
 	_ACTION_TO_UNDO latestAction;
 	latestAction._isScheduled = isScheduled;
 	latestAction._counterCommand = Edit;
-	latestAction._indexNumber = latestEntryIndex;
+	latestAction._indexNumber = oldEntryIndex;
+	latestAction._changeListCommand = changeListCommand;
+	latestAction._newIndexNumber = latestEntryIndex;
 	latestAction._modifiedEntry = latestEntry;
 
 	_undoStack.push(latestAction);
 }
 
-void UndoActions::execute(vector<Entry>& _scheduledList, vector<Entry>& _floatingList){
-	//no more action to undo
-	if(_undoStack.empty()){
+//pop out the newest member of _undoStack
+void UndoActions::removeCounter() {
+	_undoStack.pop();
+}
+
+void UndoActions::execute(vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	if(_undoStack.empty()) {
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << NO_MORE_ACTION << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-	}
-
-	//there is action to undo
-	else {
+	} else {
 		executeCounter(_undoStack.top(), _scheduledList, _floatingList);
-		//remove the counter action that was just executed from the stack
-		_undoStack.pop();
+		removeCounter();
 	}
 }
 
-void UndoActions::executeCounter(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList){
+void UndoActions::executeCounter(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
 	Command latestCounter = latestAction._counterCommand;
-	//undo addition of entry
-	if (latestCounter == Delete){
+	if (latestCounter == Delete) {
 		undoAdd(latestAction, _scheduledList, _floatingList);
-	}
-
-	//undo deletion of entry
-	else if (latestCounter == Add){
+	} else if (latestCounter == Add) {
 		undoDelete(latestAction, _scheduledList, _floatingList);
-	}
-
-	//undo editing of entry
-	else if (latestCounter == Edit){
-		undoEdit(latestAction);
+	} else if (latestCounter == Edit) {
+		undoEdit(latestAction, _scheduledList, _floatingList);
 	}
 }
 
 //undo addition of entry. Counter command = delete
-void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList){
+void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
 	//scheduled entries
-	if (latestAction._isScheduled){
+	if (latestAction._isScheduled) {
 		_scheduledList.erase(_scheduledList.begin() + latestAction._indexNumber - 1);
-	}
-
-	//floating entries
-	else {
+	} else {
 		_floatingList.erase(_floatingList.begin() + latestAction._indexNumber - 1);
 	}
 
@@ -101,16 +93,12 @@ void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedule
 }
 
 //undo deletion of entry. Counter command = add
-void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList){
+void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
 	vector<Entry>::iterator iter;
-	//scheduled entries
-	if (latestAction._isScheduled){
+	if (latestAction._isScheduled) {
 		iter = _scheduledList.begin() + latestAction._indexNumber - 1;
 		_scheduledList.insert(iter, latestAction._modifiedEntry);
-	}
-
-	//floating entries
-	else {
+	} else {
 		iter = _floatingList.begin() + latestAction._indexNumber - 1;
 		_floatingList.insert(iter, latestAction._modifiedEntry);
 	}
@@ -122,16 +110,46 @@ void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _sched
 }
 
 //undo editing of entry. Counter command = edit
-void UndoActions::undoEdit(_ACTION_TO_UNDO latestAction){
-	//scheduled entries
-	if (latestAction._isScheduled){
-
+void UndoActions::undoEdit(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	vector<Entry>::iterator addedIter;
+	vector<Entry>::iterator removedIter;
+	if (latestAction._isScheduled) {
+		if (latestAction._indexNumber > _scheduledList.size()) {
+			addedIter = _scheduledList.end();
+		} else {
+			addedIter = _scheduledList.begin() + latestAction._indexNumber - 1;
+		}
+		_scheduledList.insert(addedIter, latestAction._modifiedEntry);
+		
+		if (latestAction._changeListCommand == NoChange) {
+			if (latestAction._indexNumber <= latestAction._newIndexNumber) {
+				removedIter = _scheduledList.begin() + latestAction._newIndexNumber;
+			} else {
+				removedIter = _scheduledList.begin() + latestAction._newIndexNumber - 1;
+			}
+			_scheduledList.erase(removedIter);
+		} else if (latestAction._changeListCommand == BackToScheduled) {
+			removedIter = _floatingList.begin() + latestAction._newIndexNumber - 1;
+			_floatingList.erase(removedIter);
+		}
+	} else {
+		if (latestAction._indexNumber > _floatingList.size()) {
+			addedIter = _floatingList.end();
+		} else {
+			addedIter = _floatingList.begin() + latestAction._indexNumber - 1;
+		}
+		_floatingList.insert(addedIter, latestAction._modifiedEntry);
+		if (latestAction._changeListCommand == NoChange) {
+			removedIter = _floatingList.begin() + latestAction._newIndexNumber;
+			_floatingList.erase(removedIter);
+		} else if (latestAction._changeListCommand == BackToFloating) {
+			removedIter = _scheduledList.begin() + latestAction._newIndexNumber - 1;
+			_scheduledList.erase(removedIter);
+		}
 	}
 
-	//floating entries
-	else {
-
-	}
-
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << EDITING_UNDONE << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
