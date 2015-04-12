@@ -145,6 +145,12 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 
 	//display details of an entry
 	else if (isdigit(_userInput[1])){
+		if(!_viewingScheduledList && !_viewingFloatingList){
+			_viewingScheduledList = true;
+			_viewingClashes = false;
+			_viewingFloatingList = false;
+			_viewingPastEntries = false;
+		}
 		int entryNumber;
 		convert.convertStringToNumber(_userInput, entryNumber);
 		if(_viewingScheduledList && entryNumber > 0){
