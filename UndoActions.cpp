@@ -8,6 +8,7 @@ const string UndoActions::EDITING_UNDONE = "Editing undone";
 
 //@author A0115656A
 UndoActions::UndoActions() {
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 void UndoActions::emptyUndoStack() {
@@ -57,7 +58,6 @@ void UndoActions::removeCounter() {
 
 void UndoActions::execute(vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
 	if(_undoStack.empty()) {
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << NO_MORE_ACTION << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -87,7 +87,6 @@ void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedule
 		_floatingList.erase(_floatingList.begin() + latestAction._indexNumber - 1);
 	}
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << ADDITION_UNDONE << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -112,7 +111,6 @@ void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _sched
 		_floatingList.insert(iter, latestAction._modifiedEntry);
 	}
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << DELETION_UNDONE << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -157,7 +155,6 @@ void UndoActions::undoEdit(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedul
 		}
 	}
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << EDITING_UNDONE << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));

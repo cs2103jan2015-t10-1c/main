@@ -2,18 +2,45 @@
 #define DISPLAYENTRIES_H
 
 #include <string>
-#include <windows.h>
 #include <boost\date_time\gregorian\gregorian.hpp>
-#include "ClashInspector.h"
 #include "EntryLists.h"
 #include "StringConvertor.h"
-
+#include "ClashInspector.h"
+#include <windows.h>
 
 using namespace std;
 using namespace boost::gregorian;
 
 class DisplayEntries{
 private:
+	vector<Entry> _scheduledList;
+	vector<Entry> _floatingList;
+	string _userInput;
+	//bool values related to display modes
+	bool _viewingScheduledList;
+	bool _viewingFloatingList;
+	bool _viewingPastEntries;
+	bool _viewingClashes;
+	//bool values related to entry organisation
+	bool _printInThePast;
+	bool _printToday;
+	bool _printTomorrow;
+	bool _printThisWeek;
+	bool _printNextWeek;
+	bool _printThisMonth;
+	bool _printNextMonth;
+	//navigation attributes
+	int _pageNumber;
+	int _lastPage;
+
+	date _today;
+	date _tomorrow;
+	date _thisWeek;
+	date _nextWeek;
+	date _thisMonth;
+	date _nextMonth;
+	ptime _now;
+
 	static const string TYPE_SCHEDULED;
 	static const string TYPE_FLOATING;
 	static const string TYPE_NEXT;
@@ -26,35 +53,37 @@ private:
 	static const int BLANKSPACE_COUNT;
 	static const int ENTRY_PERPAGE;
 	static const string BORDER;
-	
+	static const string MESSAGE_SCHEDULEDENTRY;
+	static const string MESSAGE_FLOATINGENTRY;
+	static const string MESSAGE_DISPLAYING;
+	static const string MESSAGE_SCHEDULEDISEMPTY;
+	static const string MESSAGE_ENTRIESNUMBER;
+	static const string MESSAGE_FLOATINGISEMPTY;
+	static const string MESSAGE_VIEWINGSCHEDULED;
+	static const string MESSAGE_VIEWINGFLOATING;
+	static const string MESSAGE_VIEWINGENTRYCLASHES;
+	static const string MESSAGE_VIEWINGPAST;
+	static const string MESSAGE_MISSINGPAGE;
+	static const string MESSAGE_ENTRYCLASHES;
+	static const string MESSAGE_ONFIRSTPAGE;
+	static const string MESSAGE_PAGEDOESNOTEXIST;
+	static const string MESSAGE_ARROWDISPLAYPREV;
+	static const string MESSAGE_ARROWDISPLAYNEXT;
+	static const string MESSAGE_BOTHARROWS;
+	static const string MESSAGE_INVALID;
+	static const string MESSAGE_PAGE;
+	static const string MESSAGE_OUTOF;
+	static const string MESSAGE_DISPLAYENTRIES;
+	static const string MESSAGE_TO;
+	static const string MESSAGE_REMAININGTODAY;
+	static const string MESSAGE_NOENTRIESTODAY; 
+	static const string MESSAGE_DISPLAYINGTODAY;
+	static const string MESSAGE_ENTRIESTOMORROW;
+	static const string MESSAGE_NOENTRIESTOMORROW;
+	static const string MESSAGE_ENTRYFROM;
+
+
 	HANDLE hConsole;
-
-	vector<Entry> _scheduledList;
-	vector<Entry> _floatingList;
-	string _userInput;
-
-	bool _viewingScheduledList;
-	bool _viewingFloatingList;
-	bool _viewingPastEntries;
-	bool _viewingClashes;
-
-	bool _printInThePast;
-	bool _printToday;
-	bool _printTomorrow;
-	bool _printThisWeek;
-	bool _printNextWeek;
-	bool _printThisMonth;
-	bool _printNextMonth;
-
-	int _pageNumber;
-	int _lastPage;
-	date _today;
-	date _tomorrow;
-	date _thisWeek;
-	date _nextWeek;
-	date _thisMonth;
-	date _nextMonth;
-	ptime _now;
 
 public:
 	DisplayEntries(vector<Entry>, vector<Entry>);
@@ -63,11 +92,7 @@ public:
 	//Scheduled Entries
 	void execute(string, int&, int&, bool&, bool&, bool&, bool&);
 	//@author A00116660L
-	//Function is used to display entries from the scheduled list in short version
-	//Short version of an entry only contains the entry name, date and time.
 	void displayScheduledEntryShort();
-	//Function is used to display one particular entry from the scheduled list in full version
-	//Full version of an entry contains entry name, date and time, deadline, status, time left and tags etc.
 	void displayOneScheduledEntry(int);
 	
 	//@author A0115902N

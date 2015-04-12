@@ -21,8 +21,6 @@ private:
 	vector<Entry> _floatingList;
 	UndoActions _counter;
 
-	HANDLE hConsole;
-
 	//Feedback to the users
 	static const string FEEDBACK_ADDED_AT_NUMBER;
 	static const string FEEDBACK_FROM;

@@ -53,13 +53,15 @@ void Date::initialiseDate(){
 	
 
 //@author A0115656A
-int Date::getDay(){
+//returns an int containing the value of private attribute _entryDate.day()
+int Date::getDay() {
 	return _entryDate.day();
 }
 
-string Date::getMonth(){
+//returns a string containing the value of private attribute _entryDate.month() after being converted to string
+string Date::getMonth() {
 	int monthNumber = _entryDate.month();
-	switch(monthNumber){
+	switch(monthNumber) {
 		case 1:
 			return "Jan";
 		case 2: 
@@ -89,24 +91,28 @@ string Date::getMonth(){
 	}
 }
 
-int Date::getMonthNumber(){
+//returns an int containing the value of private attribute _entryDate.month()
+int Date::getMonthNumber() {
 	return _entryDate.month();
 }
 
-int Date::getYear(){
+//returns an int containing the value of private attribute _entryDate.year()
+int Date::getYear() {
 	return _entryDate.year();
 }	
 
-//check whether the entry has date
-bool Date::getDateStatus(){
+//return true when the Entry has a valid date, false otherwise
+bool Date::getDateStatus() {
 	return _hasDate;
 }
 
-date Date::getDate(){
+//return a date (from boost library) containing the date of this object
+date Date::getDate() {
 	date toPassToTime = _entryDate;
 	return toPassToTime;
 }
 
-void Date::printDayOfDate(){
+//print out the day of the Date
+void Date::printDayOfDate() {
 	cout << _entryDate.day_of_week();
 }

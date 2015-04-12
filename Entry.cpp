@@ -4,24 +4,28 @@
 
 const string Entry::FEEDBACK_AT = " at ";
 
-Entry::Entry(){
+Entry::Entry() {
 	initialiseStatus();
 }
 
 //@author A0115656A
-void Entry::insertName(string inputName){
+//insert string inputName into the private attribute _name
+void Entry::insertName(string inputName) {
 	_name = inputName;
 }
 
-string Entry::getName(){
+//returns a string containing the value of private attribute _name
+string Entry::getName() {
 	return _name;
 }
 
-void Entry::insertEntryNumber(int entryNumber){
+//insert int entryNumber into the private attribute _entryNumber
+void Entry::insertEntryNumber(int entryNumber) {
 	_entryNumber = entryNumber;
 }
 
-int Entry::getEntryNumber(){
+//returns an int containing the value of private attribute _entryNumber
+int Entry::getEntryNumber() {
 	return _entryNumber;
 }
 
@@ -83,79 +87,82 @@ Time Entry::getEndTime(){
 }
 
 //@author A0116660L
-void Entry::initialiseStatus() {
+void Entry::initialiseStatus(){
 	_status = false;
 }
 
-void Entry::changeStatus() {
+void Entry::changeStatus(){
 	_status = true;
 }
 
-string Entry::getStatus() {
+string Entry::getStatus(){
 	string printStatus;
-	if (_status == true) {
+	if (_status == true){
 		printStatus = "done";
 	}
-
-	if (_status == false) {
+	if (_status == false){
 		printStatus = "undone";
 	}
-
 	return printStatus;
 }
 
 //@author A0115656A
+//insert string inputLocation into the private attribute _location
 void Entry::insertLocation(string inputLocation){
 	_location = inputLocation;
 }
 
+//returns a string containing the value of  private attribute _location
 string Entry::getLocation (){	
 	return _location;
 }
 
 //@author A0116660L
-void Entry::insertTags(vector<string>& tags) {
+void Entry::insertTags(vector<string>& tags){
 	_tags = tags;
 }
 
-void Entry::searchEntryTag(string tag, bool& tagFound) {
+void Entry::searchEntryTag(string tag, bool& tagFound){
 	vector<string>::iterator iterTag;
-	for (iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		size_t found = iterTag->find(tag);
-		if (found != string::npos) {
+		if(found != string::npos){
 			tagFound = true;
 		}
 	}
 }
 
 //@author A0115656A
+//returns a string containing the tags inside the vector<string> _tags
 string Entry::getTags() {
 	ostringstream oss;
 	vector<string>::iterator iterTag;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		oss << *iterTag << " ";
 	}
 
 	return oss.str();
 }
 
+//add a string tag into vector<string> _tags
 void Entry::addTag(string tag) {
 	_tags.push_back(tag);
 }
 
+//remove a string tag from vector<string> _tags
 void Entry::removeTag(string tag) {
 	vector<string>::iterator iterTag;
 	bool isFound = false;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		size_t found = iterTag->find(tag);
-		if(found != string::npos) {
+		if(found != string::npos){
 			_tags.erase(iterTag);
 			isFound = true;
 			break;
 		}
 	}
 
-	if (!isFound) {
+	if (!isFound){
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << tag << " does not exist" << endl;
@@ -303,18 +310,18 @@ string Entry::getShortDisplay(){
 }
 
 //@author A0115656A
+//return a string containing the information of an entry, for storage purposes
 string Entry::storeEntry() {
 	ostringstream oss;
-	
 	oss << _name << endl;
 
-	if (_hasDate) {
+	if (_hasDate){
 		oss	<< _startDate.getDay() << " "
 			<< _startDate.getMonth() << " "
 			<< _startDate.getYear() << endl
 			
 			<< _startTime.getHour() << ".";
-		if (_startTime.getMinute() < 10) {
+		if (_startTime.getMinute() < 10){
 			oss << '0';
 		}	
 		oss	<< _startTime.getMinute() << endl 
@@ -324,7 +331,7 @@ string Entry::storeEntry() {
 			<< _endDate.getYear() << endl
 		
 			<< _endTime.getHour() << ".";
-		if (_endTime.getMinute() < 10) {
+		if (_endTime.getMinute() < 10){
 			oss << '0';
 		}
 		oss << _endTime.getMinute() << endl;

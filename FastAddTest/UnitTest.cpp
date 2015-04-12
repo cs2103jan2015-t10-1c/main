@@ -22,16 +22,16 @@ namespace FastAddTest {
 			int expectedMonthNumber = 9;
 			string expectedMonth = "Sep";
 			int expectedYear = 2013;
-
 			int actualDate=Someday.getDay();
 			Assert::AreEqual(expectedDate, actualDate);
 
+			Someday.insertMonth(9);
 			int actualMonthNumber=Someday.getMonthNumber();
 			Assert::AreEqual(expectedMonthNumber, actualMonthNumber);
-
 			string actualMonth=Someday.getMonth();
 			Assert::AreEqual(expectedMonth, actualMonth);
 			
+			Someday.insertYear(2013);
 			int actualYear=Someday.getYear();
 			Assert::AreEqual(expectedYear, actualYear);
 
@@ -129,8 +129,6 @@ namespace FastAddTest {
 			testInfo.insertLocation("utown");
 			actualAnswer=testInfo.getLocation();	
 			expectedAnswer = "utown";
-
-
 			Assert::AreEqual(expectedAnswer,actualAnswer);
 		}
 
