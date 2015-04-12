@@ -96,10 +96,18 @@ void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedule
 void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
 	vector<Entry>::iterator iter;
 	if (latestAction._isScheduled) {
-		iter = _scheduledList.begin() + latestAction._indexNumber - 1;
+		if (latestAction._indexNumber > _scheduledList.size()) {
+			iter = _scheduledList.end();
+		} else {
+			iter = _scheduledList.begin() + latestAction._indexNumber - 1;
+		}
 		_scheduledList.insert(iter, latestAction._modifiedEntry);
 	} else {
-		iter = _floatingList.begin() + latestAction._indexNumber - 1;
+		if (latestAction._indexNumber > _floatingList.size()) {
+			iter = _floatingList.end();
+		} else {
+			iter = _floatingList.begin() + latestAction._indexNumber - 1;
+		}
 		_floatingList.insert(iter, latestAction._modifiedEntry);
 	}
 

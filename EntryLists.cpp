@@ -428,7 +428,7 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 	editFeedback = oss.str();
 }
 
-void EntryLists::moveScheduledFloating(bool isScheduled, int& entryNumber, Entry movedEntry){
+void EntryLists::moveScheduledFloating(bool isScheduled, int& entryNumber, Entry movedEntry) {
 	string dummy;
 	removeEntry(isScheduled, entryNumber, dummy);
 	_counter.removeCounter();
@@ -436,47 +436,11 @@ void EntryLists::moveScheduledFloating(bool isScheduled, int& entryNumber, Entry
 	_counter.removeCounter();
 }
 
-void EntryLists::undo(){
+void EntryLists::undo() {
 	_counter.execute(_scheduledList, _floatingList);
 }
 
-void EntryLists::exit(bool& running){
-	cout << SPECIFY_STORAGE_PROMPT << endl;
-	string path;
-	getline(cin, path);
-
-	ofstream writePath("Path.txt");
-	string scheduledPath = path + SCHEDULED_FILE_NAME;
-	writePath << scheduledPath << endl;
-	string floatingPath = path + FLOATING_FILE_NAME;
-	writePath << floatingPath;
-	writePath.close();
-
-	//write scheduled
-	ofstream writeSched(scheduledPath);
-	vector<Entry>::iterator iterSched;
-
-	for (iterSched = _scheduledList.begin(); iterSched != _scheduledList.end(); iterSched++){
-		writeSched << iterSched->storeEntry() << endl;
-	}
-	writeSched.close();
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << SCHEDULED_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << scheduledPath << endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-
-	//write floating
-	ofstream writeFloat(floatingPath);
-	vector<Entry>::iterator iterFloat;
-
-	for (iterFloat = _floatingList.begin(); iterFloat != _floatingList.end(); iterFloat++){
-		writeFloat << iterFloat->storeEntry() << endl;
-	}
-	writeFloat.close();
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << FLOATING_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << floatingPath << endl;
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-
+void EntryLists::exit(bool& running) {
 	running = false;
 }
 

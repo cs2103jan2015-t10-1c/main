@@ -28,9 +28,22 @@ private:
 	static const string COMMAND_SEARCH;
 	static const string COMMAND_HELP;
 	static const string COMMAND_UNDO;
+	static const string COMMAND_SAVE;
+	static const string COMMAND_SAVE_AT;
 	static const string COMMAND_EXIT;
 	static const string COMMAND_RESIZE;
 	static const string COMMAND_BORDER;
+
+	static const string FEEDBACK_SUCCESSFULLY_STORED;
+
+	static const string SPECIFY_STORAGE_PROMPT;
+	static const string SCHEDULED_ENTRIES_PROMPT;
+	static const string FLOATING_ENTRIES_PROMPT;
+
+	//File names
+	static const string PATH_FILE_NAME;
+	static const string SCHEDULED_FILE_NAME;
+	static const string FLOATING_FILE_NAME;
 
 	string _userInput;
 	string _entryName;
@@ -87,6 +100,8 @@ public:
 	void executeSearchFunction(string);
 	void executeHelpFunction();
 	void executeUndoFunction();
+	void executeSaveFunction();
+	void executeSaveAtFunction();
 	void executeExitFunction();
 	void executeResizeFunction();
 

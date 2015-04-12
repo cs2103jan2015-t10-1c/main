@@ -10,9 +10,21 @@ const string Main::COMMAND_DELETE = "delete";
 const string Main::COMMAND_SEARCH = "search";
 const string Main::COMMAND_HELP = "help";
 const string Main::COMMAND_UNDO = "undo";
+const string Main::COMMAND_SAVE = "save";
+const string Main::COMMAND_SAVE_AT = "saveat";
 const string Main::COMMAND_EXIT = "exit";
 const string Main::COMMAND_RESIZE = "resize";
 const string Main::COMMAND_BORDER = "_________________________________________________________";
+
+const string Main::FEEDBACK_SUCCESSFULLY_STORED = " successfully stored at ";
+
+const string Main::SPECIFY_STORAGE_PROMPT = "Please specify where you want to store your lists: ";
+const string Main::SCHEDULED_ENTRIES_PROMPT = "Scheduled entries";
+const string Main::FLOATING_ENTRIES_PROMPT = "Floating entries";
+
+const string Main::PATH_FILE_NAME = "Path.txt";
+const string Main::SCHEDULED_FILE_NAME = "\\FastAddSched.txt";
+const string Main::FLOATING_FILE_NAME = "\\FastAddFloat.txt";
 
 Main::Main(){
 	_userInput = "";
@@ -38,7 +50,7 @@ void Main::welcomeMessage(){
 }
 
 void Main::readPath(){
-	ifstream readPath("Path.txt");
+	ifstream readPath(PATH_FILE_NAME);
 	getline(readPath, _scheduledPath);
 	getline(readPath, _floatingPath);
 	getline(readPath, _floatingPath);
@@ -153,44 +165,25 @@ void Main::operateFastAdd(){
 		_command = _commandInterface.findCommand(_userInput);
 		_userInput = _commandInterface.removeCommand(_userInput);
 
-		//add command
-		if(_command == COMMAND_ADD){
+		if(_command == COMMAND_ADD) {
 			executeAddFunction(_userInput);
-		}
-		
-		//edit command
-		else if(_command == COMMAND_EDIT){
+		} else if(_command == COMMAND_EDIT) {
 			executeEditFunction(_userInput);
-		}
-
-		//display scheduled command
-		//display allows the user to toggle between 'scheduled' and 'floating' mode
-		else if(_command == COMMAND_DISPLAY){
+		} else if(_command == COMMAND_DISPLAY) {
 			executeDisplayFunction(_userInput);
-		}
-
-		//delete command
-		else if(_command == COMMAND_DELETE){
+		} else if(_command == COMMAND_DELETE) {
 			executeDeleteFunction(_userInput);
-		}
-
-		//search command
-		else if(_command == COMMAND_SEARCH){
+		} else if(_command == COMMAND_SEARCH) {
 			executeSearchFunction(_userInput);
-		}
-
-		//help command
-		else if(_command == COMMAND_HELP){
+		} else if(_command == COMMAND_HELP) {
 			executeHelpFunction();
-		}
-
-		//undo command
-		else if (_command == COMMAND_UNDO){
+		} else if (_command == COMMAND_UNDO) {
 			executeUndoFunction();
-		}
-
-		//exit command
-		else if(_command == COMMAND_EXIT){
+		} else if (_command == COMMAND_SAVE) {
+			executeSaveFunction();
+		} else if (_command == COMMAND_SAVE_AT) {
+			executeSaveAtFunction();
+		} else if(_command == COMMAND_EXIT) {
 			executeExitFunction();
 		}
 
@@ -304,12 +297,13 @@ void Main::executeSearchFunction(string userInput){
 	search.execute(userInput, _searchScheduledPageNumber, _searchFloatingPageNumber,_previousSearchInput);
 }
 
+//display allows the user to toggle between 'scheduled' and 'floating' mode
 void Main::executeDisplayFunction(string userInput){
 	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList());
 	display.execute(userInput, _pageNumber, _lastPage, _viewingScheduledList, _viewingFloatingList, _viewingPastEntries, _viewingClashes);
 }
 
-void Main::executeDeleteFunction(string userInput){
+void Main::executeDeleteFunction(string userInput) {
 	int indexNumber;
 	StringConvertor convertToNumber;
 	convertToNumber.convertStringToNumber(userInput, indexNumber);
@@ -321,19 +315,64 @@ void Main::executeDeleteFunction(string userInput){
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
-void Main::executeHelpFunction(){
+void Main::executeHelpFunction() {
 	_commandInterface.displayHelp();
 }
 
-void Main::executeUndoFunction(){
+void Main::executeUndoFunction() {
 	_newList.undo();
 }
 
-void Main::executeExitFunction(){
+void Main::executeSaveFunction() {
+	//write scheduled
+	vector<Entry> scheduledList = _newList.getScheduledList();
+	ofstream writeSched(_scheduledPath);
+	vector<Entry>::iterator iterSched;
+
+	for (iterSched = scheduledList.begin(); iterSched != scheduledList.end(); iterSched++){
+		writeSched << iterSched->storeEntry() << endl;
+	}
+	writeSched.close();
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << SCHEDULED_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << _scheduledPath << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
+	//write floating
+	vector<Entry> floatingList = _newList.getFloatingList();
+	ofstream writeFloat(_floatingPath);
+	vector<Entry>::iterator iterFloat;
+
+	for (iterFloat = floatingList.begin(); iterFloat != floatingList.end(); iterFloat++){
+		writeFloat << iterFloat->storeEntry() << endl;
+	}
+	writeFloat.close();
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << FLOATING_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << _floatingPath << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+void Main::executeSaveAtFunction() {
+	cout << SPECIFY_STORAGE_PROMPT << endl;
+	string path;
+	getline(cin, path);
+
+	ofstream writePath(PATH_FILE_NAME);
+	_scheduledPath = path + SCHEDULED_FILE_NAME;
+	writePath << _scheduledPath << endl;
+	_floatingPath = path + FLOATING_FILE_NAME;
+	writePath << _floatingPath;
+	writePath.close();
+
+	executeSaveFunction();
+}
+
+void Main::executeExitFunction() {
+	executeSaveFunction();
 	_newList.exit(_running);
 }
 
-void Main::resetStringValues(){
+void Main::resetStringValues() {
 	_userInput = "";
 	_entryName = "";
 	_stringStartDate = "";
