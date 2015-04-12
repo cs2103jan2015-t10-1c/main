@@ -1,19 +1,25 @@
 //@author A0115902N
 #include "ClashInspector.h"
 #include <windows.h>
-
 using namespace std;
+
+const string ClashInspector::CLASH_MESSAGE = "Clashes with entry no.";
+const string ClashInspector::COLON = ":";
+const string ClashInspector::EXCLAMATION_MARK = "!";
+
 
 ClashInspector::ClashInspector(vector<Entry> entryVector){
 	_entryVector = entryVector;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 void ClashInspector::compareEntry(Entry inputEntry, int count, bool& clashExists, bool printClash){
 	vector<Entry>::iterator iter;
 	clashExists = false;
 	for(unsigned int i = 0; i < _entryVector.size(); i++){
+		Entry entryBeingCompared = _entryVector[i];
 		if(i + 1 != count){
-			inspectEntries(inputEntry, _entryVector[i], _entryVector[i].getEntryNumber(), clashExists, printClash);
+			inspectEntries(inputEntry, entryBeingCompared, entryBeingCompared.getEntryNumber(), clashExists, printClash);
 		}
 	}
 }
@@ -30,20 +36,16 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 
 	if(startDateInputEntry == startDateAnotherEntry){
 		if(printClash){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			if((endTimeAnotherEntry > startTimeInputEntry &&  startTimeAnotherEntry < startTimeInputEntry)
 				|| (endTimeAnotherEntry > endTimeInputEntry && startTimeAnotherEntry < endTimeInputEntry)
 				|| (startTimeInputEntry < startTimeAnotherEntry &&  endTimeInputEntry > startTimeAnotherEntry)
 				|| (startTimeInputEntry < endTimeAnotherEntry && endTimeInputEntry > endTimeAnotherEntry)){
 					if(printClash){
-						HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-						SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-						cout << "Clashes with entry no." << listCount
-							<< ": "  
+						SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+						cout << CLASH_MESSAGE << listCount
+							<< COLON  
 							<< anotherEntry.getName()
-							<< "! " << endl;
+							<< EXCLAMATION_MARK << endl;
 						clashExists = true;
 						SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 					}
@@ -55,12 +57,11 @@ void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int li
 		|| (startDateInputEntry < startDateAnotherEntry && endDateInputEntry > startDateAnotherEntry) 
 		|| (startDateInputEntry < endDateAnotherEntry && endDateInputEntry > endDateAnotherEntry)){
 			if(printClash){
-				HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-				cout << "Clashes with entry no." << listCount 
-				<< ": " 
-				<< anotherEntry.getName()
-				<< "! " << endl;
+				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+				cout << CLASH_MESSAGE << listCount 
+					<< COLON 
+					<< anotherEntry.getName()
+					<< EXCLAMATION_MARK << endl;
 				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			}
 			clashExists = true;

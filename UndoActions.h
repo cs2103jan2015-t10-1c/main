@@ -37,12 +37,12 @@ private:
 	};
 	stack<_ACTION_TO_UNDO> _undoStack;
 
-	HANDLE hConsole;
-
 	static const string NO_MORE_ACTION;
 	static const string ADDITION_UNDONE;
 	static const string DELETION_UNDONE;
 	static const string EDITING_UNDONE;
+	
+	HANDLE hConsole;
 
 public:
 	UndoActions();

@@ -87,24 +87,22 @@ Time Entry::getEndTime(){
 }
 
 //@author A0116660L
-void Entry::initialiseStatus() {
+void Entry::initialiseStatus(){
 	_status = false;
 }
 
-void Entry::changeStatus() {
+void Entry::changeStatus(){
 	_status = true;
 }
 
-string Entry::getStatus() {
+string Entry::getStatus(){
 	string printStatus;
-	if (_status == true) {
+	if (_status == true){
 		printStatus = "done";
 	}
-
-	if (_status == false) {
+	if (_status == false){
 		printStatus = "undone";
 	}
-
 	return printStatus;
 }
 
@@ -120,15 +118,15 @@ string Entry::getLocation (){
 }
 
 //@author A0116660L
-void Entry::insertTags(vector<string>& tags) {
+void Entry::insertTags(vector<string>& tags){
 	_tags = tags;
 }
 
-void Entry::searchEntryTag(string tag, bool& tagFound) {
+void Entry::searchEntryTag(string tag, bool& tagFound){
 	vector<string>::iterator iterTag;
-	for (iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		size_t found = iterTag->find(tag);
-		if (found != string::npos) {
+		if(found != string::npos){
 			tagFound = true;
 		}
 	}
@@ -139,7 +137,7 @@ void Entry::searchEntryTag(string tag, bool& tagFound) {
 string Entry::getTags() {
 	ostringstream oss;
 	vector<string>::iterator iterTag;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		oss << *iterTag << " ";
 	}
 
@@ -155,16 +153,16 @@ void Entry::addTag(string tag) {
 void Entry::removeTag(string tag) {
 	vector<string>::iterator iterTag;
 	bool isFound = false;
-	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++) {
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
 		size_t found = iterTag->find(tag);
-		if(found != string::npos) {
+		if(found != string::npos){
 			_tags.erase(iterTag);
 			isFound = true;
 			break;
 		}
 	}
 
-	if (!isFound) {
+	if (!isFound){
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << tag << " does not exist" << endl;
@@ -315,16 +313,15 @@ string Entry::getShortDisplay(){
 //return a string containing the information of an entry, for storage purposes
 string Entry::storeEntry() {
 	ostringstream oss;
-	
 	oss << _name << endl;
 
-	if (_hasDate) {
+	if (_hasDate){
 		oss	<< _startDate.getDay() << " "
 			<< _startDate.getMonth() << " "
 			<< _startDate.getYear() << endl
 			
 			<< _startTime.getHour() << ".";
-		if (_startTime.getMinute() < 10) {
+		if (_startTime.getMinute() < 10){
 			oss << '0';
 		}	
 		oss	<< _startTime.getMinute() << endl 
@@ -334,7 +331,7 @@ string Entry::storeEntry() {
 			<< _endDate.getYear() << endl
 		
 			<< _endTime.getHour() << ".";
-		if (_endTime.getMinute() < 10) {
+		if (_endTime.getMinute() < 10){
 			oss << '0';
 		}
 		oss << _endTime.getMinute() << endl;

@@ -2,7 +2,6 @@
 #include "EntryEdit.h"
 
 const int EntryEdit::BLANK_SPACE_COUNT = 1;
-const int EntryEdit::INITIAL_POSITION = 0;
 const string EntryEdit::NAME_MARKER = "name";
 const string EntryEdit::DATE_MARKER = "date";
 const string EntryEdit::TIME_MARKER = "time";
@@ -35,59 +34,68 @@ int EntryEdit::getEntryNumber(string& entryComponents){
 
 //@author A0116660L
 //extract the markers and strings of new information, and push them into _changesList vector
-void EntryEdit::extractMarkerInfo(string entryComponents) {
+void EntryEdit::extractMarkerInfo(string entryComponents){
 	bool isEndOfEdit = false;
 	while (!isEndOfEdit) {
 		_NEW_CHANGES currentChange;
 		
 		//extract new name
-		if (entryComponents[INITIAL_POSITION] == NAME_MARKER[INITIAL_POSITION] && entryComponents[1] == NAME_MARKER[1]
-			&& entryComponents[2] == NAME_MARKER[2] && entryComponents[3] == NAME_MARKER[3]) {
+		if (entryComponents[0] == NAME_MARKER[0] && entryComponents[1] == NAME_MARKER[1]
+		&& entryComponents[2] == NAME_MARKER[2] && entryComponents[3] == NAME_MARKER[3]){
 			extractName(entryComponents, currentChange, isEndOfEdit);
-		} else if (entryComponents[0] == DATE_MARKER[0] && entryComponents[1] == DATE_MARKER[1]
-				   && entryComponents[2] == DATE_MARKER[2] && entryComponents[3] == DATE_MARKER[3]) {
-		  //extract new date
+		}
+
+		//extract new date
+		else if (entryComponents[0] == DATE_MARKER[0] && entryComponents[1] == DATE_MARKER[1]
+		&& entryComponents[2] == DATE_MARKER[2] && entryComponents[3] == DATE_MARKER[3]){
 			extractDate(entryComponents, currentChange, isEndOfEdit);
-		} else if (entryComponents[0] == TIME_MARKER[0] && entryComponents[1] == TIME_MARKER[1]
-				   && entryComponents[2] == TIME_MARKER[2] && entryComponents[3] == TIME_MARKER[3]) {
-		  //extract new time
+		}
+
+		//extract new time
+		else if (entryComponents[0] == TIME_MARKER[0] && entryComponents[1] == TIME_MARKER[1]
+		&& entryComponents[2] == TIME_MARKER[2] && entryComponents[3] == TIME_MARKER[3]){
 			extractTime(entryComponents, currentChange, isEndOfEdit);
-		} else if (entryComponents[0] == LOCATION_MARKER[0] && entryComponents[1] == LOCATION_MARKER[1] 
-				   && entryComponents[2] == LOCATION_MARKER[2] && entryComponents[3] == LOCATION_MARKER[3] 
-				   && entryComponents[4] == LOCATION_MARKER[4]) {
-		  //extract new location
+		}
+
+		//extract new location
+		else if (entryComponents[0] == LOCATION_MARKER[0] && entryComponents[1] == LOCATION_MARKER[1] && entryComponents[2] == LOCATION_MARKER[2]
+		&& entryComponents[3] == LOCATION_MARKER[3] && entryComponents[4] == LOCATION_MARKER[4]){
 			extractLocation(entryComponents, currentChange, isEndOfEdit);
-		} else if (entryComponents[0] == STATUS_MARKER[0] && entryComponents[1] == STATUS_MARKER[1] 
-				   && entryComponents[2] == STATUS_MARKER[2] && entryComponents[3] == STATUS_MARKER[3] 
-				   && entryComponents[4] == STATUS_MARKER[4] && entryComponents[5] == STATUS_MARKER[5]) {
-		  //extract new status
+		}
+
+		//extract new status
+		else if (entryComponents[0] == STATUS_MARKER[0] && entryComponents[1] == STATUS_MARKER[1] && entryComponents[2] == STATUS_MARKER[2]
+		&& entryComponents[3] == STATUS_MARKER[3] && entryComponents[4] == STATUS_MARKER[4] && entryComponents[5] == STATUS_MARKER[5]){
 			extractStatus(entryComponents, currentChange, isEndOfEdit);
-		} else if (entryComponents[0] == TAG_ADD_MARKER[0] && entryComponents[1] == TAG_ADD_MARKER[1] 
-				   && entryComponents[2] == TAG_ADD_MARKER[2]) {
-		  //extract new added tags
+		}
+
+		//extract new added tags
+		else if (entryComponents[0] == TAG_ADD_MARKER[0] && entryComponents[1] == TAG_ADD_MARKER[1] && entryComponents[2] == TAG_ADD_MARKER[2]){
 			extractAddedTag(entryComponents, currentChange, isEndOfEdit);
-		} else if (entryComponents[0] == TAG_REMOVE_MARKER[0] && entryComponents[1] == TAG_REMOVE_MARKER[1] 
-				   && entryComponents[2] == TAG_REMOVE_MARKER[2] && entryComponents[3] == TAG_REMOVE_MARKER[3] 
-				   && entryComponents[4] == TAG_REMOVE_MARKER[4] && entryComponents[5] == TAG_REMOVE_MARKER[5]) {
-		  //extract new removed tags
+		}
+
+		//extract new removed tags
+		else if (entryComponents[0] == TAG_REMOVE_MARKER[0] && entryComponents[1] == TAG_REMOVE_MARKER[1] && entryComponents[2] == TAG_REMOVE_MARKER[2]
+		&& entryComponents[3] == TAG_REMOVE_MARKER[3] && entryComponents[4] == TAG_REMOVE_MARKER[4] && entryComponents[5] == TAG_REMOVE_MARKER[5]){
 			extractRemovedTag(entryComponents, currentChange, isEndOfEdit);
-		} else {
-		  //unrecognised command
+		}
+
+		//unrecognised command
+		else {
 			_isEdited = false;
 			isEndOfEdit = true;
 		}
 	}
 }
 
-void EntryEdit::extractName(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+void EntryEdit::extractName(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
 	//push current change into vector
 	currentChange._editedField = Name;
 	//remove the word 'name' and blank space
 	entryComponents = entryComponents.substr(NAME_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfName = entryComponents.find(FULLSTOP_MARKER);
-
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfName == string::npos) {
+	if (endOfName == string::npos){
 		endOfName = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfName);
@@ -135,15 +143,14 @@ void EntryEdit::extractTime(string& entryComponents, _NEW_CHANGES currentChange,
 }
 
 //@author A0116660L
-void EntryEdit::extractLocation(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+void EntryEdit::extractLocation(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
 	//push current change into vector
 	currentChange._editedField = Location;
 	//remove the word 'place' and blank space
 	entryComponents = entryComponents.substr(LOCATION_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfLocation = entryComponents.find(FULLSTOP_MARKER);
-
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfLocation == string::npos) {
+	if (endOfLocation == string::npos){
 		endOfLocation = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfLocation);
@@ -153,15 +160,14 @@ void EntryEdit::extractLocation(string& entryComponents, _NEW_CHANGES currentCha
 	extractRemainder(endOfLocation, entryComponents, isEndOfEdit);
 }
 
-void EntryEdit::extractStatus(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+void EntryEdit::extractStatus(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
 	//push current change into vector
 	currentChange._editedField = Status;
 	//remove the word 'status' and blank space
 	entryComponents = entryComponents.substr(STATUS_MARKER.size() + BLANK_SPACE_COUNT);
 	int endOfStatus = entryComponents.find(FULLSTOP_MARKER);
-
 	//if FULLSTOP_MARKER is not found, then it is already the end of string
-	if (endOfStatus == string::npos) {
+	if (endOfStatus == string::npos){
 		endOfStatus = entryComponents.size();
 	}
 	currentChange._newInformation = entryComponents.substr(0, endOfStatus);
@@ -286,20 +292,20 @@ void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour,
 }
 
 //@author A0116660L
-string EntryEdit::getLocation() {
+string EntryEdit::getLocation(){
 	vector<_NEW_CHANGES>::iterator iter;
-	for (iter = _changesList.begin(); iter < _changesList.end(); iter++) {
-		if (iter->_editedField == Location) {
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
+		if (iter->_editedField == Location){
 			return iter->_newInformation;
 		}
 	}
 	return "";
 }
 
-string EntryEdit::getStatus() {
+string EntryEdit::getStatus(){
 	vector<_NEW_CHANGES>::iterator iter;
-	for (iter = _changesList.begin(); iter < _changesList.end(); iter++) {
-		if (iter->_editedField == Status) {
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
+		if (iter->_editedField == Status){
 			return iter->_newInformation;
 		}
 	}

@@ -1,11 +1,12 @@
 #ifndef ENTRYEDIT_H
 #define ENTRYEDIT_H
 
+#include "StringConvertor.h"
+#include "Entry.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
-#include "StringConvertor.h"
-#include "Entry.h"
 
 using namespace std;
 
@@ -18,12 +19,6 @@ public:
 
 private:
 	bool _isScheduled;
-	bool _isEdited;
-	bool _dateEdited;
-	bool _timeEdited;
-	bool _tagAdded;
-	bool _tagRemoved;
-
 	int _entryNumber;
 	struct _NEW_CHANGES {
 		Field _editedField;
@@ -31,9 +26,13 @@ private:
 		string _newInformation;
 	};
 	vector<_NEW_CHANGES> _changesList;
-	
+	bool _isEdited;
+	bool _dateEdited;
+	bool _timeEdited;
+	bool _tagAdded;
+	bool _tagRemoved;
+
 	static const int BLANK_SPACE_COUNT;
-	static const int INITIAL_POSITION;
 
 	//markers
 	static const string NAME_MARKER;
@@ -46,21 +45,18 @@ private:
 	static const string FULLSTOP_MARKER;
 
 public:	
+	//@author A0115656A
 	EntryEdit(bool);
 	//@author A0100750Y
 	int getEntryNumber(string&);
 	//@author A0116660L
-	//extract the markers and strings of new information, and push them into _changesList vector
 	void extractMarkerInfo(string);
-	//Extract out the component which is the name to be edited
 	void extractName(string&, _NEW_CHANGES, bool&);
 	//@author A0115656A
 	void extractDate(string&, _NEW_CHANGES, bool&);
 	void extractTime(string&, _NEW_CHANGES, bool&);
 	//@author A0116660L
-	//Extract out the component which is the location to be edited
 	void extractLocation(string&, _NEW_CHANGES, bool&);
-	//Extract out the component which is the status to be edited
 	void extractStatus(string&, _NEW_CHANGES, bool&);
 	//@author A0115656A
 	void extractAddedTag(string&, _NEW_CHANGES, bool&);

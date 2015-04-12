@@ -1,6 +1,10 @@
 #ifndef ENTRYLISTS_H
 #define ENTRYLISTS_H
 
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <Windows.h>
 #include "EntryDate.h"
 #include "EntryTime.h"
 #include "Entry.h"
@@ -9,18 +13,13 @@
 #include "ClashInspector.h"
 #include "DateTimeInspector.h"
 
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <Windows.h>
 
-class EntryLists{
+
+class EntryLists {
 private:
 	vector<Entry> _scheduledList;
 	vector<Entry> _floatingList;
 	UndoActions _counter;
-
-	HANDLE hConsole;
 
 	//Feedback to the users
 	static const string FEEDBACK_ADDED_AT_NUMBER;
@@ -74,6 +73,7 @@ public:
 	//@author A0115656A
 	void emptyCounter();
 	//@author A0116660L
+	//Function used to add a new entry into the vector list
 	void addEntry(Entry, int&);
 	//@author A0115902N
 	void showAddFeedback(Entry, int);

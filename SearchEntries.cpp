@@ -34,6 +34,7 @@ const string SearchEntries::SYSTEMSUN = "Sunday";
 const string SearchEntries::SYSTEMDAYSOFWEEK[7] = {SYSTEMMON, SYSTEMTUE, SYSTEMWED, SYSTEMTHU, SYSTEMFRI, SYSTEMSAT, SYSTEMSUN};
 
 //@author A0116660L
+//This segment is to make the search case-insensitive
 inline bool caseInsCharCompSingle(char a, char b) {
    return(toupper(a) == b);
 }
@@ -50,85 +51,83 @@ string::const_iterator caseInsFind(string& s, const string& p) {
                  caseInsCharCompSingle));        
 }
 
-SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries){
+//Inititialise the SearchEntries object which takes in two vectors containing
+//Scheduled List and Floating List
+SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries) {
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
 	_scheduledPageNumber = 1;
 	_floatingPageNumber = 1;
-	 hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
-void SearchEntries::execute(string userInput, int& scheduledPageNumber, int& floatingPageNumber, string& previousSearchInput){
+void SearchEntries::execute(string userInput, int& scheduledPageNumber, int& floatingPageNumber, string& previousSearchInput) {
 	_scheduledPageNumber = scheduledPageNumber;
 	_floatingPageNumber = floatingPageNumber;
 	userInput = userInput.substr(1);
-	if (userInput == NEXT_MARKER){
+
+	if (userInput == NEXT_MARKER) {
 		_scheduledPageNumber++;
 		_floatingPageNumber++;
 		userInput = previousSearchInput;
-	} else if (userInput == PREV_MARKER){
+	} else if (userInput == PREV_MARKER) {
 		_scheduledPageNumber--;
 		_floatingPageNumber--;
 		userInput = previousSearchInput;
-	} else{
+	} else {
 		previousSearchInput = userInput;
 	}
-	if (userInput[0] == '#'){
+
+	if (userInput[0] == '#') {
 		searchTag(userInput);
-	}
-	else{
+	} else {
 		string marker = userInput.substr(0, userInput.find_first_of(' '));
-		userInput = userInput.erase(0, userInput.find_first_of(' ')+1);
-		if (marker == NAME_MARKER){
+		userInput = userInput.erase(0, userInput.find_first_of(' ') + 1);
+		if (marker == NAME_MARKER) {
 			searchName(userInput);
-		}
-		else if (marker == LOCATION_MARKER){
+		} else if (marker == LOCATION_MARKER) {
 			searchLocation(userInput);
-		}
-		else if (marker == STATUS_MARKER){
+		} else if (marker == STATUS_MARKER) {
 			searchStatus(userInput);
-		}
-		else if (marker == DATE_MARKER){
+		} else if (marker == DATE_MARKER) {
 			searchDate(userInput);
-		}
-		else if (marker == TIME_MARKER){
+		} else if (marker == TIME_MARKER) {
 			searchTime(userInput);
-		}
-		else if (marker == DAY_MARKER){
+		} else if (marker == DAY_MARKER) {
 			searchDay(userInput);
-		}
-		else if (marker == SLOT_MARKER){
+		} else if (marker == SLOT_MARKER) {
 			searchSlot(userInput);
-		}
-		else if (marker == ALL_MARKER){
+		} else if (marker == ALL_MARKER) {
 			searchAll(userInput);
-		}
-		else {
+		} else {
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Wrong search input is given!" << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 	}
 	scheduledPageNumber = _scheduledPageNumber;
 	floatingPageNumber = _floatingPageNumber;
 }
 
-void SearchEntries::searchTag(string keyword){
+void SearchEntries::searchTag(string keyword) {
 	initialiseSearchPagingAttributes();
 	bool print = false;
 	//initialise search results
-	for(unsigned int i = 0; i < _scheduledList.size(); i++){
+	for (unsigned int i = 0; i < _scheduledList.size(); i++) {
 		bool tagFound = false;
 		_scheduledList[i].insertEntryNumber(i+1);
 		_scheduledList[i].searchEntryTag(keyword, tagFound);
-		if(tagFound){
+		if (tagFound) {
 			_scheduledSearchResult.push_back(_scheduledList[i]);
 		}
 	}
+
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << endl << endl
 		<< "Scheduled Entries containing tag: " << keyword
 		<< endl;
-	if(_scheduledSearchResult.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
+	if(_scheduledSearchResult.empty()) {
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << "Entries are not found" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -147,11 +146,13 @@ void SearchEntries::searchTag(string keyword){
 			_floatingSearchResult.push_back(_scheduledList[i]);
 		}
 	}
+
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << endl << endl
 		<< "Floating Entries containing tag: " << keyword
 		<< endl;
-	if(_floatingSearchResult.empty()){
+
+	if (_floatingSearchResult.empty()) {
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 		cout << "Entries are not found" << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -159,49 +160,55 @@ void SearchEntries::searchTag(string keyword){
 		loadFloatingSearchResult();
 	}
 }
+
 void SearchEntries::searchName(string inputName){
 	initialiseSearchPagingAttributes();
 		//initialise search results
-		for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		for (unsigned int i = 0; i < _scheduledList.size(); i++) {
 			bool nameFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			string entryName = _scheduledList[i].getName();
 			string::const_iterator it = caseInsFind(entryName, inputName);
-			if (it != entryName.end()){
+			if (it != entryName.end()) {
 				nameFound = true;
 			}
-			if(nameFound){
+
+			if (nameFound) {
 				_scheduledSearchResult.push_back(_scheduledList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << "Scheduled Entries containing " << inputName << " in their name:" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_scheduledSearchResult.empty()){
+		
+		if (_scheduledSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		} else {
 			loadScheduledSearchResult();
 		}
+
 		//floating search
-		for(unsigned int i = 0; i < _floatingList.size(); i++){
+		for (unsigned int i = 0; i < _floatingList.size(); i++) {
 			bool nameFound = false;
 			_floatingList[i].insertEntryNumber(i+1);
 			string entryName = _floatingList[i].getName();
 			string::const_iterator it = caseInsFind(entryName, inputName);
-			if (it != entryName.end()){
+			if (it != entryName.end()) {
 				nameFound = true;
 			}
-			if(nameFound){
+
+			if (nameFound) {
 				_floatingSearchResult.push_back(_scheduledList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << "Floating Entries containing " << inputName << " in their name:" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_floatingSearchResult.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		if (_floatingSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -210,48 +217,51 @@ void SearchEntries::searchName(string inputName){
 		}
 }
 
-void SearchEntries::searchLocation(string inputLocation){
+void SearchEntries::searchLocation(string inputLocation) {
 	initialiseSearchPagingAttributes();
 		//initialise search results
-		for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		for (unsigned int i = 0; i < _scheduledList.size(); i++) {
 			bool locationFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			string entryLocation = _scheduledList[i].getLocation();
 			string::const_iterator it = caseInsFind(entryLocation, inputLocation);
-			if (it != entryLocation.end()){
+			if (it != entryLocation.end()) {
 				locationFound = true;
 			}
-			if(locationFound){
+			if (locationFound) {
 				_scheduledSearchResult.push_back(_scheduledList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Scheduled Entries containing " << inputLocation << " in their location:" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_scheduledSearchResult.empty()){
+		if (_scheduledSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		} else {
 		loadScheduledSearchResult();
 		}
+
 		//initialise floating search result
-		for(unsigned int i = 0; i < _floatingList.size(); i++){
+		for (unsigned int i = 0; i < _floatingList.size(); i++) {
 			bool locationFound = false;
-			_floatingList[i].insertEntryNumber(i+1);
+			_floatingList[i].insertEntryNumber(i + 1);
 			string entryLocation = _floatingList[i].getLocation();
 			string::const_iterator it = caseInsFind(entryLocation, inputLocation);
-			if (it != entryLocation.end()){
+			if (it != entryLocation.end()) {
 				locationFound = true;
 			}
-			if(locationFound){
+			if (locationFound) {
 				_floatingSearchResult.push_back(_floatingList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Floating Entries containing " << inputLocation << " in their location:" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_floatingSearchResult.empty()){
+		if (_floatingSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -260,21 +270,22 @@ void SearchEntries::searchLocation(string inputLocation){
 		}
 }
 
-void SearchEntries::searchStatus(string inputStatus){
+void SearchEntries::searchStatus(string inputStatus) {
 	initialiseSearchPagingAttributes();
 		//initialise search results
-		for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		for (unsigned int i = 0; i < _scheduledList.size(); i++) {
 			bool statusMatches = false;
 			_scheduledList[i].insertEntryNumber(i+1);
-			if(inputStatus == _scheduledList[i].getStatus()){
+			if (inputStatus == _scheduledList[i].getStatus()) {
 				statusMatches = true;
 				_scheduledSearchResult.push_back(_scheduledList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << "Scheduled Entries that is/are " << inputStatus << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_scheduledSearchResult.empty()){
+		if (_scheduledSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -283,19 +294,20 @@ void SearchEntries::searchStatus(string inputStatus){
 		}
 
 		//Floating Search Result
-		for(unsigned int i = 0; i < _floatingList.size(); i++){
+		for (unsigned int i = 0; i < _floatingList.size(); i++) {
 			bool statusMatches = false;
 			_floatingList[i].insertEntryNumber(i+1);
-			if(inputStatus == _floatingList[i].getStatus()){
+			if (inputStatus == _floatingList[i].getStatus()) {
 				statusMatches = true;
 				_floatingSearchResult.push_back(_floatingList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		cout << "Floating Entries that is/are " << inputStatus << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 
-		if(_floatingSearchResult.empty()){
+		if (_floatingSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -407,28 +419,31 @@ void SearchEntries::searchTime(string userInput){
 
 
 //@author A0116660L
-void SearchEntries::searchAll(string userInput){
+void SearchEntries::searchAll(string userInput) {
 	initialiseSearchPagingAttributes();
-	for(unsigned int i = 0; i < _scheduledList.size(); i++){
-			_scheduledList[i].insertEntryNumber( i + 1);
+	for (unsigned int i = 0; i < _scheduledList.size(); i++) {
+			_scheduledList[i].insertEntryNumber(i + 1);
 			bool allFound = false;
 			_scheduledList[i].insertEntryNumber(i+1);
 			string entryName = _scheduledList[i].getName();
 			string::const_iterator it = caseInsFind(entryName, userInput);
-			if (it != entryName.end()){
+			if (it != entryName.end()) {
 				allFound = true;
 			}
+
 			string entryLocation = _scheduledList[i].getLocation();
 			it = caseInsFind(entryLocation, userInput);
-			if (it != entryLocation.end()){
+			if (it != entryLocation.end()) {
 				allFound = true;
 			}
+
 			string entryTag = _scheduledList[i].getTags();
 			it = caseInsFind(entryTag, userInput);
-			if (it != entryTag.end()){
+			if (it != entryTag.end()) {
 				allFound = true;
 			}
-			if (allFound){
+
+			if (allFound) {
 				_scheduledSearchResult.push_back(_scheduledList[i]);
 			}
 	}
@@ -436,7 +451,8 @@ void SearchEntries::searchAll(string userInput){
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Scheduled Entries with keyword " << userInput << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_scheduledSearchResult.empty()){
+		
+		if (_scheduledSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -445,33 +461,37 @@ void SearchEntries::searchAll(string userInput){
 		}
 		
 		//floating Entries
-		for(unsigned int i = 0; i < _floatingList.size(); i++){
-			_floatingList[i].insertEntryNumber( i + 1);
+		for (unsigned int i = 0; i < _floatingList.size(); i++) {
+			_floatingList[i].insertEntryNumber(i + 1);
 			bool allFound = false;
-			_floatingList[i].insertEntryNumber(i+1);
+			_floatingList[i].insertEntryNumber(i + 1);
 			string entryName = _floatingList[i].getName();
 			string::const_iterator it = caseInsFind(entryName, userInput);
-			if (it != entryName.end()){
+			if (it != entryName.end()) {
 				allFound = true;
 			}
+
 			string entryLocation = _floatingList[i].getLocation();
 			it = caseInsFind(entryLocation, userInput);
-			if (it != entryLocation.end()){
+			if (it != entryLocation.end()) {
 				allFound = true;
 			}
+
 			string entryTag = _floatingList[i].getTags();
 			it = caseInsFind(entryTag, userInput);
-			if (it != entryTag.end()){
+			if (it != entryTag.end()) {
 				allFound = true;
 			}
-			if (allFound){
+			if (allFound) {
 				_floatingSearchResult.push_back(_floatingList[i]);
 			}
 		}
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "Floating Entries with keyword " << userInput << ":" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		if(_floatingSearchResult.empty()){
+
+		if (_floatingSearchResult.empty()) {
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
 			cout << "Entries are not found" << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));

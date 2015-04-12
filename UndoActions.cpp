@@ -1,5 +1,4 @@
 #include "UndoActions.h"
-#include <windows.h>
 
 const string UndoActions::NO_MORE_ACTION = "There is no more action left to undo.";
 const string UndoActions::ADDITION_UNDONE = "Addition undone";
@@ -86,7 +85,7 @@ void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _schedule
 	} else {
 		_floatingList.erase(_floatingList.begin() + latestAction._indexNumber - 1);
 	}
-	
+
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << ADDITION_UNDONE << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));

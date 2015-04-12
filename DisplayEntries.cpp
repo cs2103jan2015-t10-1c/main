@@ -1,5 +1,5 @@
 #include "DisplayEntries.h"
-
+//command parameters
 const string DisplayEntries::TYPE_SCHEDULED = " scheduled";
 const string DisplayEntries::TYPE_FLOATING = " floating";
 const string DisplayEntries::TYPE_NEXT = " next";
@@ -9,11 +9,38 @@ const string DisplayEntries::TYPE_FIRSTPAGE = " first page";
 const string DisplayEntries::TYPE_LASTPAGE = " last page";
 const string DisplayEntries::TYPE_SPECIFICPAGE = " page";
 const string DisplayEntries::TYPE_PAST = " past";
-
+//paging parameters
 const int DisplayEntries::ENTRY_PERPAGE = 5;
 const int DisplayEntries::BLANKSPACE_COUNT = 1;
-
+//warnings
+const string DisplayEntries::MESSAGE_SCHEDULEDENTRY =  "Scheduled Entry";
+const string DisplayEntries::MESSAGE_FLOATINGENTRY =  "Floating Entry";
+const string DisplayEntries::MESSAGE_DISPLAYING = "displaying ";
+const string DisplayEntries::MESSAGE_SCHEDULEDISEMPTY =  "Scheduled List is empty!";
+const string DisplayEntries::MESSAGE_ENTRIESNUMBER = "No. of Entries: ";
+const string DisplayEntries::MESSAGE_FLOATINGISEMPTY = "Floating List is empty!";
+const string DisplayEntries::MESSAGE_VIEWINGSCHEDULED =  "You are currently viewing your SCHEDULED entries";
+const string DisplayEntries::MESSAGE_VIEWINGFLOATING =  "You are currently viewing your FLOATING entries";
+const string DisplayEntries::MESSAGE_VIEWINGENTRYCLASHES =  "You are currently viewing future ENTRY CLASHES";
+const string DisplayEntries::MESSAGE_VIEWINGPAST =  "You are currently viewing your PAST entries";
+const string DisplayEntries::MESSAGE_MISSINGPAGE =  "Page number is missing! ";
+const string DisplayEntries::MESSAGE_INVALID = "Invalid display command! Try again";
+const string DisplayEntries::MESSAGE_ENTRYCLASHES ="Entry clashes in the future: ";
+const string DisplayEntries::MESSAGE_ONFIRSTPAGE = "You are on the first page ";
+const string DisplayEntries::MESSAGE_PAGEDOESNOTEXIST = "Page does not exist!";
+const string DisplayEntries::MESSAGE_ARROWDISPLAYPREV = "<<< display prev";
+const string DisplayEntries::MESSAGE_ARROWDISPLAYNEXT = "\t \t \t \t display next >>>";
+const string DisplayEntries::MESSAGE_BOTHARROWS = "<<< display prev \t \t display next >>>";
 const string DisplayEntries::BORDER = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
+const string DisplayEntries::MESSAGE_PAGE = "Page: ";
+const string DisplayEntries::MESSAGE_OUTOF = " out of ";
+const string DisplayEntries::MESSAGE_DISPLAYENTRIES = "displaying entries ";
+const string DisplayEntries::MESSAGE_TO = " to ";
+const string DisplayEntries::MESSAGE_NOENTRIESTODAY = "You have no entries for today!"; 
+const string DisplayEntries::MESSAGE_DISPLAYINGTODAY = "Displaying all remaining entries for today";
+const string DisplayEntries::MESSAGE_ENTRIESTOMORROW = "Entries for tomorrow";
+const string DisplayEntries::MESSAGE_NOENTRIESTOMORROW = "You have no entries for tomorrow!"; 
+const string DisplayEntries::MESSAGE_ENTRYFROM = " entry from ";
 
 DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries){
 	_scheduledList = scheduledEntries;
@@ -25,6 +52,7 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 	_thisMonth = _today.end_of_month();
 	_nextMonth = _thisMonth + months(1);
 	_now = second_clock::local_time();
+	//bool values for the various display modes
 	_viewingClashes = false;
 	_viewingScheduledList = false;
 	_viewingFloatingList = false;
@@ -33,17 +61,17 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
-
 //@author A0115902N
 void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, bool& viewingScheduledList, bool& viewingFloatingList, bool& viewingPast, bool& viewingClashes){
+	//retrieving display attributes from main
 	_lastPage = lastPage;
 	_pageNumber = pageNumber;
 	_userInput = command;
-	StringConvertor convert;
 	_viewingClashes = viewingClashes;
 	_viewingScheduledList = viewingScheduledList;
 	_viewingFloatingList = viewingFloatingList;
 	_viewingPastEntries = viewingPast;
+	StringConvertor convert;
 	//display scheduled
 	if (_userInput == TYPE_SCHEDULED){
 		_pageNumber = 1;
@@ -54,17 +82,17 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 		_viewingClashes = false;
 
 		if(_scheduledList.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Scheduled List is empty!" << endl << endl;
+			cout << MESSAGE_SCHEDULEDISEMPTY << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
+
 		displayScheduledEntryShort();
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-		cout << endl << "You are currently viewing your SCHEDULED entries" << endl
-			<< "No. of Entries: " << _scheduledList.size() << endl;
+		cout << endl << MESSAGE_VIEWINGSCHEDULED << endl
+			<< MESSAGE_ENTRIESNUMBER << _scheduledList.size() << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 	
@@ -78,17 +106,15 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 		_viewingClashes = false;
 
 		if(_floatingList.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Floating List is empty!" << endl << endl;
+			cout << MESSAGE_FLOATINGISEMPTY << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
 		displayFloatingEntries();
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-		cout << endl << "You are currently viewing your FLOATING entries" << endl
-			<< "No. of Entries: " << _floatingList.size() << endl;
+		cout << endl << MESSAGE_VIEWINGFLOATING<< endl
+			<< MESSAGE_ENTRIESNUMBER << _floatingList.size() << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 	
@@ -112,6 +138,9 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 		_viewingClashes = true;
 		_pageNumber = 1;
 		displayClashes();
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << endl << MESSAGE_VIEWINGENTRYCLASHES << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 	//display first page
 	else if (_userInput == TYPE_FIRSTPAGE){
@@ -127,7 +156,7 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 		if(_userInput.substr(TYPE_SPECIFICPAGE.size()).empty()){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Page number is missing! " << endl;
+			cout << MESSAGE_MISSINGPAGE << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
@@ -156,23 +185,20 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 		int entryNumber;
 		convert.convertStringToNumber(_userInput, entryNumber);
 		if(_viewingScheduledList && entryNumber > 0){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-			cout << "Scheduled Entry" << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_SCHEDULEDENTRY << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			displayOneScheduledEntry(entryNumber);
 		} 
 		else if(_viewingFloatingList && entryNumber > 0){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-			cout << "Floating Entry" << endl;
+			cout << MESSAGE_FLOATINGENTRY << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			displayOneFloatingEntry(entryNumber);
 		}
 		else if (entryNumber <= 0) {
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Invalid display command! Try again" << endl << endl;
+			cout << MESSAGE_INVALID << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 	}
@@ -185,15 +211,19 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 		_viewingClashes = true;		
 		_pageNumber = 1;
 		displayPastEntries();
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << endl << MESSAGE_VIEWINGPAST << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 
 	//if command is invalid
 	else {
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << "Invalid display command! Try again" << endl << endl;
+		cout << MESSAGE_INVALID << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
+	//returning paging attributes to main
 	pageNumber = _pageNumber;
 	lastPage = _lastPage;
 	viewingScheduledList = _viewingScheduledList;
@@ -203,7 +233,7 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 }
 
 //@author A0116660L
-void DisplayEntries::displayScheduledEntryShort() {
+void DisplayEntries::displayScheduledEntryShort(){
 	//marking the boundaries
 	_printInThePast = false;
 	_printToday = false;
@@ -212,18 +242,15 @@ void DisplayEntries::displayScheduledEntryShort() {
 	_printNextWeek = false;
 	_printThisMonth = false;
 	_printNextMonth = false;
-
 	//initialise vector for entries from today onwards
 	vector<Entry> presentAndFutureEntries;
-	int fromLocationToIndex = 1;
-	for (unsigned int i = 0; i < _scheduledList.size(); i++) {
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
 		date entryStartDate = _scheduledList[i].getStartDate().getDate();
-		_scheduledList[i].insertEntryNumber(i + fromLocationToIndex);
-		if (entryStartDate >= _today) {
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate >= _today){
 			presentAndFutureEntries.push_back(_scheduledList[i]);
 		}
 	}
-
 	//initialise for paging
 	int numberOfPages;
 	int firstEntry;
@@ -231,52 +258,52 @@ void DisplayEntries::displayScheduledEntryShort() {
 	int number;
 	initialisePaging(presentAndFutureEntries, numberOfPages, firstEntry, lastEntry, number);
 
-	for (int i = firstEntry; i < lastEntry; i++) {
+	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl;
 		date entryStartDate = presentAndFutureEntries[i].getStartDate().getDate();
-		if (entryStartDate == _today && _printToday == false) {
+		if(entryStartDate == _today && _printToday == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events today:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printToday = true;
 		}
-
-		if (entryStartDate == _tomorrow && _printTomorrow == false) {
+		if(entryStartDate == _tomorrow && _printTomorrow == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events tomorrow:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printTomorrow = true;
 		}
-
-		if (entryStartDate <= _thisWeek && entryStartDate > _tomorrow && _printThisWeek == false) {
+		if(entryStartDate <= _thisWeek && entryStartDate > _tomorrow && _printThisWeek == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events This Week:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printThisWeek = true;
 		}
-
-		if (entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false) {
+		if(entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events Next Week:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printNextWeek = true;
 		}
-
-		if (entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false) {
+		if(entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events This Month:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printThisMonth = true;
 		}
-
-		if (entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false) {
+		if(entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events Next Month:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printNextMonth = true;
 		}
-
-		if (_today <= entryStartDate) {
+		if(_today <= entryStartDate){
 			_scheduledList[i].insertEntryNumber(number);
 			cout << BORDER << endl
 				<< presentAndFutureEntries[i].getEntryNumber() << ". "
@@ -285,16 +312,15 @@ void DisplayEntries::displayScheduledEntryShort() {
 			number++;
 		}
 	}
-
 	closingMessage(numberOfPages, firstEntry, lastEntry);
 }
 
-void DisplayEntries::displayOneScheduledEntry(int index) {
+void DisplayEntries::displayOneScheduledEntry(int index){
 	cout << endl
-		 << BORDER << endl
-		 << index << ". "
-		 << _scheduledList[index-1].getFullDisplay()
-		 << BORDER;
+		<< BORDER << endl
+		<< index << ". "
+		<< _scheduledList[index-1].getFullDisplay()
+		<< BORDER;
 }
 
 //@author A0115902N
@@ -327,13 +353,12 @@ void DisplayEntries::displayOneFloatingEntry(int index){
 void DisplayEntries::displayClashes(){
 	ClashInspector checkEntries(_scheduledList);
 	vector<Entry> listOfClashes;
-	bool print = false;
+	bool clashExists;
+	bool printClash;//to enable printing of the clash
 	int numberOfPages;
 	int firstEntry;
 	int lastEntry;
 	int count = 0;
-	bool clashExists;
-	bool printClash;
 
 	for(unsigned int i = 0; i < _scheduledList.size(); i++){
 		if(!isInThePast(_scheduledList[i].getStartTime().getTime())){
@@ -352,9 +377,8 @@ void DisplayEntries::displayClashes(){
 	clashExists = false;
 	printClash = true;
 	ClashInspector checkSearchResult(listOfClashes);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-	cout << "Entry clashes in the future: " << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << MESSAGE_ENTRYCLASHES << endl << endl;
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
@@ -364,8 +388,7 @@ void DisplayEntries::displayClashes(){
 		cout << BORDER << endl;
 	}
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
-		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+	closingMessage(numberOfPages, firstEntry, lastEntry);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
@@ -390,9 +413,8 @@ void DisplayEntries::displayLastPage(){
 
 void DisplayEntries::displayNextPage(){
 	if(_scheduledList.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Scheduled List is empty!" << endl << endl;
+			cout << MESSAGE_SCHEDULEDISEMPTY << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
@@ -410,19 +432,17 @@ void DisplayEntries::displayNextPage(){
 
 void DisplayEntries::displayPrevPage(){
 	if(_scheduledList.empty()){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Scheduled List is empty!" << endl << endl;
+			cout << MESSAGE_SCHEDULEDISEMPTY << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
 		_pageNumber--;
 		if(_pageNumber < 1){
 			_pageNumber = 1;
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << "You are on the first page ";
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_ONFIRSTPAGE;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 		if(_viewingClashes){
 			displayClashes();
@@ -481,9 +501,8 @@ void DisplayEntries::initialisePaging(vector<Entry> entryVector, int& numberOfPa
 	//prevent abort for exceeding page
 	while (_pageNumber > numberOfPages){
 		if (_pageNumber = numberOfPages + 1){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-			cout << "Page does not exist!" << endl << endl;
+			cout << MESSAGE_PAGEDOESNOTEXIST << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 		_pageNumber--;
@@ -507,14 +526,14 @@ void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastE
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	if(_pageNumber == numberOfPages && numberOfPages!=1){
-		cout << "<<< display prev" << endl << endl;
+		cout << MESSAGE_ARROWDISPLAYPREV << endl << endl;
 	} else if(_pageNumber == 1 && numberOfPages!=1){
-		cout << "\t \t \t \t display next >>>" << endl << endl;
+		cout << MESSAGE_ARROWDISPLAYNEXT << endl << endl;
 	} else if (numberOfPages!=1){
-		cout << "<<< display prev \t \t display next >>>" << endl << endl;
+		cout << MESSAGE_BOTHARROWS << endl << endl;
 	}
-	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
-		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl << endl; 
+	cout << MESSAGE_PAGE << _pageNumber << MESSAGE_OUTOF << numberOfPages << endl
+		<< MESSAGE_DISPLAYENTRIES << firstEntry+1 << MESSAGE_TO << lastEntry << endl << endl; 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
@@ -532,15 +551,17 @@ void DisplayEntries::displayToday(){
 			EventsToday.push_back(_scheduledList[i]);
 		}
 	}
-	cout << "Remaining entries for Today" << endl << endl;
-	if(EventsToday.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << "You have no entries for today!" << endl << endl;
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << MESSAGE_DISPLAYINGTODAY << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(EventsToday.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << MESSAGE_NOENTRIESTODAY << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
 	}
-	for (unsigned int i = 0; i < EventsToday.size(); i++){
+	for (unsigned int i = 0; i < EventsToday.size(); i++) {
 		cout << endl
 			<< BORDER << endl
 			<< (number) << ". "
@@ -548,9 +569,6 @@ void DisplayEntries::displayToday(){
 			<< BORDER;
 		number++;
 	}
-	cout << endl;
-	cout << "displaying all remaining entries for today" << endl;
-	cout << endl << endl;
 }
 
 void DisplayEntries::displayTomorrow(){
@@ -571,11 +589,13 @@ void DisplayEntries::displayTomorrow(){
 	if(lastEntry > EventsTomorrow.size()){
 		lastEntry = EventsTomorrow.size();
 	}
-	cout << "Entries for tomorrow" << endl;
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY | FOREGROUND_GREEN));
+	cout << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if(EventsTomorrow.empty()){
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
-		cout << "You have no entries for tomorrow!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << MESSAGE_NOENTRIESTOMORROW << endl << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
 	}
@@ -588,8 +608,12 @@ void DisplayEntries::displayTomorrow(){
 			<< BORDER;
 		number++;
 	}
+
 	cout << endl;
-	cout << "displaying " << lastEntry << " entry from " << EventsTomorrow.size() << " entry for tomorrow" << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << MESSAGE_DISPLAYING << lastEntry << MESSAGE_ENTRYFROM << EventsTomorrow.size() 
+		 << " " << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	cout << endl << endl;
 }
 

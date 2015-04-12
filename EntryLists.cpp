@@ -45,7 +45,6 @@ const string EntryLists::BORDER = "- - - - - - - - - - - - - - - - -";
 
 //@author A0115902N
 EntryLists::EntryLists(){
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 //@author A0115656A
@@ -182,12 +181,15 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 	int entryNumber = editComponent.getEntryNumber(userInput);
 	editComponent.extractMarkerInfo(userInput);
 	
-	if (!editComponent.getEditStatus()) {
+	if (!editComponent.getEditStatus()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << FEEDBACK_WRONG_COMMAND << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		return;
-	} else {
+	}
+	else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		oss << FEEDBACK_EDITED << entryNumber << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
@@ -196,20 +198,21 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 
 	//find the entry to be edited
 	vector<Entry>::iterator iter;
-	if (isScheduled) {
+	if (isScheduled){
 		iter = _scheduledList.begin();
-	} else {
+	}
+	else {
 		iter = _floatingList.begin();
 	}
 	//loop to find the ith entry
-	for (int i = 1; i < entryNumber; i++) {
+	for (int i = 1; i < entryNumber; i++){
 			iter++;
 	}
 	Entry oldEntry = *iter;
 
 	//update name
 	string newName = editComponent.getName();
-	if (newName != "") {
+	if (newName != ""){
 		oss << FEEDBACK_NAME << iter->getName();
 		iter->insertName(newName);
 		oss << FEEDBACK_ARROW << iter->getName() << endl; 
@@ -217,10 +220,10 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 
 	//update date
 	int inputStartDay;
-	if (editComponent.getDateEditStatus()) {
+	if (editComponent.getDateEditStatus()){
 		oss << FEEDBACK_DATE;
 		Date currentStartDate = iter->getStartDate();
-		if (currentStartDate.getDateStatus()) {
+		if (currentStartDate.getDateStatus()){
 			int currentStartDay = currentStartDate.getDay();
 			string currentStartMonth = currentStartDate.getMonth();
 			int currentStartYear = currentStartDate.getYear();
@@ -237,7 +240,8 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 			if (diffDates) {
 				oss << FEEDBACK_TO << currentEndDay << " " << currentEndMonth << " " << currentEndYear;
 			}
-		} else {	
+		}
+		else {	
 			oss << FEEDBACK_NO_DATE;		
 		}
 
@@ -266,9 +270,10 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		iter->insertStartDate(newStartDate);
 		iter->insertEndDate(newEndDate);
 		oss << FEEDBACK_ARROW;
-		if (inputStartDay == 0) {
+		if (inputStartDay == 0){
 			oss << FEEDBACK_REMOVED << endl;
-		} else {
+		}
+		else {
 			newStartDate = iter->getStartDate();
 			string inputStartMonthString = newStartDate.getMonth();
 			oss << inputStartDay << " " << inputStartMonthString << " " << inputStartYear;
@@ -298,9 +303,9 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		Time currentStartTime = iter->getStartTime();
 		int currentStartHour = currentStartTime.getHour();
 		int currentStartMinute = currentStartTime.getMinute();
-		if (currentStartTime.getTimeStatus() && (currentStartHour != 0 || currentStartMinute != 0)) {
+		if (currentStartTime.getTimeStatus() && (currentStartHour != 0 || currentStartMinute != 0)){
 			oss << currentStartHour << ".";
-			if (currentStartMinute < 10) {
+			if (currentStartMinute < 10){
 					oss << '0';
 			}
 			oss << currentStartMinute;
@@ -308,14 +313,15 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 			Time currentEndTime = iter->getEndTime();
 			int currentEndHour = currentEndTime.getHour();
 			int currentEndMinute = currentEndTime.getMinute();
-			if (currentEndTime.getTime() != currentStartTime.getTime()) {
+			if (currentEndTime.getTime() != currentStartTime.getTime()){
 				oss << FEEDBACK_TO << currentEndHour << ".";
-				if (currentEndMinute < 10) {
+				if (currentEndMinute < 10){
 					oss << '0';
 				}
 				oss << currentEndMinute;
 			} 
-		} else {
+		}
+		else {
 			oss << FEEDBACK_NO_TIME;
 		}
 
@@ -325,8 +331,8 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		int inputEndMinute;
 		editComponent.getTime(inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
 		DateTimeInspector inspector;
-		if (!inspector.timeIsValid(inputStartHour, inputStartMinute)
-			|| !inspector.timeIsValid(inputEndHour, inputEndMinute)) {
+		if(!inspector.timeIsValid(inputStartHour, inputStartMinute)
+			|| !inspector.timeIsValid(inputEndHour, inputEndMinute)){
 			editFeedback = "Invalid time\n";
 			return;
 		}
@@ -349,9 +355,9 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 			
 		newStartTime = iter->getStartTime();
 		newEndTime = iter->getEndTime();
-		if (newEndTime.getTime() != newStartTime.getTime()) {
+		if (newEndTime.getTime() != newStartTime.getTime()){
 			oss << FEEDBACK_TO << inputEndHour << ".";
-			if (inputEndMinute < 10) {
+			if (inputEndMinute < 10){
 				oss << '0';
 			}
 			oss << inputEndMinute;
@@ -361,7 +367,7 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 
 	//update location
 	string newLocation = editComponent.getLocation();
-	if (newLocation != "") {
+	if (newLocation != ""){
 		oss << FEEDBACK_LOCATION << iter->getLocation();
 		iter->insertLocation(newLocation);
 		oss << FEEDBACK_ARROW << iter->getLocation() << endl; 
