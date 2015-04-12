@@ -21,6 +21,7 @@ EntryEdit::EntryEdit(bool isScheduled){
 	_tagRemoved = false;
 };
 
+//@author A0100750Y
 int EntryEdit::getEntryNumber(string& entryComponents){
 	//remove blank space
 	entryComponents = entryComponents.substr(1);

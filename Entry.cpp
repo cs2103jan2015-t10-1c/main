@@ -4,24 +4,28 @@
 
 const string Entry::FEEDBACK_AT = " at ";
 
-Entry::Entry(){
+Entry::Entry() {
 	initialiseStatus();
 }
 
 //@author A0115656A
-void Entry::insertName(string inputName){
+//insert string inputName into the private attribute _name
+void Entry::insertName(string inputName) {
 	_name = inputName;
 }
 
-string Entry::getName(){
+//returns a string containing the value of private attribute _name
+string Entry::getName() {
 	return _name;
 }
 
-void Entry::insertEntryNumber(int entryNumber){
+//insert int entryNumber into the private attribute _entryNumber
+void Entry::insertEntryNumber(int entryNumber) {
 	_entryNumber = entryNumber;
 }
 
-int Entry::getEntryNumber(){
+//returns an int containing the value of private attribute _entryNumber
+int Entry::getEntryNumber() {
 	return _entryNumber;
 }
 
@@ -103,10 +107,12 @@ string Entry::getStatus(){
 }
 
 //@author A0115656A
+//insert string inputLocation into the private attribute _location
 void Entry::insertLocation(string inputLocation){
 	_location = inputLocation;
 }
 
+//returns a string containing the value of  private attribute _location
 string Entry::getLocation (){	
 	return _location;
 }
@@ -127,7 +133,8 @@ void Entry::searchEntryTag(string tag, bool& tagFound){
 }
 
 //@author A0115656A
-string Entry::getTags(){
+//returns a string containing the tags inside the vector<string> _tags
+string Entry::getTags() {
 	ostringstream oss;
 	vector<string>::iterator iterTag;
 	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
@@ -137,11 +144,13 @@ string Entry::getTags(){
 	return oss.str();
 }
 
-void Entry::addTag(string tag){
+//add a string tag into vector<string> _tags
+void Entry::addTag(string tag) {
 	_tags.push_back(tag);
 }
 
-void Entry::removeTag(string tag){
+//remove a string tag from vector<string> _tags
+void Entry::removeTag(string tag) {
 	vector<string>::iterator iterTag;
 	bool isFound = false;
 	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
@@ -301,9 +310,9 @@ string Entry::getShortDisplay(){
 }
 
 //@author A0115656A
-string Entry::storeEntry(){
+//return a string containing the information of an entry, for storage purposes
+string Entry::storeEntry() {
 	ostringstream oss;
-	
 	oss << _name << endl;
 
 	if (_hasDate){

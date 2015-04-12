@@ -10,7 +10,8 @@
 
 using namespace std;
 
-class EntryEdit{
+//@author A0115656A
+class EntryEdit {
 public:
 	enum Field {
 		Name, Date, Time, Location, Status, TagAdd, TagRemove
