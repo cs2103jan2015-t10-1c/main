@@ -499,8 +499,15 @@ void DisplayEntries::initialisePaging(vector<Entry> entryVector, int& numberOfPa
 void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastEntry){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	if(_pageNumber == numberOfPages && numberOfPages!=1){
+		cout << "<<< display prev" << endl << endl;
+	} else if(_pageNumber == 1 && numberOfPages!=1){
+		cout << "\t \t \t \t display next >>>" << endl << endl;
+	} else if (numberOfPages!=1){
+		cout << "<<< display prev \t \t display next >>>" << endl << endl;
+	}
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
-		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl << endl; 
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 

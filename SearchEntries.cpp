@@ -608,7 +608,7 @@ void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> 
 	firstEntry = ENTRY_PERPAGE*(_scheduledPageNumber-1);
 	lastEntry = firstEntry + ENTRY_PERPAGE;
 	//case for the last page
-	if(_scheduledPageNumber == numberOfPages){
+	if(_scheduledPageNumber == numberOfPages && numberOfEntriesOnLastPage != 0){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
 	//prevent abort for number of entries less than maximum page
@@ -636,7 +636,7 @@ void SearchEntries::initialiseFloatingPaging(int& numberOfPages, vector<Entry> s
 	firstEntry = ENTRY_PERPAGE*(_floatingPageNumber-1);
 	lastEntry = firstEntry + ENTRY_PERPAGE;
 	//case for the last page
-	if(_floatingPageNumber == numberOfPages){
+	if(_floatingPageNumber == numberOfPages && numberOfEntriesOnLastPage != 0){
 		lastEntry = firstEntry + numberOfEntriesOnLastPage;
 	}
 	//prevent abort for number of entries less than maximum page
@@ -657,18 +657,32 @@ void SearchEntries::displaySearchResults(vector<Entry> searchResult, int firstEn
 void SearchEntries::closingScheduledMessage(int numberOfPages, int firstEntry, int lastEntry){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	if(_scheduledPageNumber == numberOfPages && numberOfPages!=1){
+		cout <<  "<<< search prev"  << endl << endl;
+	} else if(_scheduledPageNumber == 1 && numberOfPages!=1){
+		cout << "\t \t \t \tsearch next >>>" << endl << endl;
+	} else if (numberOfPages!=1){
+		cout << "<<< search prev \t \t search next >>>" << endl << endl;
+	}
 	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
-	cout << "<<< search prev \t \t search next >>>" << endl;
+	
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 void SearchEntries::closingFloatingMessage(int numberOfPages, int firstEntry, int lastEntry){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	if(_floatingPageNumber == numberOfPages && numberOfPages!=1){
+		cout << "<<< search prev" << endl << endl;
+	} else if(_floatingPageNumber == 1 && numberOfPages!=1){
+		cout << "\t \t \t \tsearch next >>>" << endl << endl;
+	} else if (numberOfPages!=1){
+		cout << "<<< search prev \t \t search next >>>" << endl << endl;
+	}
 	cout << "Page: " << _floatingPageNumber << " out of " << numberOfPages << endl
-		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
-	cout << "<<< search prev \t \t search next >>>" << endl;
+		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl ; 
+	
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
