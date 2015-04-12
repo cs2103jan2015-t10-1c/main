@@ -528,6 +528,8 @@ void SearchEntries::searchSlot(string inputDate){
 	int inputMonth;
 	int inputYear;
 	ptime start;
+	ptime startOfDay;
+	ptime endOfDay;
 	ptime end;
 	vector<Entry> entriesOfDate;
 	convertDate.convertDate(inputDate, inputDay, inputMonth, inputYear);
@@ -542,17 +544,17 @@ void SearchEntries::searchSlot(string inputDate){
 		}
 	}
 	if(entriesOfDate.empty()){
-		cout << "The whole day is available" << endl;
+		cout << "The whole day is available for your new entry!" << endl;
 		return;
 	} else{
 		end = entriesOfDate[0].getStartTime().getTime();
 	}
 	date entryDate = keyDate.getDate();
 	vector<ptime> unoccupiedTimeOfDate;
-	ptime endOfDay;
-	endOfDay = ptime(entryDate + days(1), hours(0) + minutes(0));
-	start = ptime(entryDate, hours(0) + minutes(0));
-	unoccupiedTimeOfDate.push_back(start);
+	endOfDay = ptime(entryDate, hours(24) + minutes(0));
+	startOfDay = ptime(entryDate, hours(0) + minutes(0));
+	start = startOfDay;
+	unoccupiedTimeOfDate.push_back(startOfDay);
 	//initialise unoccupied
 	for (unsigned int i = 0; i < entriesOfDate.size(); i++){
 		start = entriesOfDate[i].getEndTime().getTime();
@@ -565,9 +567,26 @@ void SearchEntries::searchSlot(string inputDate){
 		}
 	}
 	unoccupiedTimeOfDate.push_back(end);
-	for (unsigned int i = 0; i < unoccupiedTimeOfDate.size(); i++){
-		cout << unoccupiedTimeOfDate[i] << endl;
+	cout << "Time slots available on the date: " << keyDate.getDay()
+		<< " " << keyDate.getMonth() << " " << keyDate.getYear() << endl << endl;
+	ostringstream oss;
+	for (unsigned int i = 0; i < unoccupiedTimeOfDate.size(); i = i + 2){
+		oss << "from "; 
+		if(unoccupiedTimeOfDate[i] == startOfDay){
+			oss << "midnight";
+		} else{
+			oss << unoccupiedTimeOfDate[i].time_of_day().hours() << "."
+				<< unoccupiedTimeOfDate[i].time_of_day().minutes();
+		}
+		oss << " to ";
+		if(unoccupiedTimeOfDate[i + 1] == endOfDay){
+			oss << "midnight";
+		} else {
+			oss << unoccupiedTimeOfDate[i + 1].time_of_day().hours() << "." 
+				<< unoccupiedTimeOfDate[i + 1].time_of_day().minutes() << endl;
+		}
 	}
+	cout << oss.str();
 }
 
 void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
