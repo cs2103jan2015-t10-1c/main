@@ -13,6 +13,7 @@ const string EntryAdd::TAG_MARKER = "#";
 const string EntryAdd::TO_MARKER = "to";
 
 
+//@author A0116660L
 void EntryAdd::dissectCommand (string entryComponents, string& entryName, string& entryStartDate, string& entryStartTime,
 							   string& entryEndDate, string& entryEndTime, string& entryLocation, vector<string>& tag){
 	//extract name of event
@@ -129,6 +130,7 @@ void EntryAdd::extractLocation(string& entryComponents, string& entryLocation){
     entryComponents.erase(0, endOfLocation);
 }
 
+//@author A0115902N
 void EntryAdd::convertTime(string entryTime, int& entryHour, int& entryMin){
 	StringConvertor parseTime;
 	parseTime.convertTime(entryTime, entryHour, entryMin);

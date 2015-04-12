@@ -59,10 +59,15 @@ private:
 
 public:
 	DisplayEntries(vector<Entry>, vector<Entry>);
+	
+	//@author A0115902N
 	//Scheduled Entries
 	void execute(string, int&, int&, bool&, bool&, bool&, bool&);
+	//@author A00116660L
 	void displayScheduledEntryShort();
 	void displayOneScheduledEntry(int);
+	
+	//@author A0115902N
 	//Floating Entries
 	void displayFloatingEntries();
 	void displayOneFloatingEntry(int index);

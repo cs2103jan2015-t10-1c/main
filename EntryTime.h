@@ -16,6 +16,7 @@ private:
 	ptime _entryTime;
 
 public:
+	//@author A0115902N
 	Time();
 	
 	//input the hour and minutes into a Time object

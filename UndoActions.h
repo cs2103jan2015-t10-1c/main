@@ -41,6 +41,7 @@ private:
 	static const string EDITING_UNDONE;
 
 public:
+	//@author A0115656A
 	UndoActions();
 	void emptyUndoStack();
 	void counterAdd(bool, int);

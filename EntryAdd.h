@@ -21,12 +21,14 @@ private:
 	static const string TO_MARKER;
 	
 public:
+	 //@author A0116660L
 	 void dissectCommand(string, string&, string&, string&, string&, string&, string&, vector<string>&);
 	 void extractName(string&, string&);
 	 void extractTime(string&, string&);
 	 void extractDate(string&, string&);
 	 void extractLocation(string&, string&);
 	 void extractTag(string&, vector<string>&);
+	 //@author A0115902N
 	 void convertTime(string, int&, int&);
 	 void convertDate(string, int&, int&, int&);
 };

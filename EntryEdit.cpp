@@ -11,6 +11,7 @@ const string EntryEdit::TAG_ADD_MARKER = "add";
 const string EntryEdit::TAG_REMOVE_MARKER = "remove";
 const string EntryEdit::FULLSTOP_MARKER = ". ";
 
+//@author A0115656A
 EntryEdit::EntryEdit(bool isScheduled){
 	_isScheduled = isScheduled;
 	_isEdited = true;
@@ -30,6 +31,7 @@ int EntryEdit::getEntryNumber(string& entryComponents){
 	return _entryNumber;
 }
 
+//@author A0116660L
 //extract the markers and strings of new information, and push them into _changesList vector
 void EntryEdit::extractMarkerInfo(string entryComponents){
 	bool isEndOfEdit = false;
@@ -102,6 +104,7 @@ void EntryEdit::extractName(string& entryComponents, _NEW_CHANGES currentChange,
 	extractRemainder(endOfName, entryComponents, isEndOfEdit);
 }
 
+//@author A0115902N
 void EntryEdit::extractDate(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
 	//push current change into vector
 	currentChange._editedField = Date;
@@ -138,6 +141,7 @@ void EntryEdit::extractTime(string& entryComponents, _NEW_CHANGES currentChange,
 	extractRemainder(endOfTime, entryComponents, isEndOfEdit);
 }
 
+//@author A0116660L
 void EntryEdit::extractLocation(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
 	//push current change into vector
 	currentChange._editedField = Location;
@@ -172,6 +176,7 @@ void EntryEdit::extractStatus(string& entryComponents, _NEW_CHANGES currentChang
 	extractRemainder(endOfStatus, entryComponents, isEndOfEdit);
 }
 
+//@author A0115656A
 void EntryEdit::extractAddedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit){
 	//push current change into vector
 	currentChange._editedField = TagAdd;
@@ -218,6 +223,7 @@ void EntryEdit::extractRemainder(int endOfField, string& entryComponents, bool& 
 	}
 }
 
+//@author A0115902N
 int EntryEdit::convertToNumber(string numberString){
 	int number;
 	istringstream convertString(numberString);
@@ -285,6 +291,7 @@ void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour,
 	parseTime.convertTime(newEndTime, newEndHour, newEndMinute);
 }
 
+//@author A0116660L
 string EntryEdit::getLocation(){
 	vector<_NEW_CHANGES>::iterator iter;
 	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
@@ -305,6 +312,7 @@ string EntryEdit::getStatus(){
 	return "";
 }
 
+//@author A0115656A
 void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss){
 	string addedTags;
 	//store the added tags into the string addedTags

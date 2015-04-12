@@ -67,16 +67,22 @@ private:
 	static const string BORDER;
 
 public:
+	//@author A0115902N
 	EntryLists();
+	//@author A0115656A
 	void emptyCounter();
+	//@author A0116660L
 	void addEntry(Entry, int&);
+	//@author A0115902N
 	void showAddFeedback(Entry, int);
 	string getEntryDisplay(bool, int);
 	void removeEntry(bool, unsigned int, string&);
+	//@author A0115656A
 	void editEntry(bool, string, string&);
 	void moveScheduledFloating(bool, int&, Entry);
 	void undo();
 	void exit(bool&);
+	//@author A0115902N
 	void sort(int&);
 	
 	//list accessors

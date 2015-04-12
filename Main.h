@@ -82,29 +82,41 @@ private:
 	DateTimeInitialiser _initialiser;
 
 public:
+	//@author A0100750Y
 	Main();
 	void welcomeMessage();
+	//@author A0115656A
 	void readPath();
 	void loadScheduledEntries();
 	void loadFloatingEntries();
 	void resetStringValues();
 	void resetIntegerValues();
+	//@author A0100750Y
 	void operateFastAdd();
 	
 	//FastAdd CRUD
+	//@author A0116660L
 	void executeAddFunction(string);
+	//@author A0115656A
 	void executeEditFunction(string);
+	//@author A0115902N
 	void executeDisplayFunction(string);
+	//@author A0116660L
 	void executeDeleteFunction(string);
 	//FastAdd additional features
+	//@author A0116660L
 	void executeSearchFunction(string);
+	//@author A0100750Y
 	void executeHelpFunction();
+	//@author A0115656A
 	void executeUndoFunction();
 	void executeSaveFunction();
 	void executeSaveAtFunction();
 	void executeExitFunction();
+	//@author A0116660L
 	void executeResizeFunction();
 
+	//@author A0115902N
 	void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear);
 	void initialiseTime(Time& inputTime, int inputHour, int inputMinute);
 	void convertDateTime(EntryAdd&, string, int&, int&, int&,

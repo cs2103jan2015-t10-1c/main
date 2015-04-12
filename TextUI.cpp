@@ -11,6 +11,7 @@ const string TextUI::KEY_IN_COMMANDS = "Please key in your commands";
 const string TextUI::HELP_FOR_INFORMATION = "Type 'help' for information on how to use FastAdd";
 const string TextUI::BORDER = "_________________________________________________________";
 
+//@author A0100750Y
 TextUI::TextUI(){
 }
 

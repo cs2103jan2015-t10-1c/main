@@ -33,6 +33,7 @@ const string SearchEntries::SYSTEMSAT = "Saturday";
 const string SearchEntries::SYSTEMSUN = "Sunday";
 const string SearchEntries::SYSTEMDAYSOFWEEK[7] = {SYSTEMMON, SYSTEMTUE, SYSTEMWED, SYSTEMTHU, SYSTEMFRI, SYSTEMSAT, SYSTEMSUN};
 
+//@author A0116660L
 inline bool caseInsCharCompSingle(char a, char b) {
    return(toupper(a) == b);
 }
@@ -303,6 +304,7 @@ void SearchEntries::searchStatus(string inputStatus){
 		}
 }
 
+//@author A0115902N
 void SearchEntries::searchDate(string userInput){
 	initialiseSearchPagingAttributes();
 	DateTimeInitialiser _initialiser;
@@ -404,6 +406,7 @@ void SearchEntries::searchTime(string userInput){
 }
 
 
+//@author A0116660L
 void SearchEntries::searchAll(string userInput){
 	initialiseSearchPagingAttributes();
 	for(unsigned int i = 0; i < _scheduledList.size(); i++){
@@ -477,6 +480,7 @@ void SearchEntries::searchAll(string userInput){
 		}
 }
 
+//@author A0115902N
 void SearchEntries::searchDay(string keyDay){
 	initialiseSearchPagingAttributes();
 	int dayOfWeek;

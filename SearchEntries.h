@@ -45,16 +45,20 @@ private:
 
 public:
 
+	//@author A0116660L
 	SearchEntries(vector<Entry>, vector<Entry>);
 	void execute(string input, int&, int&, string&);
 	void searchTag(string);
 	void searchName(string);
 	void searchLocation(string);
 	void searchStatus(string);
+	//@author A0115902N
 	void searchDate(string);
 	void searchTime(string);
-	void searchAll(string);
 	void searchDay(string);
+	//@author A0116660L
+	void searchAll(string);
+	//@author A0115902N
 	void searchSlot(string);
 	void initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
 	void initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
