@@ -521,7 +521,6 @@ void SearchEntries::searchDay(string keyDay){
 }
 
 void SearchEntries::searchSlot(string inputDate){
-	initialiseSearchPagingAttributes();
 	StringConvertor convertDate; 
 	DateTimeInitialiser dateInitialiser;
 	Date keyDate;
@@ -536,41 +535,36 @@ void SearchEntries::searchSlot(string inputDate){
 	keyDate.initialiseDate();
 	//initialise search result
 	for(unsigned int i = 0; i < _scheduledList.size(); i++){
-		cout << "iteration" << i << "error" << endl;
 		date entryDate = _scheduledList[i].getStartDate().getDate();
 		if(_scheduledList[i].getStartDate().getDate() == keyDate.getDate() 
 			&& _scheduledList[i].getEndDate().getDate() == keyDate.getDate() ){
 			entriesOfDate.push_back(_scheduledList[i]);
 		}
 	}
-	cout << "iteration here 1 error" << endl;
 	if(entriesOfDate.empty()){
 		cout << "The whole day is available" << endl;
 		return;
 	} else{
 		end = entriesOfDate[0].getStartTime().getTime();
 	}
-	cout << "iteration here 2 error" << endl;
 	date entryDate = keyDate.getDate();
 	vector<ptime> unoccupiedTimeOfDate;
 	ptime endOfDay;
 	endOfDay = ptime(entryDate + days(1), hours(0) + minutes(0));
 	start = ptime(entryDate, hours(0) + minutes(0));
-	cout << "iteration here 3 error" << endl;
-
+	unoccupiedTimeOfDate.push_back(start);
 	//initialise unoccupied
 	for (unsigned int i = 0; i < entriesOfDate.size(); i++){
-		unoccupiedTimeOfDate.push_back(start);
-		unoccupiedTimeOfDate.push_back(end);
 		start = entriesOfDate[i].getEndTime().getTime();
-		if(i != entriesOfDate.size()){
+		unoccupiedTimeOfDate.push_back(end);
+		unoccupiedTimeOfDate.push_back(start);
+		if(i + 1 != entriesOfDate.size()){
 			end = entriesOfDate[i + 1].getStartTime().getTime();
 		} else {
-			unoccupiedTimeOfDate.push_back(endOfDay);
+			end = endOfDay;
 		}
 	}
-	cout << "iteration here 4 error" << endl;
-
+	unoccupiedTimeOfDate.push_back(end);
 	for (unsigned int i = 0; i < unoccupiedTimeOfDate.size(); i++){
 		cout << unoccupiedTimeOfDate[i] << endl;
 	}
