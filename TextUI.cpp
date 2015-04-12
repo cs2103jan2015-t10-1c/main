@@ -11,7 +11,6 @@ const string TextUI::KEY_IN_COMMANDS = "Please key in your commands";
 const string TextUI::HELP_FOR_INFORMATION = "Type 'help' for information on how to use FastAdd";
 const string TextUI::BORDER = "_________________________________________________________";
 
-//@author A0100750Y
 TextUI::TextUI(){
 }
 
@@ -72,26 +71,31 @@ void TextUI::displayHelp(){
 		cout << "1. Add - " << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		cout << "Scheduled entry with <start date and time> and <end date and time>:" << endl
-			<< "add holiday. from 2 jun 15 10.30 to 27 Jun 2015 "<< endl 
+			<< "add <event name>. from <start date> <start time> to <end date>" << endl
+			<< "<end time> at <location> #<tag>" << endl
+			<< "e.g. add holiday. from 2 jun 15 10.30 to 27 Jun 2015 "<< endl 
 			<< "20.30 at Europe #holiday" << endl << endl
 			<< "Scheduled entry on <one date> with <start time> and <end time>:" << endl
-			<< "add career fair. on 14 Mar 2015 9.30 to 20.30  at NUS #careerfair #NUS" << endl << endl
+			<< "add <event name>. on <date> <start time> to <end time> at <location> #<tag>" << endl
+			<< "e.g. add career fair. on 14 Mar 2015 9.30 to 20.30  at NUS #careerfair #NUS" << endl << endl
 			<< "Deadline on <one date> and <one time>:" << endl
-			<< "add UPC2209 essay deadline. by 19 may 15 23.59 #deadline" << endl << endl
+			<< "add <event name>. by <date> <time>" << endl
+			<< "e.g. add UPC2209 essay deadline. by 19 may 15 23.59 #deadline" << endl << endl
 			<< "Floating entry without <date> or <time> " << endl
-			<< "add return John's thumbdrive. at Cinnamon #friendship #lend" << endl;
+			<< "add <event name>. or add <event name>. at <location> #<tag>" << endl
+			<< "e.g. add return John's thumbdrive. at Cinnamon #friendship #lend" << endl;
 		break;
 	case 2:
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "2. Display - " << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		cout << "To display the scheduled entries: display scheduled" << endl << endl
-			<< "To display the floating entries: display floating" << endl << endl
-			<< "To display clashes between scheduled entries: display clashes" << endl << endl
-			<< "To display past events: display past" << endl 
-			<< "To navigate through the list: display next or display prev" << endl
-			<< "To display a specific entry: display <entry number>" << endl
-			<< "To display a specific page: display page <page number>" << endl;
+		cout << "To display the scheduled entries:\tdisplay scheduled" << endl << endl
+			<< "To display the floating entries:\tdisplay floating" << endl << endl
+			<< "To display clashes between scheduled entries:\tdisplay clashes" << endl << endl
+			<< "To display past events:\tdisplay past" << endl 
+			<< "To navigate through the list:\tdisplay next or display prev" << endl
+			<< "To display a specific entry:\tdisplay <entry number>" << endl
+			<< "To display a specific page:\tdisplay page <page number>" << endl;
 		break;
 	case 3:
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
@@ -103,18 +107,19 @@ void TextUI::displayHelp(){
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "4. Edit - " << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		cout << "Edit entry name: edit <entry number> name <new name> " << endl
+		cout << "Edit entry name: " << endl
+			<< "edit <entry number> name <new name> " << endl
 			<< "e.g. edit 10 name dinner with John" << endl << endl
 			<< "Edit entry time. editing both one or two timings are enabled" << endl
 			<< "edit <entry number> time <new time> <new time> " << endl
-			<< "e.g. edit 2 time 10.30 or edit 2 time 10.30 11.30" << endl 
+			<< "e.g. edit 2 time 10.30 or edit 2 time 10.30 11.30" << endl << endl
 			<< "Editing the time of a floating entry will move it to the scheduled entry" << endl << endl
 			<< "Edit entry date. editing both one or two dates are enabled" << endl
 			<< "edit <entry number> date <new date> <new date>" << endl
-			<< "e.g. edit 30 date 13 mar 16 or edit 30 date 13 mar 16 17 mar 16" << endl
+			<< "e.g. edit 30 date 13 mar 16 or edit 30 date 13 mar 16 17 mar 16" << endl << endl
 			<< "Editing the date of a floating entry will move it to the scheduled entry" << endl << endl
 			<< "Edit entry location - edit <entry number> place <new location>" << endl
-			<< "e.g. edit 41 place NUS" << endl << endl
+			<< "e.g. edit 41 place NUS" << endl << endl << endl
 			<< "Edit entry status (done/undone)" << endl
 			<< "edit <entry number> status <done/undone> " << endl
 			<< "e.g. edit 5 status done or edit 5 status undone" << endl << endl
@@ -123,7 +128,7 @@ void TextUI::displayHelp(){
 			<< "e.g. edit 21 add #girlfriend remove #friend" << endl << endl
 			<< "Editing multiple parts is also possible, in any orders." << endl
 			<< "Each part is separated by full stop" << endl
-			<< "e.g. edit 18 name Case Competition Deadline. date 18 feb 15. time 2359." << endl
+			<< "e.g. edit 18 name Case Competition Deadline. date 18 feb 15. time 2359." << endl << endl
 			<< "place school. add #casecompetition #deadline" << endl;
 
 		break;
@@ -131,12 +136,15 @@ void TextUI::displayHelp(){
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << "5. Search -" << endl;
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-		cout << "search name <name of event>" << endl
-			<< "search place <location> " << endl
-			<< "search status \"done\"" << endl
-			<< "search status \"undone\"" << endl
-			<< "search date <DD Month YYYY>" << endl
-			<< "search time <HH.MM>" << endl;
+		cout << "to search name:\tsearch name <name of event>" << endl
+			<< "to search location:\tsearch place <location> " << endl
+			<< "to search status:\tsearch status \"done\""
+			<< " or search status \"undone\"" << endl
+			<< "to search a specific date:\t search date <DD Month YYYY>" << endl
+			<< "to search a specific time:\tsearch time <HH.MM>" << endl
+			<< "to search an empty slot in a specific date:\t search slot date <DD Month YYYY>" << endl
+			<< "to search a particular tag:\t search #<tag>" << endl
+			<< "to search a keyword in name, location and tag:\t search all <keyword>" << endl;
 						
 		break;
 	default:
