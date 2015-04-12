@@ -241,9 +241,8 @@ void DisplayEntries::displayScheduledEntryShort(){
 			cout << endl << "[Events tomorrow:] " << endl << endl;
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printTomorrow = true;
-			_printThisWeek = true;
 		}
-		if(entryStartDate <= _thisWeek && entryStartDate >= _today && _printThisWeek == false){
+		if(entryStartDate <= _thisWeek && entryStartDate > _tomorrow && _printThisWeek == false){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << endl << "[Events This Week:] " << endl << endl;
