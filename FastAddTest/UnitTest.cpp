@@ -12,7 +12,7 @@ namespace FastAddTest
 	{
 	public:
 
-		TEST_METHOD(DateTest) 
+		TEST_METHOD(EntryDateTest) 
 		{	
 			Date Someday;
 
@@ -38,7 +38,7 @@ namespace FastAddTest
 			Assert::IsTrue(Someday.getDateStatus());				
 		}
 		
-		TEST_METHOD(TimeTest) 
+		TEST_METHOD(EntryTimeTest) 
 		{	
 			Time Sometime;
 			date today(day_clock::local_day());
@@ -53,37 +53,6 @@ namespace FastAddTest
 			Assert::AreEqual(expectedMinute, actualMinute);
 
 			Assert::IsTrue(Sometime.getTimeStatus());				
-		}
-		
-
-		TEST_METHOD(ScheduledEntryTest) //addEntry and removeEntry for scheduled
-		{
-			vector<string> expectedAnswser;
-			expectedAnswser.push_back("b");
-			expectedAnswser.push_back("c");
-			expectedAnswser.push_back("d");
-				
-			Entry testScheduled; 
-			Entry testFloating;	
-			EntryLists testInfo;
-	
-			int dummy;
-			testScheduled.insertName("b");
-			testInfo.addEntry(testScheduled, dummy);
-			testScheduled.insertName("c");
-			testInfo.addEntry(testScheduled, dummy);
-			testScheduled.insertName("d");
-			testInfo.addEntry(testScheduled, dummy);
-		
-			//testInfo.removeEntry(true, 1);
-			vector<Entry> actualResult;
-			actualResult = testInfo.getScheduledList();
-			int size = actualResult.size();
-			Assert::AreEqual(3,size);
-
-			/*for(int i=0; i<3; i++){
-				Assert::AreEqual(expectedAnswser[i],actualResult[i]);
-			}*/
 		}
 
 
@@ -108,5 +77,107 @@ namespace FastAddTest
 			expectedAnswer="utown";
 			Assert::AreEqual(expectedAnswer,actualAnswer);
 		}
+
+		TEST_METHOD(TestUITest) 
+		{
+			string testInfo="edit dinner with me";
+			TextUI line(testInfo);
+			string expectedCommandWord="edit";
+			string actualCommandWord=line.findCommand(testInfo);
+			Assert::AreEqual(expectedCommandWord, actualCommandWord);
+		}
+		
+
+		//addEntry for scheduled and floating
+		TEST_METHOD(EntryListAddScheduledTest) 
+		{
+			vector<string> expectedAnswser;
+			expectedAnswser.push_back("a");
+			expectedAnswser.push_back("b");
+			expectedAnswser.push_back("c");
+			expectedAnswser.push_back("d");
+				
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummy;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummy);
+			
+			vector<Entry> actualResult;
+			actualResult = testInfo.getScheduledList();
+			int size = actualResult.size();
+			Assert::AreEqual(4,size);
+		
+		}
+
+		//removeEntry for scheduled and floating
+		TEST_METHOD(EntryListsRemoveTest) 
+		{
+			vector<string> expectedAnswser;
+			expectedAnswser.push_back("a");
+			expectedAnswser.push_back("b");
+			expectedAnswser.push_back("c");
+			expectedAnswser.push_back("d");
+				
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummy;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummy);
+			
+			vector<Entry> actualResult;
+			actualResult = testInfo.getScheduledList();
+			
+			string deleteFeedback;
+			testInfo.removeEntry(true, 1, deleteFeedback);			
+			int size = actualResult.size();
+			Assert::AreEqual(3,size);
+		}
+
+		//test for getEntryDisplay from Entrylists
+		TEST_METHOD(EntryListsGetEntryDisplayTest) 
+		{
+			string expectedAnswer= "b";
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummy;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummy);
+			
+			string actualResult;
+			actualResult = testInfo.getEntryDisplay(true, 2);
+
+			Assert::AreEqual(expectedAnswer,actualResult);
+	
+		}
+
+		
+
+
+
 	};
 }
