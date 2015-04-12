@@ -178,7 +178,10 @@ time_duration Entry::calculateEventDurationInHours(){
 string Entry::getFullDisplay(){
 	ostringstream oss;
 	
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	oss << _name << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
 	if (_hasDate){
 		string eventType;
 		if(_startTime.getTime() == _endTime.getTime()){
@@ -245,7 +248,10 @@ string Entry::getFullDisplay(){
 
 string Entry::getShortDisplay(){
 	ostringstream oss;
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	oss << _name << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	if (_hasDate){
 		string eventType;
 		if(_startTime.getTime() == _endTime.getTime()){

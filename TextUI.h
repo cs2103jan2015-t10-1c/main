@@ -27,6 +27,7 @@ class TextUI{
 		void displayWelcomeMessage();
 		void displayCurrentDateTime();
 		void displayHelp();
+		void displayResizeOptions();
 		TextUI(string &inputContent);	
 		string findCommand(string&);
         string removeCommand(string&);

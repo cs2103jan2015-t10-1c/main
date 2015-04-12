@@ -37,6 +37,7 @@ private:
 	date _nextWeek;
 	date _thisMonth;
 	date _nextMonth;
+	ptime _now;
 
 	static const string TYPE_SCHEDULED;
 	static const string TYPE_FLOATING;
@@ -71,6 +72,8 @@ public:
 	void displayNextPage();
 	void displaySpecifiedPage(int);
 	void displayPastEntries();
+	void displayToday();
+	void displayTomorrow();
 
 
 	int returnPageNumber();

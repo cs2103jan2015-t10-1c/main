@@ -12,6 +12,7 @@
 #include "SearchEntries.h"
 #include "UndoActions.h"
 #include <assert.h>
+#include <windows.h>
 
 using namespace std;
 using namespace boost::gregorian;
@@ -47,7 +48,7 @@ private:
 	int _intEndHour; int _intEndMinute;
 
 	bool _running;
-	
+
 	bool _viewingScheduledList;
 	bool _viewingFloatingList;
 	bool _viewingPastEntries;
@@ -56,14 +57,14 @@ private:
 	int _searchScheduledPageNumber;
 	int _searchFloatingPageNumber;
 	int _lastPage;
-	
+
 	//loading
 	bool _loadingEntries;
 	string _scheduledPath;
 	string _floatingPath;
-	
+
 	EntryLists _newList;
-	
+
 	TextUI _commandInterface;
 	DateTimeInitialiser _initialiser;
 

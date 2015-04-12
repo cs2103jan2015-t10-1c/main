@@ -24,6 +24,7 @@ DisplayEntries::DisplayEntries(vector<Entry> scheduledEntries, vector<Entry> flo
 	_nextWeek = _today + days(14);
 	_thisMonth = _today.end_of_month();
 	_nextMonth = _thisMonth + months(1);
+	_now = second_clock::local_time();
 	_viewingClashes = false;
 	_viewingScheduledList = false;
 	_viewingFloatingList = false;
@@ -122,7 +123,10 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 	else if (_userInput.substr(0, TYPE_SPECIFICPAGE.size()) == TYPE_SPECIFICPAGE){
 		int inputPageNumber;
 		if(_userInput.substr(TYPE_SPECIFICPAGE.size()).empty()){
-			cout << "page number is missing! " << endl;
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << "Page number is missing! " << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			return;
 		}
 		_userInput = _userInput.substr(TYPE_SPECIFICPAGE.size() + BLANKSPACE_COUNT);
@@ -141,6 +145,12 @@ void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, boo
 
 	//display details of an entry
 	else if (isdigit(_userInput[1])){
+		if(!_viewingScheduledList && !_viewingFloatingList){
+			_viewingScheduledList = true;
+			_viewingClashes = false;
+			_viewingFloatingList = false;
+			_viewingPastEntries = false;
+		}
 		int entryNumber;
 		convert.convertStringToNumber(_userInput, entryNumber);
 		if(_viewingScheduledList && entryNumber > 0){
@@ -199,23 +209,25 @@ void DisplayEntries::displayScheduledEntryShort(){
 	_printNextWeek = false;
 	_printThisMonth = false;
 	_printNextMonth = false;
+	//initialise vector for entries from today onwards
+	vector<Entry> presentAndFutureEntries;
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate >= _today){
+			presentAndFutureEntries.push_back(_scheduledList[i]);
+		}
+	}
 	//initialise for paging
 	int numberOfPages;
 	int firstEntry;
 	int lastEntry;
 	int number;
-	initialisePaging(_scheduledList, numberOfPages, firstEntry, lastEntry, number);
+	initialisePaging(presentAndFutureEntries, numberOfPages, firstEntry, lastEntry, number);
 
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl;
-		date entryStartDate = _scheduledList[i].getStartDate().getDate();
-		if(entryStartDate < _today && _printInThePast == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events in the past:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printInThePast = true;
-		}
+		date entryStartDate = presentAndFutureEntries[i].getStartDate().getDate();
 		if(entryStartDate == _today && _printToday == false){
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
@@ -259,12 +271,14 @@ void DisplayEntries::displayScheduledEntryShort(){
 			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 			_printNextMonth = true;
 		}
-		_scheduledList[i].insertEntryNumber(number);
-		cout << BORDER << endl
-			<< _scheduledList[i].getEntryNumber() << ". "
-			<< _scheduledList[i].getShortDisplay() << endl;
-		cout << BORDER << endl;
-		number++;
+		if(_today <= entryStartDate){
+			_scheduledList[i].insertEntryNumber(number);
+			cout << BORDER << endl
+				<< presentAndFutureEntries[i].getEntryNumber() << ". "
+				<< presentAndFutureEntries[i].getShortDisplay() << endl;
+			cout << BORDER << endl;
+			number++;
+		}
 	}
 	closingMessage(numberOfPages, firstEntry, lastEntry);
 }
@@ -283,12 +297,11 @@ void DisplayEntries::displayFloatingEntries(){
 	int lastEntry;
 	int number;
 	initialisePaging(_floatingList, numberOfPages, firstEntry, lastEntry, number);
-	vector<Entry>::iterator iter;
-	for (iter = _floatingList.begin(); iter != _floatingList.end(); iter++){
+	for (int i = firstEntry; i < lastEntry; i++){
 		cout << endl
 			<< BORDER << endl
 			<< (number) << ". "
-			<< iter->getShortDisplay() << endl
+			<< _floatingList[i].getShortDisplay() << endl
 			<< BORDER;
 		number++;
 	}
@@ -332,7 +345,10 @@ void DisplayEntries::displayClashes(){
 	clashExists = false;
 	printClash = true;
 	ClashInspector checkSearchResult(listOfClashes);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 	cout << "Entry clashes in the future: " << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
 	for (int i = firstEntry; i < lastEntry; i++){
 		cout << BORDER << endl
 			<< listOfClashes[i].getEntryNumber() << ". "
@@ -340,7 +356,6 @@ void DisplayEntries::displayClashes(){
 		checkSearchResult.compareEntry(listOfClashes[i], i + 1, clashExists, printClash);
 		cout << BORDER << endl;
 	}
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 	cout << "Page: " << _pageNumber << " out of " << numberOfPages << endl
 		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
@@ -398,9 +413,9 @@ void DisplayEntries::displayPrevPage(){
 		if(_pageNumber < 1){
 			_pageNumber = 1;
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 			cout << "You are on the first page ";
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_BLUE | FOREGROUND_GREEN));
 		}
 		if(_viewingClashes){
 			displayClashes();
@@ -489,78 +504,80 @@ void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastE
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
-/*void DisplayEntries::displayTodayAndTomorrow(int& pageNumber, int& lastPage, bool& viewingScheduledList, bool& viewingFloatingList, bool& viewingPast, bool& viewingClashes){
-	//marking the boundaries
-	_printInThePast = false;
-	_printToday = false;
-	_printTomorrow = false;
-	_printThisWeek = false;
-	_printNextWeek = false;
-	_printThisMonth = false;
-	_printNextMonth = false;
-	//initialise for paging
-	int numberOfPages;
-	int firstEntry;
-	int lastEntry;
-	int number;
-	initialisePaging(_scheduledList, numberOfPages, firstEntry, lastEntry, number);
-
-	for (int i = firstEntry; i < lastEntry; i++){
-		cout << endl;
+void DisplayEntries::displayToday(){
+	_pageNumber = 1;
+	int number = 1;
+	vector<Entry> EventsToday;
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
 		date entryStartDate = _scheduledList[i].getStartDate().getDate();
-		if(entryStartDate == _today && _printToday == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events today:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printToday = true;
+		date entryEndDate = _scheduledList[i].getEndDate().getDate();
+		ptime entryStartTime = _scheduledList[i].getStartTime().getTime();
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate == _today || (entryStartDate < _today && entryEndDate >= _today)){
+			if(entryStartTime >= _now);
+			EventsToday.push_back(_scheduledList[i]);
 		}
-		if(entryStartDate == _tomorrow && _printTomorrow == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
-			cout << endl << "[Events tomorrow:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printTomorrow = true;
-			_printThisWeek = true;
-		}
-		if(entryStartDate <= _thisWeek && entryStartDate >= _today && _printThisWeek == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events This Week:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printThisWeek = true;
-		}
-		if(entryStartDate > _thisWeek && entryStartDate <= _nextWeek && _printNextWeek == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events Next Week:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printNextWeek = true;
-		}
-		if(entryStartDate <= _thisMonth && entryStartDate > _nextWeek && _printThisMonth == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events This Month:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printThisMonth = true;
-		}
-		if(entryStartDate <= _nextMonth && entryStartDate > _thisMonth && _printNextMonth == false){
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
-			cout << endl << "[Events Next Month:] " << endl << endl;
-			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
-			_printNextMonth = true;
-		}
-		_scheduledList[i].insertEntryNumber(number);
-		cout << BORDER << endl
-			<< _scheduledList[i].getEntryNumber() << ". "
-			<< _scheduledList[i].getShortDisplay() << endl;
-		cout << BORDER << endl;
+	}
+	cout << "Remaining entries for Today" << endl << endl;
+	if(EventsToday.empty()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "You have no entries for today!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		return;
+	}
+	for (unsigned int i = 0; i < EventsToday.size(); i++){
+		cout << endl
+			<< BORDER << endl
+			<< (number) << ". "
+			<< EventsToday[i].getShortDisplay() << endl
+			<< BORDER;
 		number++;
 	}
-	closingMessage(numberOfPages, firstEntry, lastEntry);
-}*/
+	cout << endl;
+	cout << "displaying all remaining entries for today" << endl;
+	cout << endl << endl;
+}
 
+void DisplayEntries::displayTomorrow(){
+	_pageNumber = 1;
+	int number = 1;
+	stringstream intToString;
+	string pageSize;
+	unsigned int lastEntry = 3;
+	vector<Entry> EventsTomorrow;
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		date entryEndDate = _scheduledList[i].getEndDate().getDate();
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate == _tomorrow || (entryStartDate < _tomorrow && _tomorrow <= entryEndDate)){
+			EventsTomorrow.push_back(_scheduledList[i]);
+		}
+	}
+	if(lastEntry > EventsTomorrow.size()){
+		lastEntry = EventsTomorrow.size();
+	}
+	cout << "Entries for tomorrow" << endl;
+	if(EventsTomorrow.empty()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "You have no entries for tomorrow!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		return;
+	}
+	
+	for (int i = 0; i < lastEntry; i++){
+		cout << endl
+			<< BORDER << endl
+			<< EventsTomorrow[i].getEntryNumber() << ". "
+			<< EventsTomorrow[i].getShortDisplay() << endl
+			<< BORDER;
+		number++;
+	}
+	cout << endl;
+	cout << "displaying " << lastEntry << " entry from " << EventsTomorrow.size() << " entry for tomorrow" << endl;
+	cout << endl << endl;
+}
 
 bool DisplayEntries::isInThePast(ptime entryTime){
 	ptime now(second_clock::local_time());

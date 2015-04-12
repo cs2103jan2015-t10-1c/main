@@ -49,9 +49,6 @@ namespace FastAddTest
 			Sometime.initialiseTime(today);
 			int actualHour=Sometime.getHour();
 			Assert::AreEqual(expectedHour, actualHour);
-
-			/*int expectedMinute=33;
-			Sometime.insertMinute(expectedMinute);*/
 			int actualMinute=Sometime.getMinute();
 			Assert::AreEqual(expectedMinute, actualMinute);
 

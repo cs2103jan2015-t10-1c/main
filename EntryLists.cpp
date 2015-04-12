@@ -87,7 +87,8 @@ void EntryLists::showAddFeedback(Entry newEntry, int latestEntryIndex) {
 		}
 		cout << entryEndTime.getMinute();
 	}
-		cout << ". " << entryLocation << endl; 
+	cout << ". " << entryLocation << endl; 
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
 
@@ -123,11 +124,14 @@ void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& delet
 			return;
 		}
 
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));	
 		oss << FEEDBACK_DELETED << endl;
 		oss << getEntryDisplay(isScheduled, index);
 		deleteFeedback = oss.str();
 		_counter.counterDelete(true, index, _scheduledList[index-1]);
 		_scheduledList.erase(_scheduledList.begin() + index - 1);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 
 	//floating entry
@@ -140,11 +144,14 @@ void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& delet
 			return;
 		}
 		
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		oss << FEEDBACK_DELETED << endl;
 		oss << getEntryDisplay(isScheduled, index);
 		deleteFeedback = oss.str();
 		_counter.counterDelete(false, index, _floatingList[index-1]);
 		_floatingList.erase(_floatingList.begin() + index - 1);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 
 	//no more entry
@@ -152,6 +159,7 @@ void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& delet
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
 		cout << FEEDBACK_NO_ENTRIES_LEFT << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 }
 
@@ -171,7 +179,10 @@ void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedb
 		return;
 	}
 	else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
 		oss << FEEDBACK_EDITED << entryNumber << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 	}
 	int oldEntryNumber = entryNumber;
 
@@ -435,7 +446,7 @@ void EntryLists::exit(bool& running){
 	ofstream writePath("Path.txt");
 	string scheduledPath = path + SCHEDULED_FILE_NAME;
 	writePath << scheduledPath << endl;
-	string floatingPath = path + FLOATING_FILE_NAME;;
+	string floatingPath = path + FLOATING_FILE_NAME;
 	writePath << floatingPath;
 	writePath.close();
 
