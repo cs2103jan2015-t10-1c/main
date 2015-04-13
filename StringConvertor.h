@@ -17,7 +17,7 @@ private:
 	static const string FULLSTOP_MARKER;
 
 public:
-	//@author A0115902N
+	//@author A0100750Y
 	StringConvertor();
 	void extractStringDate(string&, string&);
 	void extractStringTime(string&, string&);
