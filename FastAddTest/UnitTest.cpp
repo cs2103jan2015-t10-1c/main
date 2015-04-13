@@ -38,23 +38,50 @@ namespace FastAddTest
 			Assert::IsTrue(Someday.getDateStatus());				
 		}
 		
+		//@author A0115656A
 		TEST_METHOD(EntryTimeTest) 
 		{	
-			Time Sometime;
+			Time timeTest;
 			date today(day_clock::local_day());
-			int expectedHour=20;
-			int expectedMinute=20;
-			Sometime.insertHour(expectedHour);
-			Sometime.insertMinute(expectedMinute);
-			Sometime.initialiseTime(today);
-			int actualHour=Sometime.getHour();
+			int expectedHour = 20;
+			int expectedMinute = 20;
+			timeTest.insertHour(expectedHour);
+			timeTest.insertMinute(expectedMinute);
+			timeTest.initialiseTime(today);
+			int actualHour = timeTest.getHour();
 			Assert::AreEqual(expectedHour, actualHour);
-			int actualMinute=Sometime.getMinute();
+			int actualMinute = timeTest.getMinute();
 			Assert::AreEqual(expectedMinute, actualMinute);
 
-			Assert::IsTrue(Sometime.getTimeStatus());				
+			Assert::IsTrue(timeTest.getTimeStatus());				
 		}
 
+		TEST_METHOD(EntryEditTest)
+		{
+			//scheduled entries
+			EntryEdit editTestSch(true);
+			bool testBool = editTestSch.getEditStatus();
+			Assert::AreEqual(true, testBool);
+			testBool = editTestSch.getDateEditStatus();
+			Assert::AreEqual(false, testBool);
+			testBool = editTestSch.getTimeEditStatus();
+			Assert::AreEqual(false, testBool);
+			testBool = editTestSch.getTagAddedStatus();
+			Assert::AreEqual(false, testBool);
+			testBool = editTestSch.getTagRemovedStatus();
+			Assert::AreEqual(false, testBool);
+
+			//floating entries
+			EntryEdit editTestFlo(false);
+
+		}
+
+		TEST_METHOD(UndoActionsTest)
+		{
+
+		}
+
+		//@author
 		TEST_METHOD(EntryListEditNameTest) 
 		{
 			//vector<string> expectedAnswer;
