@@ -372,6 +372,12 @@ void DisplayEntries::displayClashes(){
 		count++;
 		}
 	}
+	if(listOfClashes.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "No clashes are found!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
+		return;
+	}
 
 	initialisePaging(listOfClashes, numberOfPages, firstEntry, lastEntry, count);
 	clashExists = false;
@@ -474,6 +480,12 @@ void DisplayEntries::displayPastEntries(){
 			entriesInThePast.push_back(*iterPastEntry);
 		}
 		number++;
+	}
+	if(entriesInThePast.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "No past Entries are found!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
+		return;
 	}
 	number = 0;
 	initialisePaging(entriesInThePast, numberOfPages, firstEntry, lastEntry, number);

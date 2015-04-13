@@ -18,8 +18,6 @@ public:
 	enum SuppCommand {
 		BackToFloating, BackToScheduled, NoChange
 	};
-
-private:
 	struct _ACTION_TO_UNDO {
 		bool _isScheduled;
 		//counterCommand refers to a command that can reverse the effect of the most recent command 
@@ -35,6 +33,9 @@ private:
 		SuppCommand _changeListCommand;
 		int _newIndexNumber;
 	};
+
+private:
+
 	stack<_ACTION_TO_UNDO> _undoStack;
 
 	static const string NO_MORE_ACTION;

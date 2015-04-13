@@ -21,6 +21,15 @@ class TextUI{
 		static const string KEY_IN_COMMANDS;
 		static const string HELP_FOR_INFORMATION;
 		static const string BORDER; 
+		static const string WRONG_INPUT;
+		static const string DATE_TODAY;
+		static const string TIME_STARTED;
+		static const string INPUT_COMMAND_NOT_IDENTIFIED;
+		static const string CHOOSE_RESIZE_OPTIONS;
+		static const string SIZE_SMALL;
+		static const string SIZE_LARGE;
+		static const string SIZE_DEFAULT;
+		static const string YOUR_CHOICE;
 
 	public:
 		//@author A0100750Y
@@ -29,7 +38,7 @@ class TextUI{
 		void displayCurrentDateTime();
 		void displayHelp();
 		void displayResizeOptions();
-		TextUI(string &inputContent);	
+		TextUI(string&);	
 		string findCommand(string&);
         string removeCommand(string&);
         void displayErrorFeedback();

@@ -16,15 +16,15 @@ public:
 	enum Field {
 		Name, Date, Time, Location, Status, TagAdd, TagRemove
 	};
-
-private:
-	bool _isScheduled;
-	int _entryNumber;
 	struct _NEW_CHANGES {
 		Field _editedField;
 		//new edited information
 		string _newInformation;
 	};
+
+private:
+	bool _isScheduled;
+	int _entryNumber;
 	vector<_NEW_CHANGES> _changesList;
 	bool _isEdited;
 	bool _dateEdited;

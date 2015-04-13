@@ -58,6 +58,7 @@ SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> float
 	_floatingList = floatingEntries;
 	_scheduledPageNumber = 1;
 	_floatingPageNumber = 1;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 void SearchEntries::execute(string userInput, int& scheduledPageNumber, int& floatingPageNumber, string& previousSearchInput) {
