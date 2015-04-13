@@ -6,32 +6,32 @@ using namespace boost::posix_time;
 using namespace boost::gregorian;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace FastAddTest
-{		
-	TEST_CLASS(UnitTest1)
-	{
+namespace FastAddTest {		
+	TEST_CLASS(UnitTest1) {
 	public:
 
-		TEST_METHOD(EntryDateTest) 
-		{	
+		TEST_METHOD(EntryDateTest) {	
 			Date Someday;
 
 			Someday.insertDay(27);
-			int expectedDate=27;
+			Someday.insertMonth(9);
+			Someday.insertYear(2013);
+			Someday.initialiseDate();
+
+			int expectedDate = 27;
+			int expectedMonthNumber = 9;
+			string expectedMonth = "Sep";
+			int expectedYear = 2013;
 			int actualDate=Someday.getDay();
 			Assert::AreEqual(expectedDate, actualDate);
 
 			Someday.insertMonth(9);
-			int expectedMonthNumber=9;
 			int actualMonthNumber=Someday.getMonthNumber();
 			Assert::AreEqual(expectedMonthNumber, actualMonthNumber);
-
-			string expectedMonth="Sep";
 			string actualMonth=Someday.getMonth();
 			Assert::AreEqual(expectedMonth, actualMonth);
 			
 			Someday.insertYear(2013);
-			int expectedYear=2013;
 			int actualYear=Someday.getYear();
 			Assert::AreEqual(expectedYear, actualYear);
 
@@ -86,6 +86,7 @@ namespace FastAddTest
 		{
 			//vector<string> expectedAnswer;
 			string expectedAnswer="k";
+
 			//expectedAnswer.push_back(expected);
 			
 			Entry testScheduled; 
@@ -137,15 +138,10 @@ namespace FastAddTest
 			vector<Entry> whatever = testInfo.getScheduledList();
 			testScheduled = whatever.back();
 			actualResult = testScheduled.getName();
-
-			//testInfo.getName();
-
-			Assert::AreEqual(expectedAnswer, actualResult);
 		}
 
 
-		TEST_METHOD(EntryTest) 
-		{
+		TEST_METHOD(EntryTest) {
 			Entry testInfo;
 		
 			//test for name
@@ -162,23 +158,21 @@ namespace FastAddTest
 			//test for location
 			testInfo.insertLocation("utown");
 			actualAnswer=testInfo.getLocation();	
-			expectedAnswer="utown";
+			expectedAnswer = "utown";
 			Assert::AreEqual(expectedAnswer,actualAnswer);
 		}
 
-		TEST_METHOD(TestUITest) 
-		{
-			string testInfo="edit dinner with me";
+		TEST_METHOD(TestUITest) {
+			string testInfo = "edit dinner with me";
 			TextUI line(testInfo);
-			string expectedCommandWord="edit";
+			string expectedCommandWord = "edit";
 			string actualCommandWord=line.findCommand(testInfo);
 			Assert::AreEqual(expectedCommandWord, actualCommandWord);
 		}
 		
 
 		//addEntry for scheduled and floating
-		TEST_METHOD(EntryListAddScheduledTest) 
-		{
+		TEST_METHOD(EntryListAddScheduledTest) {
 			vector<string> expectedAnswser;
 			expectedAnswser.push_back("a");
 			expectedAnswser.push_back("b");
@@ -207,8 +201,7 @@ namespace FastAddTest
 		}
 
 		//removeEntry for scheduled and floating
-		TEST_METHOD(EntryListsRemoveTest) 
-		{
+		TEST_METHOD(EntryListsRemoveTest) {
 			vector<string> expectedAnswser;
 			expectedAnswser.push_back("a");
 			expectedAnswser.push_back("b");
@@ -239,9 +232,8 @@ namespace FastAddTest
 		}
 
 		//test for getEntryDisplay from Entrylists
-		TEST_METHOD(EntryListsGetEntryDisplayTest) 
-		{
-			string expectedAnswer= "b";
+		TEST_METHOD(EntryListsGetEntryDisplayTest) {
+			string expectedAnswer = "b";
 			Entry testScheduled; 
 			Entry testFloating;	
 			EntryLists testInfo;
@@ -262,5 +254,115 @@ namespace FastAddTest
 			Assert::AreEqual(expectedAnswer,actualResult);
 	
 		}
+		TEST_METHOD(EntryAddTest) {	
+			string expectedName = "testing";
+			string expectedLocation = "NUS ";
+			string expectedTag = "#meeting";
+			string expectedStatus = "done";
+			string expectedStartDate = "20 Apr 2015";
+			string expectedEndDate = "21 Apr 2015";
+			string expectedStartTime = "18.30";
+			string expectedEndTime = "21.45";
+			string input = " testing. from 20 Apr 2015 18.30 to 21 Apr 2015 21.45 at NUS #meeting";
+			string actualName;
+			string actualLocation;
+			vector<string> actualTag;
+			string actualStatus;
+			string actualStartDate;
+			string actualEndDate;
+			string actualStartTime;
+			string actualEndTime;
+
+			EntryAdd testDissectCommand;
+			testDissectCommand.dissectCommand(input,actualName, actualStartDate, actualStartTime, actualEndDate, 
+											  actualEndTime, actualLocation, actualTag);
+			Assert::AreEqual(expectedName, actualName);
+			Assert::AreEqual(expectedStartDate, actualStartDate);
+			Assert::AreEqual(expectedStartTime, actualStartTime);
+			Assert::AreEqual(expectedEndDate, actualEndDate);
+			Assert::AreEqual(expectedEndTime, actualEndTime);
+			Assert::AreEqual(expectedLocation, actualLocation);
+		}
+		//@author A0115902N
+		TEST_METHOD(ClashInspectorTest) {
+			vector<Entry> dummy;
+			Entry firstEntry;
+			Entry secondEntry;
+
+			Date firstDate;
+			Date secondDate;
+			Time firstStartTime;
+			Time firstEndTime;
+			Time secondStartTime;
+			Time secondEndTime;
+
+			firstDate.insertDay(10);
+			firstDate.insertMonth(5);
+			firstDate.insertYear(2015);
+			firstDate.initialiseDate();
+			secondDate.insertDay(10);
+			secondDate.insertMonth(5);
+			secondDate.insertYear(2015);
+			secondDate.initialiseDate();
+
+			firstStartTime.insertHour(10);
+			firstStartTime.insertMinute(30);
+			firstEndTime.insertHour(11);
+			firstEndTime.insertMinute(30);
+
+			secondStartTime.insertHour(10);
+			secondStartTime.insertMinute(30);
+			secondEndTime.insertHour(11);
+			secondEndTime.insertMinute(30);
+
+			firstEntry.insertStartDate(firstDate);
+			firstEntry.insertEndDate(firstDate);
+			firstEntry.insertStartTime(firstStartTime);
+			firstEntry.insertEndTime(firstEndTime);
+
+			secondEntry.insertStartDate(secondDate);
+			secondEntry.insertEndDate(secondDate);
+			secondEntry.insertStartTime(secondStartTime);
+			secondEntry.insertEndTime(secondEndTime);
+
+			bool clash = false;
+			bool print = false;
+			int dummyInt = 1;
+			ClashInspector inspector(dummy);
+			inspector.inspectEntries(firstEntry, secondEntry, dummyInt, clash, print);
+			
+			Assert::AreEqual(true, clash);
+		}
+		//@author A0115902N
+		TEST_METHOD(StringConvertorTest) {
+			StringConvertor convertor;
+			string dateInput = "14 mar 15";
+			int day;
+			int month;
+			int year;
+			int expectedDay = 14;
+			int expectedMonth = 3;
+			int expectedYear = 2015;
+			int number;
+			int expectedNumber = 12;
+			convertor.convertDate(dateInput, day, month, year);
+			Assert::AreEqual(expectedDay, day);
+			Assert::AreEqual(expectedMonth, month);
+			Assert::AreEqual(expectedYear, year);
+
+			string numberInput = "12";
+			convertor.convertStringToNumber(numberInput, number);
+			Assert::AreEqual(expectedNumber, number);
+			string dateLongInput = "14 mar 15 to 15 mar 15";
+			string expectedStartDate = "14 mar 15";
+			string expectedEndDate = "15 mar 15";
+			string resultStartDate;
+			string resultEndDate;
+			convertor.extractStringDate(dateLongInput, resultStartDate);
+			dateLongInput = dateLongInput.substr(3);
+			convertor.extractStringDate(dateLongInput, resultEndDate);
+			Assert::AreEqual(expectedStartDate, resultStartDate);
+			Assert::AreEqual(expectedEndDate, resultEndDate);
+		}
 	};
-}
+	}
