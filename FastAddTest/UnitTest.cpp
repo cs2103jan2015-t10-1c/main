@@ -10,6 +10,7 @@ namespace FastAddTest {
 	TEST_CLASS(UnitTest1) {
 	public:
 
+		//@author A0116660L
 		TEST_METHOD(EntryDateTest) {	
 			Date Someday;
 
@@ -109,6 +110,7 @@ namespace FastAddTest {
 		
 		}		
 
+		//@author A0116660L
 		TEST_METHOD(EntryAddTest) {	
 			string expectedName = "testing";
 			string expectedLocation = "NUS ";
