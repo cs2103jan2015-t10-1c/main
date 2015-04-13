@@ -81,22 +81,20 @@ namespace FastAddTest {
 
 		}
 
+
 		//@author
+		//test on editEntry name for scheduled tasks
 		TEST_METHOD(EntryListEditNameTest) 
 		{
-			//vector<string> expectedAnswer;
 			string expectedAnswer="k";
-
-			//expectedAnswer.push_back(expected);
-			
+						
 			Entry testScheduled; 
 			Entry testFloating;	
 			EntryLists testInfo;
 	
 			testScheduled.insertName("a");
 			testScheduled.insertEntryNumber(1);
-
-			/*Date startDate;
+			Date startDate;
 			startDate.insertDay(17);
 			startDate.insertMonth(2);
 			startDate.insertYear(2014);
@@ -124,21 +122,23 @@ namespace FastAddTest {
 			testScheduled.insertLocation("utown");
 			vector<string> vectorTag;
 			vectorTag.push_back("#study");
-			testScheduled.insertTags(vectorTag);*/
+			testScheduled.insertTags(vectorTag);
 
 			int dummyNumber;
-			testInfo.addEntry(testScheduled, dummyNumber);			
+			testInfo.addEntry(testScheduled,dummyNumber);			
 			
-			//vector<Entry> actualResult;
-			string userInput = "1 name k";
 			string dummyString;
-			testInfo.editEntry(true, userInput, dummyString);		
+			string userInput = "1 name k";
+			testInfo.editEntry(true, userInput, dummyString);	
 			string actualResult;
-
-			vector<Entry> whatever = testInfo.getScheduledList();
-			testScheduled = whatever.back();
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
 			actualResult = testScheduled.getName();
+
+			Assert::AreEqual(expectedAnswer,actualResult);
 		}
+
+
 
 
 		TEST_METHOD(EntryTest) {
