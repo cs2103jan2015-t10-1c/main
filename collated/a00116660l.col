@@ -1,0 +1,17 @@
+//@author: a00116660l
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	 */
+
+	void displayScheduledEntryShort();
+	void displayOneScheduledEntry(int);
+	
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+
+
+
+
+

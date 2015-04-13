@@ -1,0 +1,127 @@
+//@author: a0100750y
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInspector.h
+	 */
+
+#ifndef DATETIMEINSPECTOR_H
+#define DATETIMEINSPECTOR_H
+#include <string>
+#include <boost\date_time\gregorian\gregorian.hpp>
+#include <boost\date_time\posix_time\posix_time.hpp>
+
+using namespace std;
+using namespace boost::gregorian;
+using namespace boost::posix_time;
+
+class DateTimeInspector{
+private:
+	date _testDate;
+	ptime _testTime;
+public:
+	DateTimeInspector();
+	bool dateIsValid(int, int, int);
+	bool timeIsValid (int, int);
+
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInspector.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	int getEntryNumber(string&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	Main();
+	void welcomeMessage();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void operateFastAdd();
+	
+	//FastAdd CRUD
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void executeHelpFunction();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\StringConvertor.h
+	 */
+
+	StringConvertor();
+	void extractStringDate(string&, string&);
+	void extractStringTime(string&, string&);
+	void convertDate(string, int&, int&, int&);
+	void convertTime(string, int&, int&);
+	void convertStringToNumber(string input, int& number);
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\StringConvertor.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\TextUI.h
+	 */
+
+		TextUI();
+		void displayWelcomeMessage();
+		void displayCurrentDateTime();
+		void displayHelp();
+		void displayResizeOptions();
+		TextUI(string&);	
+		string findCommand(string&);
+        string removeCommand(string&);
+        void displayErrorFeedback();
+		};
+#endif
+		
+		
+
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\TextUI.h
+
+
+
+
+

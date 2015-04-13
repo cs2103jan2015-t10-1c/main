@@ -1,0 +1,368 @@
+//@author: a0115902n
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\ClashInspector.h
+	 */
+
+#ifndef CLASHINSPECTOR_H
+#define CLASHINSPECTOR_H
+#include <string>
+#include <boost\date_time\gregorian\gregorian.hpp>
+#include "Entry.h"
+#include <windows.h>
+class ClashInspector{
+	
+private:
+	vector<Entry> _entryVector;
+	static const string CLASH_MESSAGE;
+	static const string COLON;
+	static const string EXCLAMATION_MARK;
+	HANDLE hConsole;
+
+public:
+	ClashInspector(vector<Entry>);
+	void compareEntry(Entry, int, bool&, bool);
+	void inspectEntries(Entry, Entry, int, bool&, bool);
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\ClashInspector.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInitialiser.h
+	 */
+
+#ifndef DATETIMEINITIALISER_H
+#define DATETIMEINITIALISER_H
+
+#include "EntryDate.h"
+#include "EntryTime.h"
+#include <boost\date_time\gregorian\gregorian.hpp>
+#include <boost\date_time\posix_time\posix_time.hpp>
+
+using namespace std;
+using namespace boost::gregorian;
+using namespace boost::posix_time;
+
+class DateTimeInitialiser{
+
+public:
+	DateTimeInitialiser();
+	void initialiseDate(Date&, int, int, int);
+	void initialiseTime(Time&, int, int, date);
+};
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInitialiser.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	 */
+
+	//Scheduled Entries
+	void execute(string, int&, int&, bool&, bool&, bool&, bool&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	 */
+
+	//Floating Entries
+	void displayFloatingEntries();
+	void displayOneFloatingEntry(int index);
+	void displayClashes();
+	//Jump to first, last, and a specific page
+	void displayFirstPage();
+	void displayLastPage();
+	void displayPrevPage();
+	void displayNextPage();
+	void displaySpecifiedPage(int);
+	void displayPastEntries();
+	void displayToday();
+	void displayTomorrow();
+
+
+	int returnPageNumber();
+
+	void initialisePaging(vector<Entry>, int&, int&, int&, int&);
+	void closingMessage(int, int, int);
+	bool isInThePast(ptime);
+
+
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	//Date
+	//input start date and end date into an Entry object
+	void insertStartDate(Date);
+	void insertEndDate(Date);
+	//return the values of Date type private attributes
+	Date getStartDate();
+	Date getEndDate();
+	bool getDateStatus();
+
+	//Time
+	//input start time and end time into an Entry object
+	void insertStartTime(Time);
+	void insertEndTime(Time);
+	//return the values of Time type private attributes
+	Time getStartTime();
+	Time getEndTime();
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	date_duration calculateDaysFromToday();
+	date_duration calculateEventDurationInDays();
+	time_duration calculateEventDurationInHours();
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	string getFullDisplay();
+	string getShortDisplay();
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryAdd.h
+	 */
+
+	 void convertTime(string, int&, int&);
+	 void convertDate(string, int&, int&, int&);
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryAdd.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+	 */
+
+	//input day, month and year into a Date object
+	void insertDay(int);
+	void insertMonth(int);
+	void insertYear(int);
+	void initialiseDate();
+	
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	string getName();
+	void getDate(int&, int&, int&, int&, int&, int&);
+	void getTime(int&, int&, int&, int&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 */
+
+	EntryLists();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 */
+
+	void showAddFeedback(Entry, int);
+	string getEntryDisplay(bool, int);
+	void removeEntry(bool, unsigned int, string&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 */
+
+	void sort(int&);
+	
+	//list accessors
+	vector<Entry> getScheduledList();
+	vector<Entry> getFloatingList();
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryTime.h
+	 */
+
+	Time();
+	
+	//input the hour and minutes into a Time object
+	void insertHour(int);
+	void insertMinute(int);
+	
+	//return the values of the private attributes
+	int getHour();
+	int getMinute();
+	bool getTimeStatus();
+	void initialiseTime(date);
+	ptime getTime();
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryTime.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void resetStringValues();
+	void resetIntegerValues();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void executeDisplayFunction(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear);
+	void initialiseTime(Time& inputTime, int inputHour, int inputMinute);
+	void convertDateTime(EntryAdd&, string, int&, int&, int&,
+						 string, int&, int&,
+						 string, int&, int&, int&,
+						 string, int&, int&);
+	void initialiseEntry(Entry&, string, Date, 
+						Date, Time, Time, string,
+						string, vector<string>&);
+	void initialiseDateTime(Date&, int, int, int, Time&, int, int,
+							Date&, int, int, int, Time& , int, int);
+};
+
+#endif
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	 */
+
+	void searchDate(string);
+	void searchTime(string);
+	void searchDay(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	 */
+
+	void searchSlot(string);
+	void initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
+	void initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry);
+	void closingScheduledMessage(int, int, int);
+	void closingFloatingMessage(int, int, int);
+	void displaySearchResults(vector<Entry>, int, int);
+	void initialiseSearchPagingAttributes();
+	void loadScheduledSearchResult();
+	void loadFloatingSearchResult();
+
+	int calculateDifferenceBetweenTwoWeekDays(string, string);
+
+};
+#endif
+
+
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+
+
+
+
+

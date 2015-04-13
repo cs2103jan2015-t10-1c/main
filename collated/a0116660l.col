@@ -1,0 +1,227 @@
+//@author: a0116660l
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	void initialiseStatus();
+	void changeStatus();
+	string getStatus();
+	
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	void insertTags(vector<string>&);
+	void searchEntryTag(string, bool&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryAdd.h
+	 */
+
+	 void dissectCommand(string, string&, string&, string&, string&, string&, string&, vector<string>&);
+	 void extractName(string&, string&);
+	 void extractTime(string&, string&);
+	 void extractDate(string&, string&);
+	 void extractLocation(string&, string&);
+	 void extractTag(string&, vector<string>&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryAdd.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	void extractMarkerInfo(string);
+	void extractName(string&, _NEW_CHANGES, bool&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	void extractLocation(string&, _NEW_CHANGES, bool&);
+	void extractStatus(string&, _NEW_CHANGES, bool&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	string getLocation();
+	string getStatus();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 */
+
+	//Function used to add a new entry into the vector list
+	void addEntry(Entry, int&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\FastAddTest\stdafx.h
+	 */
+
+// stdafx.h : include file for standard system include files,
+// or project specific include files that are used frequently, but
+// are changed infrequently
+//
+
+#pragma once
+
+#include "targetver.h"
+
+// Headers for CppUnitTest
+#include "CppUnitTest.h"
+
+// TODO: reference additional headers your program requires here
+#include "ClashInspector.h"
+#include "DateTimeInitialiser.h"
+#include "DateTimeInspector.h" 
+#include "DisplayEntries.h" 
+#include "Entry.h" 
+#include "EntryAdd.h"//nguyen
+#include "EntryDate.h" 
+#include "EntryEdit.h"
+#include "EntryLists.h"
+#include "EntryTime.h"
+#include "Main.h"
+#include "SearchEntries.h" 
+#include "StringConvertor.h"
+#include "TextUI.h"
+#include "UndoActions.h"
+#include <string.h>
+#include <boost\date_time\posix_time\posix_time.hpp>
+#include <boost\date_time\gregorian\gregorian.hpp>
+
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\FastAddTest\stdafx.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	//Function used to activate the whole chain of functions to add a new entry
+	//The string received is from the user without the command word
+	//The Command word has been removed through the TextUI
+	void executeAddFunction(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void executeDeleteFunction(string);
+	//FastAdd additional features
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	//Function used to activate the whole chain of functions to search for a new entry
+	//The string received is from the user without the command word
+	//The Command word has been removed through the TextUI
+	void executeSearchFunction(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	//Function used to resize the command prompt window size
+	//Two options available small and large
+	void executeResizeFunction();
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	 */
+
+	//Contructor of SearchEntries which takes in two vectors containing Scheduled and Floating lists
+	//The Search will be conducted on both list simultaneously
+	SearchEntries(vector<Entry>, vector<Entry>);
+	//The function to activate the whole chain of commands for search
+	//Used to distinguish different types of search such as search by name, location, date or time etc.
+	void execute(string input, int&, int&, string&);
+	//Function dedicated to search for the tag only
+	void searchTag(string);
+	//Function dedicated to search for the name only
+	void searchName(string);
+	//Function dedicated to search for the location only
+	void searchLocation(string);
+	//Function dedicated to search for the status only
+	void searchStatus(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	 */
+
+	//Function dedicated to search for anything that contains the keyword given by the user
+	void searchAll(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+
+
+
+
+

@@ -1,0 +1,311 @@
+//@author: a0115656a
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	void insertEntryNumber(int entryNumber);
+	int getEntryNumber();
+	//input name of entry into an Entry object
+	void insertName(string);
+	//return the value of _name
+	string getName();
+	
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	//input location into an Entry object
+	void insertLocation(string);
+	//return the value of _location
+	string getLocation();
+	
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	string getTags();
+	void addTag(string);
+	void removeTag(string);
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 */
+
+	string storeEntry();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+	 */
+
+	//return the values of the private attributes
+	int getDay();
+	string getMonth();
+	int getMonthNumber();
+	int getYear();
+	bool getDateStatus();
+	date getDate();
+	void printDayOfDate();
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+class EntryEdit {
+public:
+	enum Field {
+		Name, Date, Time, Location, Status, TagAdd, TagRemove
+	};
+	struct _NEW_CHANGES {
+		Field _editedField;
+		//new edited information
+		string _newInformation;
+	};
+
+private:
+	bool _isScheduled;
+	int _entryNumber;
+	vector<_NEW_CHANGES> _changesList;
+	bool _isEdited;
+	bool _dateEdited;
+	bool _timeEdited;
+	bool _tagAdded;
+	bool _tagRemoved;
+
+	static const int BLANK_SPACE_COUNT;
+
+	//markers
+	static const string NAME_MARKER;
+	static const string DATE_MARKER;
+	static const string TIME_MARKER;
+	static const string LOCATION_MARKER;
+	static const string STATUS_MARKER;
+	static const string TAG_ADD_MARKER;
+	static const string TAG_REMOVE_MARKER;
+	static const string FULLSTOP_MARKER;
+
+public:	
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	EntryEdit(bool);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	void extractDate(string&, _NEW_CHANGES, bool&);
+	void extractTime(string&, _NEW_CHANGES, bool&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	void extractAddedTag(string&, _NEW_CHANGES, bool&);
+	void extractRemovedTag(string&, _NEW_CHANGES, bool&);
+	void extractRemainder(int, string&, bool&);
+
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 */
+
+	void addTag(Entry&, ostringstream&);
+	void removeTag(Entry&, ostringstream&);
+
+	bool getEditStatus();
+	bool getDateEditStatus();
+	bool getTimeEditStatus();
+	bool getTagAddedStatus();
+	bool getTagRemovedStatus();
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 */
+
+	void emptyCounter();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 */
+
+	void editEntry(bool, string, string&);
+	void moveScheduledFloating(bool, int&, Entry);
+	void undo();
+	void exit(bool&);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void readPath();
+	void loadScheduledEntries();
+	void loadFloatingEntries();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void executeEditFunction(string);
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 */
+
+	void executeUndoFunction();
+	void executeSaveFunction();
+	void executeSaveAtFunction();
+	void executeExitFunction();
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\UndoActions.h
+	 */
+
+//UndoActions can only undo the effect of Add, Edit and Delete because only these 3 commands
+//modify the content of _scheduledList and _floatingList in ScheduledEntry
+class UndoActions {
+public:
+	enum Command {
+		Add, Delete, Edit
+	};
+	enum SuppCommand {
+		BackToFloating, BackToScheduled, NoChange
+	};
+	struct _ACTION_TO_UNDO {
+		bool _isScheduled;
+		//counterCommand refers to a command that can reverse the effect of the most recent command 
+		//Here are the list of pairs of command and its counterCommand:
+		//1. Add - Delete
+		//2. Delete - Add
+		//3. Edit - Edit
+		Command _counterCommand;
+		int _indexNumber;
+		Entry _modifiedEntry;
+
+		//only for edit
+		SuppCommand _changeListCommand;
+		int _newIndexNumber;
+	};
+
+private:
+
+	stack<_ACTION_TO_UNDO> _undoStack;
+
+	static const string NO_MORE_ACTION;
+	static const string ADDITION_UNDONE;
+	static const string DELETION_UNDONE;
+	static const string EDITING_UNDONE;
+	
+	HANDLE hConsole;
+
+public:
+	UndoActions();
+	void emptyUndoStack();
+	void counterAdd(bool, int);
+	void counterDelete(bool, int, Entry);
+	void counterEdit(bool, int, SuppCommand, int, Entry);
+	void removeCounter();
+
+	void execute(vector<Entry>&, vector<Entry>&);
+	void executeCounter(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
+	
+	void undoAdd(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
+	void undoDelete(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
+	void undoEdit(_ACTION_TO_UNDO, vector<Entry>&, vector<Entry>&);
+};
+
+#endif
+	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\UndoActions.h
+
+
+
+
+
