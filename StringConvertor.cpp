@@ -147,6 +147,7 @@ void StringConvertor::convertDate(string entryDate, int& entryDay, int& entryMon
 	}
 }
 
+//@author A0115902N-reused
 void StringConvertor::convertStringToNumber(string input, int& number){
 	istringstream convertToNumber(input);
 	if (!(convertToNumber >> number)) {

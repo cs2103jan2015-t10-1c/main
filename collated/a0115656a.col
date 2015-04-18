@@ -3,7 +3,149 @@
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+	 */
+
+//insert string inputName into the private attribute _name
+void Entry::insertName(string inputName) {
+	_name = inputName;
+}
+
+//returns a string containing the value of private attribute _name
+string Entry::getName() {
+	return _name;
+}
+
+//insert int entryNumber into the private attribute _entryNumber
+void Entry::insertEntryNumber(int entryNumber) {
+	_entryNumber = entryNumber;
+}
+
+//returns an int containing the value of private attribute _entryNumber
+int Entry::getEntryNumber() {
+	return _entryNumber;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+	 */
+
+//insert string inputLocation into the private attribute _location
+void Entry::insertLocation(string inputLocation){
+	_location = inputLocation;
+}
+
+//returns a string containing the value of  private attribute _location
+string Entry::getLocation (){	
+	return _location;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+	 */
+
+//returns a string containing the tags inside the vector<string> _tags
+string Entry::getTags() {
+	ostringstream oss;
+	vector<string>::iterator iterTag;
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+		oss << *iterTag << " ";
+	}
+
+	return oss.str();
+}
+
+//add a string tag into vector<string> _tags
+void Entry::addTag(string tag) {
+	_tags.push_back(tag);
+}
+
+//remove a string tag from vector<string> _tags
+void Entry::removeTag(string tag) {
+	vector<string>::iterator iterTag;
+	bool isFound = false;
+	for(iterTag = _tags.begin(); iterTag != _tags.end(); iterTag++){
+		size_t found = iterTag->find(tag);
+		if(found != string::npos){
+			_tags.erase(iterTag);
+			isFound = true;
+			break;
+		}
+	}
+
+	if (!isFound){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << tag << " does not exist" << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+	 */
+
+//return a string containing the information of an entry, for storage purposes
+string Entry::storeEntry() {
+	ostringstream oss;
+	oss << _name << endl;
+
+	if (_hasDate){
+		oss	<< _startDate.getDay() << " "
+			<< _startDate.getMonth() << " "
+			<< _startDate.getYear() << endl
+			
+			<< _startTime.getHour() << ".";
+		if (_startTime.getMinute() < 10){
+			oss << '0';
+		}	
+		oss	<< _startTime.getMinute() << endl 
+		
+			<< _endDate.getDay() << " "
+			<< _endDate.getMonth() << " "
+			<< _endDate.getYear() << endl
+		
+			<< _endTime.getHour() << ".";
+		if (_endTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss << _endTime.getMinute() << endl;
+	}
+
+	oss	<< _location << endl
+		<< getStatus() << endl
+		<< getTags() << endl;
+	
+	return oss.str();
+}
+
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	void insertEntryNumber(int entryNumber);
@@ -13,14 +155,14 @@
 	//return the value of _name
 	string getName();
 	
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	//input location into an Entry object
@@ -28,39 +170,113 @@
 	//return the value of _location
 	string getLocation();
 	
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	string getTags();
 	void addTag(string);
 	void removeTag(string);
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	string storeEntry();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.cpp
+	 */
+
+//returns an int containing the value of private attribute _entryDate.day()
+int Date::getDay() {
+	return _entryDate.day();
+}
+
+//returns a string containing the value of private attribute _entryDate.month() after being converted to string
+string Date::getMonth() {
+	int monthNumber = _entryDate.month();
+	switch(monthNumber) {
+		case 1:
+			return "Jan";
+		case 2: 
+			return "Feb";
+		case 3: 
+			return "Mar";
+		case 4: 
+			return "Apr";
+		case 5: 
+			return "May";
+		case 6: 	
+			return "Jun";
+		case 7: 
+			return "Jul";
+		case 8: 
+			return "Aug";
+		case 9: 
+			return "Sep";
+		case 10: 
+			return "Oct";
+		case 11: 
+			return "Nov";
+		case 12: 
+			return "Dec";
+		default:
+			return "Invalid month";
+	}
+}
+
+//returns an int containing the value of private attribute _entryDate.month()
+int Date::getMonthNumber() {
+	return _entryDate.month();
+}
+
+//returns an int containing the value of private attribute _entryDate.year()
+int Date::getYear() {
+	return _entryDate.year();
+}	
+
+//return true when the Entry has a valid date, false otherwise
+bool Date::getDateStatus() {
+	return _hasDate;
+}
+
+//return a date (from boost library) containing the date of this object
+date Date::getDate() {
+	date toPassToTime = _entryDate;
+	return toPassToTime;
+}
+
+//print out the day of the Date
+void Date::printDayOfDate() {
+	cout << _entryDate.day_of_week();
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.h
 	 */
 
 	//return the values of the private attributes
@@ -74,14 +290,221 @@
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+	 */
+
+EntryEdit::EntryEdit(bool isScheduled) {
+	_isScheduled = isScheduled;
+	_isEdited = true;
+	_dateEdited = false;
+	_timeEdited = false;
+	_tagAdded = false;
+	_tagRemoved = false;
+};
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+	 */
+
+void EntryEdit::extractDate(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+	//push current change into vector
+	currentChange._editedField = Date;
+	//remove the word 'date' and blank space
+	entryComponents = entryComponents.substr(DATE_MARKER.size() + BLANK_SPACE_COUNT);
+	int endOfDate = entryComponents.find(FULLSTOP_MARKER);
+	//if FULLSTOP_MARKER is not found, then it is already the end of string
+	if (endOfDate == string::npos) {
+		endOfDate = entryComponents.size();
+	}
+	currentChange._newInformation = entryComponents.substr(0, endOfDate);
+	_changesList.push_back(currentChange);
+	_dateEdited = true;
+
+	extractRemainder(endOfDate, entryComponents, isEndOfEdit);
+}
+
+void EntryEdit::extractTime(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+	//push current change into vector
+	currentChange._editedField = Time;
+	//remove the word 'time' and blank space
+	entryComponents = entryComponents.substr(TIME_MARKER.size() + BLANK_SPACE_COUNT);
+	int endOfTime = entryComponents.find(FULLSTOP_MARKER);
+	//if FULLSTOP_MARKER is not found, then it is already the end of string
+	if (endOfTime == string::npos) {
+		endOfTime = entryComponents.size();
+	}
+	currentChange._newInformation = entryComponents.substr(0, endOfTime);
+	_changesList.push_back(currentChange);
+	_timeEdited = true;
+
+	//extract remainder
+	extractRemainder(endOfTime, entryComponents, isEndOfEdit);
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+	 */
+
+void EntryEdit::extractAddedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+	//push current change into vector
+	currentChange._editedField = TagAdd;
+	//remove the word 'add' and blank space
+	entryComponents = entryComponents.substr(TAG_ADD_MARKER.size() + BLANK_SPACE_COUNT);
+	int endOfAddedTag = entryComponents.find(FULLSTOP_MARKER);
+	//if FULLSTOP_MARKER is not found, then it is already the end of string
+	if (endOfAddedTag == string::npos) {
+		endOfAddedTag = entryComponents.size();
+	}
+	currentChange._newInformation = entryComponents.substr(0, endOfAddedTag);
+	_changesList.push_back(currentChange);
+	_tagAdded = true;
+	
+	//extract remainder
+	extractRemainder(endOfAddedTag, entryComponents, isEndOfEdit);
+}
+
+void EntryEdit::extractRemovedTag(string& entryComponents, _NEW_CHANGES currentChange, bool& isEndOfEdit) {
+	//push current change into vector
+	currentChange._editedField = TagRemove;
+	//remove the word 'remove' and blank space
+	entryComponents = entryComponents.substr(TAG_REMOVE_MARKER.size() + BLANK_SPACE_COUNT);
+	int endOfRemovedTag = entryComponents.find(FULLSTOP_MARKER);
+	//if FULLSTOP_MARKER is not found, then it is already the end of string
+	if (endOfRemovedTag == string::npos) {
+		endOfRemovedTag = entryComponents.size();
+	}
+	currentChange._newInformation = entryComponents.substr(0, endOfRemovedTag);
+	_changesList.push_back(currentChange);
+	_tagRemoved = true;
+
+	//extract remainder
+	extractRemainder(endOfRemovedTag, entryComponents, isEndOfEdit);
+}
+
+void EntryEdit::extractRemainder(int endOfField, string& entryComponents, bool& isEndOfEdit) {
+	int startOfRemainder = endOfField + BLANK_SPACE_COUNT + 1;
+	if (startOfRemainder < entryComponents.size()) {
+		entryComponents = entryComponents.substr(startOfRemainder);
+	} else {
+		isEndOfEdit = true;
+	}
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+	 */
+
+//add tags to an entry
+void EntryEdit::addTag(Entry& editedEntry, ostringstream& oss) {
+	string addedTags;
+	//store the added tags into the string addedTags
+	vector<_NEW_CHANGES>::iterator iter;
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
+		if (iter->_editedField == TagAdd) {
+			addedTags = iter->_newInformation;
+			break;
+		}
+	}
+	oss << addedTags << endl;
+
+	int endOfTag = addedTags.size();
+	string tag;
+	int tracker;
+	for (tracker = 0; tracker <= endOfTag; tracker++) {
+		if (addedTags[tracker] == ' ' || tracker == endOfTag) {
+			tag = addedTags.substr(0, tracker);
+			addedTags = addedTags.erase(0, tracker + BLANK_SPACE_COUNT);
+			tracker = 0;
+			endOfTag = addedTags.size();
+			editedEntry.addTag(tag);
+		}
+	}
+}
+
+//remove tags from an entry
+void EntryEdit::removeTag(Entry& editedEntry, ostringstream& oss) {
+	string removedTags;
+	//store the removed tags into the string removedTags
+	vector<_NEW_CHANGES>::iterator iter;
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++) {
+		if (iter->_editedField == TagRemove) {
+			removedTags = iter->_newInformation;
+			break;
+		}
+	}
+	oss << removedTags << endl;
+
+	int endOfTag = removedTags.size();
+	string tag;
+	int tracker;
+	for (tracker = 0; tracker <= endOfTag; tracker++) {
+		if (removedTags[tracker] == ' ' || tracker == endOfTag) {
+			tag = removedTags.substr(0, tracker);
+			removedTags = removedTags.erase(0, tracker + BLANK_SPACE_COUNT);
+			tracker = 0;
+			endOfTag = removedTags.size();
+			editedEntry.removeTag(tag);
+		}
+	}
+}
+
+//return true if status has been edited, false otherwise
+bool EntryEdit::getEditStatus() {
+	return _isEdited;
+}
+
+//return true if date has been edited, false otherwise
+bool EntryEdit::getDateEditStatus() {
+	return _dateEdited;
+}
+
+//return true if time has been edited, false otherwise
+bool EntryEdit::getTimeEditStatus() {
+	return _timeEdited;
+}
+
+//return true if tags have been added, false otherwise
+bool EntryEdit::getTagAddedStatus() {
+	return _tagAdded;
+}
+
+//return true if tags have been removed, false otherwise
+bool EntryEdit::getTagRemovedStatus() {
+	return _tagRemoved;
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 class EntryEdit {
@@ -118,51 +541,51 @@ private:
 	static const string FULLSTOP_MARKER;
 
 public:	
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 	EntryEdit(bool);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 	void extractDate(string&, _NEW_CHANGES, bool&);
 	void extractTime(string&, _NEW_CHANGES, bool&);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 	void extractAddedTag(string&, _NEW_CHANGES, bool&);
 	void extractRemovedTag(string&, _NEW_CHANGES, bool&);
 	void extractRemainder(int, string&, bool&);
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 	void addTag(Entry&, ostringstream&);
@@ -176,77 +599,818 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+	 */
+
+//Empties the _counter stack. The purpose of this function is such that additions of entries during loading
+//at the beginning of running the program cannot be undone
+void EntryLists::emptyCounter() {
+	_counter.emptyUndoStack();
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+	 */
+
+//Edits an entry in either the scheduled or floating list and return a string of feedback
+//editFeedback is initially empty. An EntryEdit object is created every time the function is called 
+void EntryLists::editEntry(bool isScheduled, string userInput, string& editFeedback) {
+	editFeedback = "";
+	ostringstream oss;
+	
+	EntryEdit editComponent(isScheduled);
+	int entryNumber = editComponent.getEntryNumber(userInput);
+	editComponent.extractMarkerInfo(userInput);
+	
+	if (!editComponent.getEditStatus()) {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << FEEDBACK_WRONG_COMMAND << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		return;
+	} else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		oss << FEEDBACK_EDITED << entryNumber << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+	int oldEntryNumber = entryNumber;
+
+	//find the entry to be edited
+	vector<Entry>::iterator iter;
+	if (isScheduled) {
+		iter = _scheduledList.begin();
+	}
+	else {
+		iter = _floatingList.begin();
+	}
+	//loop to find the ith entry
+	for (int i = 1; i < entryNumber; i++) {
+			iter++;
+	}
+	Entry oldEntry = *iter;
+
+	//update name
+	string newName = editComponent.getName();
+	if (newName != "") {
+		oss << FEEDBACK_NAME << iter->getName();
+		iter->insertName(newName);
+		oss << FEEDBACK_ARROW << iter->getName() << endl; 
+	}
+
+	//update date
+	int inputStartDay;
+	if (editComponent.getDateEditStatus()) {
+		oss << FEEDBACK_DATE;
+		Date currentStartDate = iter->getStartDate();
+		if (currentStartDate.getDateStatus()) {
+			int currentStartDay = currentStartDate.getDay();
+			string currentStartMonth = currentStartDate.getMonth();
+			int currentStartYear = currentStartDate.getYear();
+			oss << currentStartDay << " " << currentStartMonth << " " << currentStartYear;
+
+			Date currentEndDate = iter->getEndDate();
+			int currentEndDay = currentEndDate.getDay();
+			string currentEndMonth = currentEndDate.getMonth();
+			int currentEndYear = currentEndDate.getYear();
+			bool diffStartEndDay = currentEndDay != currentStartDay;
+			bool diffStartEndMonth = currentEndMonth != currentStartMonth;
+			bool diffStartEndYear = currentEndYear != currentStartYear;
+			bool diffDates = diffStartEndDay || diffStartEndMonth || diffStartEndYear;
+			if (diffDates) {
+				oss << FEEDBACK_TO << currentEndDay << " " << currentEndMonth << " " << currentEndYear;
+			}
+		} else {	
+			oss << FEEDBACK_NO_DATE;		
+		}
+
+		int inputStartMonth;
+		int inputStartYear;
+		int inputEndDay;
+		int inputEndMonth;
+		int inputEndYear;		
+		editComponent.getDate(inputStartDay, inputStartMonth, inputStartYear, inputEndDay, inputEndMonth, inputEndYear);
+
+		Date newStartDate;
+		newStartDate.insertDay(inputStartDay);
+		newStartDate.insertMonth(inputStartMonth);
+		newStartDate.insertYear(inputStartYear);
+		Date newEndDate;
+		newEndDate.insertDay(inputEndDay);
+		newEndDate.insertMonth(inputEndMonth);
+		newEndDate.insertYear(inputEndYear);
+		
+		iter->insertStartDate(newStartDate);
+		iter->insertEndDate(newEndDate);
+		oss << FEEDBACK_ARROW;
+		if (inputStartDay == 0) {
+			oss << FEEDBACK_REMOVED << endl;
+		} else {
+			newStartDate = iter->getStartDate();
+			string inputStartMonthString = newStartDate.getMonth();
+			oss << inputStartDay << " " << inputStartMonthString << " " << inputStartYear;
+			
+			newEndDate = iter->getEndDate();
+			string inputEndMonthString = newEndDate.getMonth();
+			bool diffStartEndDay = inputEndDay != inputStartDay;
+			bool diffStartEndMonth = inputEndMonthString != inputStartMonthString;
+			bool diffStartEndYear = inputEndYear != inputStartYear;
+			bool diffDates = diffStartEndDay || diffStartEndMonth || diffStartEndYear;
+			if (diffDates) {
+				oss << FEEDBACK_TO << inputEndDay << " " << inputEndMonthString << " " << inputEndYear;
+			}
+			oss << endl;
+		}
+
+		//initialise time for sorting
+		Time startTimeInitialiser = iter->getStartTime();
+		Time endTimeInitialiser = iter->getEndTime();
+		iter->insertStartTime(startTimeInitialiser);
+		iter->insertEndTime(endTimeInitialiser);
+	}
+
+	//update time
+	if (editComponent.getTimeEditStatus()) {
+		oss << FEEDBACK_TIME ;
+		Time currentStartTime = iter->getStartTime();
+		int currentStartHour = currentStartTime.getHour();
+		int currentStartMinute = currentStartTime.getMinute();
+		if (currentStartTime.getTimeStatus() && (currentStartHour != 0 || currentStartMinute != 0)){
+			oss << currentStartHour << ".";
+			if (currentStartMinute < 10) {
+					oss << '0';
+			}
+			oss << currentStartMinute;
+
+			Time currentEndTime = iter->getEndTime();
+			int currentEndHour = currentEndTime.getHour();
+			int currentEndMinute = currentEndTime.getMinute();
+			if (currentEndTime.getTime() != currentStartTime.getTime()){
+				oss << FEEDBACK_TO << currentEndHour << ".";
+				if (currentEndMinute < 10) {
+					oss << '0';
+				}
+				oss << currentEndMinute;
+			} 
+		} else {
+			oss << FEEDBACK_NO_TIME;
+		}
+
+		int inputStartHour;
+		int inputStartMinute;
+		int inputEndHour;
+		int inputEndMinute;
+		editComponent.getTime(inputStartHour, inputStartMinute, inputEndHour, inputEndMinute);
+		DateTimeInspector inspector;
+		if(!inspector.timeIsValid(inputStartHour, inputStartMinute)
+			|| !inspector.timeIsValid(inputEndHour, inputEndMinute)) {
+			editFeedback = "Invalid time\n";
+			return;
+		}
+
+		Time newStartTime;
+		Time newEndTime;
+		newStartTime.insertHour(inputStartHour);
+		newStartTime.insertMinute(inputStartMinute);
+		newEndTime.insertHour(inputEndHour);
+		newEndTime.insertMinute(inputEndMinute);
+
+		iter->insertStartTime(newStartTime);
+		iter->insertEndTime(newEndTime);
+		oss << FEEDBACK_ARROW;
+		oss << inputStartHour << ".";
+		if (inputStartMinute < 10) {
+			oss << '0';
+		}
+		oss << inputStartMinute;
+			
+		newStartTime = iter->getStartTime();
+		newEndTime = iter->getEndTime();
+		if (newEndTime.getTime() != newStartTime.getTime()) {
+			oss << FEEDBACK_TO << inputEndHour << ".";
+			if (inputEndMinute < 10){
+				oss << '0';
+			}
+			oss << inputEndMinute;
+		}
+		oss << endl;
+	}
+
+	//update location
+	string newLocation = editComponent.getLocation();
+	if (newLocation != "") {
+		oss << FEEDBACK_LOCATION << iter->getLocation();
+		iter->insertLocation(newLocation);
+		oss << FEEDBACK_ARROW << iter->getLocation() << endl; 
+	}
+
+	//update status
+	string newStatus = editComponent.getStatus();
+	if (newStatus != "") {
+		if (newStatus == STATUS_DONE) {
+		oss << FEEDBACK_STATUS << iter->getStatus();
+		iter->changeStatus();
+		oss << FEEDBACK_ARROW << iter->getStatus() << endl; 
+		} else if (newStatus == STATUS_UNDONE) {
+			oss << FEEDBACK_STATUS << iter->getStatus();
+			iter->initialiseStatus();
+			oss << FEEDBACK_ARROW << iter->getStatus() << endl;
+		} else {
+			oss << FEEDBACK_INVALID_STATUS << endl;
+		}
+	}
+
+	//update added tags
+	if (editComponent.getTagAddedStatus()) {
+		oss << FEEDBACK_TAGS_ADDED;
+		editComponent.addTag(*iter, oss);
+	}
+
+	//update removed tags
+	if (editComponent.getTagRemovedStatus()) {
+		oss << FEEDBACK_TAGS_REMOVED;
+		editComponent.removeTag(*iter, oss);
+	}
+	
+	//sort the list again if either date or time has been edited
+	//if date editing is done on scheduled list AND date is not deleted, i.e. no shift from scheduled to floating
+	bool dateEditedSort = editComponent.getDateEditStatus() && isScheduled && inputStartDay != 0;
+	//if time editing is done on scheduled list. there is no need to check the time as time must have been edited properly
+	bool timeEditedSort = editComponent.getTimeEditStatus() && isScheduled;
+	if (dateEditedSort || timeEditedSort) {
+		Entry newEntry = *iter;
+		string dummy;
+		removeEntry(isScheduled, entryNumber, dummy);
+		_counter.removeCounter();
+		addEntry(newEntry, entryNumber);
+		_counter.removeCounter();
+	}
+
+	//move entry from floating to scheduled list and vice versa
+	UndoActions::SuppCommand changeListCommand;
+	bool isScheduledToFloating = isScheduled && editComponent.getDateEditStatus() && (inputStartDay == 0);
+	bool isFloatingToScheduled = !isScheduled && editComponent.getDateEditStatus() && editComponent.getTimeEditStatus();
+	if (isScheduledToFloating || isFloatingToScheduled) {
+		moveScheduledFloating(isScheduled, entryNumber, *iter);
+		oss << FEEDBACK_MOVED_TO;
+		if (isScheduled) {
+			changeListCommand = UndoActions::BackToScheduled;
+			oss << FEEDBACK_FLOATING_LIST << endl;
+		} else {
+			changeListCommand = UndoActions::BackToFloating;
+			oss << FEEDBACK_SCHEDULED_LIST << endl;
+		}
+	} else {
+		changeListCommand = UndoActions::NoChange;
+	}
+
+	oss << FEEDBACK_CURRENT_ENTRY_NUMBER << entryNumber << endl;
+	_counter.counterEdit(isScheduled, oldEntryNumber, changeListCommand, entryNumber, oldEntry);
+	
+	editFeedback = oss.str();
+}
+
+void EntryLists::moveScheduledFloating(bool isScheduled, int& entryNumber, Entry movedEntry) {
+	string dummy;
+	removeEntry(isScheduled, entryNumber, dummy);
+	_counter.removeCounter();
+	addEntry(movedEntry, entryNumber);
+	_counter.removeCounter();
+}
+
+void EntryLists::undo() {
+	_counter.execute(_scheduledList, _floatingList);
+}
+
+void EntryLists::exit(bool& running) {
+	running = false;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 	 */
 
 	void emptyCounter();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 	 */
 
 	void editEntry(bool, string, string&);
 	void moveScheduledFloating(bool, int&, Entry);
 	void undo();
 	void exit(bool&);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+	 */
+
+        TEST_METHOD(EntryTimeTest) {    
+            Time timeTest;
+            int expectedHour = 20;
+            int expectedMinute = 20;
+			date today(day_clock::local_day());
+            timeTest.insertHour(expectedHour);
+            timeTest.insertMinute(expectedMinute);
+            timeTest.initialiseTime(today);
+           
+			int actualHour = timeTest.getHour();
+            Assert::AreEqual(expectedHour, actualHour);
+            int actualMinute = timeTest.getMinute();
+            Assert::AreEqual(expectedMinute, actualMinute);
+
+            Assert::IsTrue(timeTest.getTimeStatus());                
+        }
+
+		TEST_METHOD(EntryEditTest) {
+            //scheduled entries
+            EntryEdit editTestSch(true);
+            bool testBool = editTestSch.getEditStatus();
+            Assert::AreEqual(true, testBool);
+            testBool = editTestSch.getDateEditStatus();
+            Assert::AreEqual(false, testBool);
+            testBool = editTestSch.getTimeEditStatus();
+            Assert::AreEqual(false, testBool);
+            testBool = editTestSch.getTagAddedStatus();
+            Assert::AreEqual(false, testBool);
+            testBool = editTestSch.getTagRemovedStatus();
+            Assert::AreEqual(false, testBool);
+
+			string testEntryComponents = " 17 name yeah man. place here and there";
+			int testEntryNumber = editTestSch.getEntryNumber(testEntryComponents);
+			Assert::AreEqual(17, testEntryNumber);
+			string expectedString = "name yeah man. place here and there";
+			Assert::AreEqual(expectedString, testEntryComponents);
+
+			testEntryComponents = "yeah man. place here and there";
+			EntryEdit::_NEW_CHANGES testChange;
+			bool isEndOfEdit;
+			editTestSch.extractName(testEntryComponents, testChange, isEndOfEdit);
+			expectedString = "place here and there";
+			Assert::AreEqual(expectedString, testEntryComponents);
+		}
+
+		TEST_METHOD(UndoActionsTest) {
+			UndoActions testUndo;
+			UndoActions::_ACTION_TO_UNDO testAction;
+			testAction._isScheduled = true;
+			testAction._counterCommand = UndoActions::Delete;
+			testAction._indexNumber = 1;
+			vector<Entry> testSched;
+			vector<Entry> testFloat;
+			Entry dummy;
+			testSched.push_back(dummy);
+			unsigned int expectedSize = 1;
+			Assert::AreEqual(expectedSize, testSched.size());
+			testUndo.undoAdd(testAction, testSched, testFloat);
+			expectedSize = 0;
+			Assert::AreEqual(expectedSize, testSched.size());
+
+			testAction._counterCommand = UndoActions::Add;
+			testUndo.undoDelete(testAction, testSched, testFloat);
+			expectedSize = 1;
+			Assert::AreEqual(expectedSize, testSched.size());
+		}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+//read the path to scheduled and floating lists
+void Main::readPath() {
+	ifstream readPath(PATH_FILE_NAME);
+	getline(readPath, _scheduledPath);
+	getline(readPath, _floatingPath);
+	getline(readPath, _floatingPath);
+	readPath.close();
+}
+
+//
+void Main::loadScheduledEntries() {
+	_loadingEntries = true;
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, 10);
+	cout << "Loading existing entries..." << endl;
+	SetConsoleTextAttribute(hConsole, 15);
+	//load existing scheduled entries
+	ifstream readSched(_scheduledPath);
+	while (getline(readSched, _userInput)) {
+		Entry newEntry;
+		string entryStatus;
+		string stringTags;
+		vector<string> tags;
+		if (_userInput != "") {
+			_entryName = _userInput;
+			getline(readSched, _stringStartDate);
+			getline(readSched, _stringStartTime);
+			getline(readSched, _stringEndDate);
+			getline(readSched, _stringEndTime);
+			getline(readSched, _entryLocation);
+			getline(readSched, entryStatus);
+			getline(readSched, stringTags);
+
+		//set integer values to 0
+		resetIntegerValues();
+
+		EntryAdd parse;
+		convertDateTime(parse, _stringStartDate, _intStartDay, _intStartMonth, _intStartYear, _stringStartTime, _intStartHour, _intStartMinute,	
+				_stringEndDate, _intEndDay, _intEndMonth, _intEndYear, _stringEndTime, _intEndHour, _intEndMinute);
+		parse.extractTag(stringTags, tags);
+
+		//initialise start and end dates, start and end times
+			Date startDate(_loadingEntries);
+			Date endDate(_loadingEntries);
+			Time startTime;
+			Time endTime;
+			initialiseDateTime(startDate, _intStartDay, _intStartMonth, _intStartYear, startTime, _intStartHour, _intStartMinute,
+				endDate, _intEndDay, _intEndMonth, _intEndYear, endTime, _intEndHour, _intEndMinute);
+				//initialise entry
+			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, entryStatus, tags);
+			int dummy;
+			_newList.addEntry(newEntry, dummy);
+		}
+	}
+	readSched.close();
+	//reset values
+	resetStringValues();
+	resetIntegerValues();
+
+	//empty the counter stack
+	_newList.emptyCounter();
+}
+
+void Main::loadFloatingEntries() {
+	_loadingEntries = true;
+	ifstream readFloat(_floatingPath);
+	while (getline(readFloat, _userInput)) {
+		Entry newEntry;
+		string entryStatus;
+		string stringTags;
+		vector<string> tags;
+		if (_userInput != "") {
+			_entryName = _userInput;
+			getline(readFloat, _entryLocation);
+			getline(readFloat, entryStatus);
+			getline(readFloat, stringTags);
+
+			EntryAdd parse;
+			parse.extractTag(stringTags, tags);
+
+			//initialise start and end dates, start and end times
+			Date startDate(_loadingEntries);
+			Date endDate(_loadingEntries);
+			Time startTime;
+			Time endTime;
+			initialiseDateTime(startDate, 0, 0, 0, startTime, 0, 0, endDate, 0, 0, 0, endTime, 0, 0);
+						
+			//initialise entry
+			initialiseEntry(newEntry, _entryName, startDate, endDate, startTime, endTime, _entryLocation, entryStatus, tags);
+			int dummy;
+			_newList.addEntry(newEntry, dummy);
+		}
+	}
+	readFloat.close();
+	resetIntegerValues();
+	resetStringValues();
+
+	//empty the counter stack
+	_newList.emptyCounter();
+	cout << endl;
+	DisplayEntries loadEntries(_newList.getScheduledList(), _newList.getFloatingList());
+	cout << COMMAND_BORDER << endl << endl;
+	loadEntries.displayToday(); 
+	cout << COMMAND_BORDER << endl << endl;
+	loadEntries.displayTomorrow();
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+void Main::executeEditFunction(string userInput) {
+	string editFeedback;
+	_newList.editEntry(_viewingScheduledList, userInput, editFeedback);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << editFeedback;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+//undo addition, deletion and editing of entries
+void Main::executeUndoFunction() {
+	_newList.undo();
+}
+
+//write the entries that are currently in _scheduledList and _floatingList into the .txt files at the specified location
+void Main::executeSaveFunction() {
+	//write scheduled
+	vector<Entry> scheduledList = _newList.getScheduledList();
+	ofstream writeSched(_scheduledPath);
+	vector<Entry>::iterator iterSched;
+
+	for (iterSched = scheduledList.begin(); iterSched != scheduledList.end(); iterSched++){
+		writeSched << iterSched->storeEntry() << endl;
+	}
+	writeSched.close();
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << SCHEDULED_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << _scheduledPath << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
+	//write floating
+	vector<Entry> floatingList = _newList.getFloatingList();
+	ofstream writeFloat(_floatingPath);
+	vector<Entry>::iterator iterFloat;
+
+	for (iterFloat = floatingList.begin(); iterFloat != floatingList.end(); iterFloat++){
+		writeFloat << iterFloat->storeEntry() << endl;
+	}
+	writeFloat.close();
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << FLOATING_ENTRIES_PROMPT << FEEDBACK_SUCCESSFULLY_STORED << _floatingPath << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+//choose where to store the entries that are currently in _scheduledList and _floatingList and store them
+void Main::executeSaveAtFunction() {
+	cout << SPECIFY_STORAGE_PROMPT << endl;
+	string path;
+	getline(cin, path);
+
+	ofstream writePath(PATH_FILE_NAME);
+	_scheduledPath = path + SCHEDULED_FILE_NAME;
+	writePath << _scheduledPath << endl;
+	_floatingPath = path + FLOATING_FILE_NAME;
+	writePath << _floatingPath;
+	writePath.close();
+
+	executeSaveFunction();
+}
+
+//stop the running of the program and exit it
+void Main::executeExitFunction() {
+	executeSaveFunction();
+	_newList.exit(_running);
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void readPath();
 	void loadScheduledEntries();
 	void loadFloatingEntries();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void executeEditFunction(string);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void executeUndoFunction();
 	void executeSaveFunction();
 	void executeSaveAtFunction();
 	void executeExitFunction();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\UndoActions.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UndoActions.cpp
+	 */
+
+UndoActions::UndoActions() {
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+}
+
+void UndoActions::emptyUndoStack() {
+	while (!_undoStack.empty()) {
+		_undoStack.pop();
+	}
+}
+
+//to counter addition, push delete command and index number into _undoStack
+void UndoActions::counterAdd(bool isScheduled, int latestEntryIndex) {
+	_ACTION_TO_UNDO latestAction;
+	latestAction._isScheduled = isScheduled;
+	latestAction._counterCommand = Delete;
+	latestAction._indexNumber = latestEntryIndex;
+
+	_undoStack.push(latestAction);
+}
+
+//to counter deletion, push add command, index number and the entry into _undoStack
+void UndoActions::counterDelete(bool isScheduled, int latestEntryIndex, Entry latestEntry) {
+	_ACTION_TO_UNDO latestAction;
+	latestAction._isScheduled = isScheduled;
+	latestAction._counterCommand = Add;
+	latestAction._indexNumber = latestEntryIndex;
+	latestAction._modifiedEntry = latestEntry;
+
+	_undoStack.push(latestAction);
+}
+
+//to counter editing, push edit command, index number and the entry into _undoStack
+void UndoActions::counterEdit(bool isScheduled, int oldEntryIndex, SuppCommand changeListCommand, int latestEntryIndex, Entry latestEntry) {
+	_ACTION_TO_UNDO latestAction;
+	latestAction._isScheduled = isScheduled;
+	latestAction._counterCommand = Edit;
+	latestAction._indexNumber = oldEntryIndex;
+	latestAction._changeListCommand = changeListCommand;
+	latestAction._newIndexNumber = latestEntryIndex;
+	latestAction._modifiedEntry = latestEntry;
+
+	_undoStack.push(latestAction);
+}
+
+//pop out the newest member of _undoStack
+void UndoActions::removeCounter() {
+	_undoStack.pop();
+}
+
+void UndoActions::execute(vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	if(_undoStack.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << NO_MORE_ACTION << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		executeCounter(_undoStack.top(), _scheduledList, _floatingList);
+		removeCounter();
+	}
+}
+
+void UndoActions::executeCounter(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	Command latestCounter = latestAction._counterCommand;
+	if (latestCounter == Delete) {
+		undoAdd(latestAction, _scheduledList, _floatingList);
+	} else if (latestCounter == Add) {
+		undoDelete(latestAction, _scheduledList, _floatingList);
+	} else if (latestCounter == Edit) {
+		undoEdit(latestAction, _scheduledList, _floatingList);
+	}
+}
+
+//undo addition of entry. Counter command = delete
+void UndoActions::undoAdd(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	//scheduled entries
+	if (latestAction._isScheduled) {
+		_scheduledList.erase(_scheduledList.begin() + latestAction._indexNumber - 1);
+	} else {
+		_floatingList.erase(_floatingList.begin() + latestAction._indexNumber - 1);
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << ADDITION_UNDONE << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+//undo deletion of entry. Counter command = add
+void UndoActions::undoDelete(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	vector<Entry>::iterator iter;
+	if (latestAction._isScheduled) {
+		//getIter(latestAction, _scheduledList, iter);
+		if (latestAction._indexNumber > _scheduledList.size()) {
+			iter = _scheduledList.end();
+		} else {
+			iter = _scheduledList.begin() + latestAction._indexNumber - 1;
+		}
+		_scheduledList.insert(iter, latestAction._modifiedEntry);
+	} else {
+		if (latestAction._indexNumber > _floatingList.size()) {
+			iter = _floatingList.end();
+		} else {
+			iter = _floatingList.begin() + latestAction._indexNumber - 1;
+		}
+		_floatingList.insert(iter, latestAction._modifiedEntry);
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << DELETION_UNDONE << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+//undo editing of entry. Counter command = edit
+void UndoActions::undoEdit(_ACTION_TO_UNDO latestAction, vector<Entry>& _scheduledList, vector<Entry>& _floatingList) {
+	vector<Entry>::iterator addedIter;
+	vector<Entry>::iterator removedIter;
+	if (latestAction._isScheduled) {
+		if (latestAction._indexNumber > _scheduledList.size()) {
+			addedIter = _scheduledList.end();
+		} else {
+			addedIter = _scheduledList.begin() + latestAction._indexNumber - 1;
+		}
+		_scheduledList.insert(addedIter, latestAction._modifiedEntry);
+		
+		if (latestAction._changeListCommand == NoChange) {
+			if (latestAction._indexNumber <= latestAction._newIndexNumber) {
+				removedIter = _scheduledList.begin() + latestAction._newIndexNumber;
+			} else {
+				removedIter = _scheduledList.begin() + latestAction._newIndexNumber - 1;
+			}
+			_scheduledList.erase(removedIter);
+		} else if (latestAction._changeListCommand == BackToScheduled) {
+			removedIter = _floatingList.begin() + latestAction._newIndexNumber - 1;
+			_floatingList.erase(removedIter);
+		}
+	} else {
+		if (latestAction._indexNumber > _floatingList.size()) {
+			addedIter = _floatingList.end();
+		} else {
+			addedIter = _floatingList.begin() + latestAction._indexNumber - 1;
+		}
+		_floatingList.insert(addedIter, latestAction._modifiedEntry);
+		if (latestAction._changeListCommand == NoChange) {
+			removedIter = _floatingList.begin() + latestAction._newIndexNumber;
+			_floatingList.erase(removedIter);
+		} else if (latestAction._changeListCommand == BackToFloating) {
+			removedIter = _scheduledList.begin() + latestAction._newIndexNumber - 1;
+			_scheduledList.erase(removedIter);
+		}
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << EDITING_UNDONE << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UndoActions.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UndoActions.h
 	 */
 
 //UndoActions can only undo the effect of Add, Edit and Delete because only these 3 commands
@@ -303,7 +1467,84 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\UndoActions.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UndoActions.h
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
+	 */
+
+        TEST_METHOD(EntryTimeTest) {    
+            Time timeTest;
+            int expectedHour = 20;
+            int expectedMinute = 20;
+			date today(day_clock::local_day());
+            timeTest.insertHour(expectedHour);
+            timeTest.insertMinute(expectedMinute);
+            timeTest.initialiseTime(today);
+           
+			int actualHour = timeTest.getHour();
+            Assert::AreEqual(expectedHour, actualHour);
+            int actualMinute = timeTest.getMinute();
+            Assert::AreEqual(expectedMinute, actualMinute);
+
+            Assert::IsTrue(timeTest.getTimeStatus());                
+        }
+
+		TEST_METHOD(EntryEditTest) {
+            //scheduled entries
+            EntryEdit editTestSch(true);
+            bool testBool = editTestSch.getEditStatus();
+            Assert::AreEqual(true, testBool);
+            testBool = editTestSch.getDateEditStatus();
+            Assert::AreEqual(false, testBool);
+            testBool = editTestSch.getTimeEditStatus();
+            Assert::AreEqual(false, testBool);
+            testBool = editTestSch.getTagAddedStatus();
+            Assert::AreEqual(false, testBool);
+            testBool = editTestSch.getTagRemovedStatus();
+            Assert::AreEqual(false, testBool);
+
+			string testEntryComponents = " 17 name yeah man. place here and there";
+			int testEntryNumber = editTestSch.getEntryNumber(testEntryComponents);
+			Assert::AreEqual(17, testEntryNumber);
+			string expectedString = "name yeah man. place here and there";
+			Assert::AreEqual(expectedString, testEntryComponents);
+
+			testEntryComponents = "yeah man. place here and there";
+			EntryEdit::_NEW_CHANGES testChange;
+			bool isEndOfEdit;
+			editTestSch.extractName(testEntryComponents, testChange, isEndOfEdit);
+			expectedString = "place here and there";
+			Assert::AreEqual(expectedString, testEntryComponents);
+		}
+
+		TEST_METHOD(UndoActionsTest) {
+			UndoActions testUndo;
+			UndoActions::_ACTION_TO_UNDO testAction;
+			testAction._isScheduled = true;
+			testAction._counterCommand = UndoActions::Delete;
+			testAction._indexNumber = 1;
+			vector<Entry> testSched;
+			vector<Entry> testFloat;
+			Entry dummy;
+			testSched.push_back(dummy);
+			unsigned int expectedSize = 1;
+			Assert::AreEqual(expectedSize, testSched.size());
+			testUndo.undoAdd(testAction, testSched, testFloat);
+			expectedSize = 0;
+			Assert::AreEqual(expectedSize, testSched.size());
+
+			testAction._counterCommand = UndoActions::Add;
+			testUndo.undoDelete(testAction, testSched, testFloat);
+			expectedSize = 1;
+			Assert::AreEqual(expectedSize, testSched.size());
+		}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
 
 
 

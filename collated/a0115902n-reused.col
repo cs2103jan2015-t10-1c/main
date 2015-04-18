@@ -1,0 +1,22 @@
+//@author: a0115902n-reused
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\StringConvertor.cpp
+	 */
+
+void StringConvertor::convertStringToNumber(string input, int& number){
+	istringstream convertToNumber(input);
+	if (!(convertToNumber >> number)) {
+		number = 0;  
+	}
+}
+
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\StringConvertor.cpp
+
+
+
+
+

@@ -37,7 +37,9 @@ class TextUI{
 		void displayWelcomeMessage();
 		void displayCurrentDateTime();
 		void displayHelp();
+		//@author A0116660L-reused
 		void displayResizeOptions();
+		//@author A0100750Y
 		TextUI(string&);	
 		string findCommand(string&);
         string removeCommand(string&);

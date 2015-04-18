@@ -3,7 +3,89 @@
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\ClashInspector.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\ClashInspector.cpp
+	 */
+
+#include "ClashInspector.h"
+#include <windows.h>
+using namespace std;
+
+const string ClashInspector::CLASH_MESSAGE = "Clashes with entry no.";
+const string ClashInspector::COLON = ":";
+const string ClashInspector::EXCLAMATION_MARK = "!";
+
+
+ClashInspector::ClashInspector(vector<Entry> entryVector){
+	_entryVector = entryVector;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+}
+
+void ClashInspector::compareEntry(Entry inputEntry, int count, bool& clashExists, bool printClash){
+	vector<Entry>::iterator iter;
+	clashExists = false;
+	for(unsigned int i = 0; i < _entryVector.size(); i++){
+		if(i + 1 != count){
+			inspectEntries(inputEntry, _entryVector[i], _entryVector[i].getEntryNumber(), clashExists, printClash);
+		}
+	}
+}
+
+void ClashInspector::inspectEntries(Entry inputEntry, Entry anotherEntry, int listCount, bool& clashExists, bool printClash){
+	date startDateInputEntry = inputEntry.getStartDate().getDate();
+	date endDateInputEntry = inputEntry.getEndDate().getDate();
+	date startDateAnotherEntry = anotherEntry.getStartDate().getDate();
+	date endDateAnotherEntry = anotherEntry.getEndDate().getDate();
+	ptime startTimeInputEntry = inputEntry.getStartTime().getTime();
+	ptime endTimeInputEntry = inputEntry.getEndTime().getTime();
+	ptime startTimeAnotherEntry = anotherEntry.getStartTime().getTime();
+	ptime endTimeAnotherEntry = anotherEntry.getEndTime().getTime();
+
+	if(startDateInputEntry == startDateAnotherEntry){
+			if((endTimeAnotherEntry >= startTimeInputEntry &&  startTimeAnotherEntry <= startTimeInputEntry)//input start time is in between the other entry's 2 time values
+				|| (endTimeAnotherEntry >= endTimeInputEntry && startTimeAnotherEntry <= endTimeInputEntry)//input end time is in between the other entry's 2 time values
+				|| (startTimeInputEntry <= startTimeAnotherEntry &&  endTimeInputEntry >= startTimeAnotherEntry)//the other entry's start time is in between input entry's 2 time values
+				|| (startTimeInputEntry <= endTimeAnotherEntry && endTimeInputEntry >= endTimeAnotherEntry)){//the other entry's end time is in between input entry's 2 time values
+					if(printClash){
+						SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+						cout << CLASH_MESSAGE << listCount
+							<< COLON  
+							<< anotherEntry.getName()
+							<< EXCLAMATION_MARK << endl;
+						SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+					}
+					clashExists = true;
+			}
+	}
+	
+	else if( (endDateAnotherEntry > startDateInputEntry && startDateAnotherEntry < startDateInputEntry) //input start date is in between the other entry's 2 date values
+		|| (endDateAnotherEntry > endDateInputEntry && startDateAnotherEntry < endDateInputEntry)//input end date is in between the other entry's 2 date values
+		|| (startDateInputEntry < startDateAnotherEntry && endDateInputEntry > startDateAnotherEntry) //the other entry's start date is in between input entry's 2 date values
+		|| (startDateInputEntry < endDateAnotherEntry && endDateInputEntry > endDateAnotherEntry)){//the other entry's end date is in between input entry's 2 date values
+			if(printClash){
+				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+				cout << CLASH_MESSAGE << listCount 
+					<< COLON 
+					<< anotherEntry.getName()
+					<< EXCLAMATION_MARK << endl;
+				SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			}
+			clashExists = true;
+	}
+}
+
+
+
+
+
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\ClashInspector.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\ClashInspector.h
 	 */
 
 #ifndef CLASHINSPECTOR_H
@@ -28,14 +110,41 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\ClashInspector.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\ClashInspector.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInitialiser.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInitialiser.cpp
+	 */
+
+#include "DateTimeInitialiser.h"
+
+DateTimeInitialiser::DateTimeInitialiser(){
+}
+
+void DateTimeInitialiser::initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
+	inputDate.insertDay(inputDay);
+	inputDate.insertMonth(inputMonth);
+	inputDate.insertYear(inputYear);
+	inputDate.initialiseDate();
+}
+
+void DateTimeInitialiser::initialiseTime(Time& inputTime, int inputHour, int inputMinute, date inputDate){
+	inputTime.insertHour(inputHour);
+	inputTime.insertMinute(inputMinute);
+	inputTime.initialiseTime(inputDate);
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInitialiser.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInitialiser.h
 	 */
 
 #ifndef DATETIMEINITIALISER_H
@@ -58,26 +167,525 @@ public:
 	void initialiseTime(Time&, int, int, date);
 };
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInitialiser.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInitialiser.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.cpp
+	 */
+
+void DisplayEntries::execute(string command, int& pageNumber, int& lastPage, bool& viewingScheduledList, bool& viewingFloatingList, bool& viewingPast, bool& viewingClashes){
+	//retrieving display attributes from main
+	_lastPage = lastPage;
+	_pageNumber = pageNumber;
+	_userInput = command;
+	_viewingClashes = viewingClashes;
+	_viewingScheduledList = viewingScheduledList;
+	_viewingFloatingList = viewingFloatingList;
+	_viewingPastEntries = viewingPast;
+	StringConvertor convert;
+	//display scheduled
+	if (_userInput == TYPE_SCHEDULED){
+		_pageNumber = 1;
+		_viewingClashes = false;
+		_viewingScheduledList = true;
+		_viewingFloatingList = false;
+		_viewingPastEntries = false;
+		_viewingClashes = false;
+
+		if(_scheduledList.empty()){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_SCHEDULEDISEMPTY << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+
+		displayScheduledEntryShort();
+
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << endl << MESSAGE_VIEWINGSCHEDULED << endl
+			<< MESSAGE_ENTRIESNUMBER << _scheduledList.size() << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+	
+	//display floating
+	else if (_userInput == TYPE_FLOATING){
+		_pageNumber = 1;
+		_viewingClashes = false;
+		_viewingScheduledList = false;
+		_viewingFloatingList = true;
+		_viewingPastEntries = false;
+		_viewingClashes = false;
+
+		if(_floatingList.empty()){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_FLOATINGISEMPTY << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		displayFloatingEntries();
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << endl << MESSAGE_VIEWINGFLOATING<< endl
+			<< MESSAGE_ENTRIESNUMBER << _floatingList.size() << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+	
+	//display next page
+	else if (_userInput == TYPE_NEXT){
+		displayNextPage();
+		pageNumber = _pageNumber;
+	}
+
+	//display previous page
+	else if (_userInput == TYPE_PREV){
+		displayPrevPage();
+		pageNumber = _pageNumber;
+	}
+	
+	//display clashing scheduled entries
+	else if (_userInput == TYPE_CLASH){
+		_viewingScheduledList = false;
+		_viewingFloatingList = false;
+		_viewingPastEntries = false;
+		_viewingClashes = true;
+		_pageNumber = 1;
+		displayClashes();
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << endl << MESSAGE_VIEWINGENTRYCLASHES << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+	//display first page
+	else if (_userInput == TYPE_FIRSTPAGE){
+		displayFirstPage();
+	}
+	//display last page
+	else if (_userInput == TYPE_LASTPAGE){
+		displayLastPage();
+	}
+	//display specified page
+	else if (_userInput.substr(0, TYPE_SPECIFICPAGE.size()) == TYPE_SPECIFICPAGE){
+		int inputPageNumber;
+		if(_userInput.substr(TYPE_SPECIFICPAGE.size()).empty()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_MISSINGPAGE << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		_userInput = _userInput.substr(TYPE_SPECIFICPAGE.size() + BLANKSPACE_COUNT);
+		convert.convertStringToNumber(_userInput, inputPageNumber);
+		_pageNumber = inputPageNumber;
+		if (_viewingClashes){
+			displayClashes();
+		} else if(_viewingScheduledList){
+			displayScheduledEntryShort();
+		} else if (_viewingFloatingList){
+			displayFloatingEntries();
+		} else if (_viewingPastEntries){
+			displayPastEntries();
+		}
+	}
+
+	//display details of an entry
+	else if (isdigit(_userInput[1])){
+		if(!_viewingScheduledList && !_viewingFloatingList){
+			_viewingScheduledList = true;
+			_viewingClashes = false;
+			_viewingFloatingList = false;
+			_viewingPastEntries = false;
+		}
+		int entryNumber;
+		convert.convertStringToNumber(_userInput, entryNumber);
+		if(_viewingScheduledList && entryNumber > 0){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_SCHEDULEDENTRY << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			displayOneScheduledEntry(entryNumber);
+		} 
+		else if(_viewingFloatingList && entryNumber > 0){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+			cout << MESSAGE_FLOATINGENTRY << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			displayOneFloatingEntry(entryNumber);
+		}
+		else if (entryNumber <= 0) {
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_INVALID << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		}
+	}
+	//display past events
+	else if (_userInput == TYPE_PAST){
+		_viewingClashes = false;
+		_viewingScheduledList = false;
+		_viewingFloatingList = false;
+		_viewingPastEntries = false;
+		_viewingClashes = true;		
+		_pageNumber = 1;
+		displayPastEntries();
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		cout << endl << MESSAGE_VIEWINGPAST << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+
+	//if command is invalid
+	else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << MESSAGE_INVALID << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+	//returning paging attributes to main
+	pageNumber = _pageNumber;
+	lastPage = _lastPage;
+	viewingScheduledList = _viewingScheduledList;
+	viewingFloatingList = _viewingFloatingList;
+	viewingPast = _viewingPastEntries;
+	viewingClashes = _viewingClashes;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.cpp
+	 */
+
+void DisplayEntries::displayFloatingEntries(){
+	int numberOfPages;
+	int firstEntry;
+	int lastEntry;
+	int number;
+	initialisePaging(_floatingList, numberOfPages, firstEntry, lastEntry, number);
+	for (int i = firstEntry; i < lastEntry; i++){
+		cout << endl
+			<< BORDER << endl
+			<< (number) << ". "
+			<< _floatingList[i].getShortDisplay() << endl
+			<< BORDER;
+		number++;
+	}
+	cout << endl;
+	closingMessage(numberOfPages, firstEntry, lastEntry);
+}
+
+void DisplayEntries::displayOneFloatingEntry(int index){
+	cout << endl
+		<< BORDER << endl
+		<< index << ". "
+		<< _floatingList[index-1].getFullDisplay()
+		<< BORDER;
+}
+
+void DisplayEntries::displayClashes(){
+	ClashInspector checkEntries(_scheduledList);
+	vector<Entry> listOfClashes;
+	bool clashExists;
+	bool printClash;//to enable printing of the clash
+	int numberOfPages;
+	int firstEntry;
+	int lastEntry;
+	int count = 0;
+
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		if(!isInThePast(_scheduledList[i].getStartTime().getTime())){
+			clashExists = false;
+			printClash = false;
+			_scheduledList[i].insertEntryNumber(i + 1);
+			checkEntries.compareEntry(_scheduledList[i], _scheduledList[i].getEntryNumber(), clashExists, printClash);
+			if(clashExists){
+				listOfClashes.push_back(_scheduledList[i]);
+			}
+		count++;
+		}
+	}
+	if(listOfClashes.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "No clashes are found!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
+		return;
+	}
+
+	initialisePaging(listOfClashes, numberOfPages, firstEntry, lastEntry, count);
+	clashExists = false;
+	printClash = true;
+	ClashInspector checkSearchResult(listOfClashes);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << MESSAGE_ENTRYCLASHES << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
+	for (int i = firstEntry; i < lastEntry; i++){
+		cout << BORDER << endl
+			<< listOfClashes[i].getEntryNumber() << ". "
+			<< listOfClashes[i].getName() << endl;
+		checkSearchResult.compareEntry(listOfClashes[i], i + 1, clashExists, printClash);
+		cout << BORDER << endl;
+	}
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	closingMessage(numberOfPages, firstEntry, lastEntry);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+void DisplayEntries::displayFirstPage(){
+	int firstPage = 1;
+	_pageNumber = 1;
+		if (_viewingClashes){
+			displayClashes();
+		} else if(_viewingScheduledList){
+			displayScheduledEntryShort();
+		} else if (_viewingFloatingList){
+			displayFloatingEntries();
+		} else if (_viewingPastEntries){
+			displayPastEntries();
+		}
+}
+
+void DisplayEntries::displayLastPage(){
+	_pageNumber = _lastPage - 1;
+	displayNextPage();
+}
+
+void DisplayEntries::displayNextPage(){
+	if(_scheduledList.empty()){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_SCHEDULEDISEMPTY << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		_pageNumber++;
+		if(_viewingClashes){
+			displayClashes();
+		} else if(_viewingScheduledList){
+			displayScheduledEntryShort();
+		} else if(_viewingPastEntries){
+			displayPastEntries();
+		} else{
+			displayFloatingEntries();
+		}
+}
+
+void DisplayEntries::displayPrevPage(){
+	if(_scheduledList.empty()){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_SCHEDULEDISEMPTY << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		_pageNumber--;
+		if(_pageNumber < 1){
+			_pageNumber = 1;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_ONFIRSTPAGE;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		}
+		if(_viewingClashes){
+			displayClashes();
+		} else if(_viewingScheduledList){
+			displayScheduledEntryShort();
+		} else if(_viewingPastEntries){
+			displayPastEntries();
+		} else{
+			displayFloatingEntries();
+		}
+}
+
+void DisplayEntries::displaySpecifiedPage(int page){
+	_pageNumber = page + 1;
+	displayPrevPage();
+}
+
+void DisplayEntries::displayPastEntries(){
+	vector<Entry>::iterator iterPastEntry;
+	vector<Entry> entriesInThePast;
+
+	int number = 1;
+	int firstEntry;
+	int lastEntry;
+	int numberOfPages;
+	for(iterPastEntry = _scheduledList.begin(); iterPastEntry != _scheduledList.end(); iterPastEntry++){
+		iterPastEntry->insertEntryNumber(number);
+		if(isInThePast(iterPastEntry->getStartTime().getTime())){
+			entriesInThePast.push_back(*iterPastEntry);
+		}
+		number++;
+	}
+	if(entriesInThePast.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "No past Entries are found!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ));
+		return;
+	}
+	number = 0;
+	initialisePaging(entriesInThePast, numberOfPages, firstEntry, lastEntry, number);
+	for(int i = firstEntry; i < lastEntry ; i++){
+		cout << BORDER << endl
+			<< entriesInThePast[i].getEntryNumber() << ". "
+			<< _scheduledList[i].getShortDisplay() << endl;
+		cout << BORDER << endl;
+	}
+	closingMessage(numberOfPages, firstEntry, lastEntry);
+}
+
+int DisplayEntries::returnPageNumber(){
+	return _pageNumber;
+}
+
+void DisplayEntries::initialisePaging(vector<Entry> entryVector, int& numberOfPages,int& firstEntry, int& lastEntry, int& number){
+	//initialise number of Pages
+	numberOfPages = entryVector.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = entryVector.size()%ENTRY_PERPAGE;
+	if(numberOfEntriesOnLastPage > 0){
+		numberOfPages++;
+	}
+
+	//prevent abort for exceeding page
+	while (_pageNumber > numberOfPages){
+		if (_pageNumber = numberOfPages + 1){
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << MESSAGE_PAGEDOESNOTEXIST << endl << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		}
+		_pageNumber--;
+	}
+
+	firstEntry = ENTRY_PERPAGE*(_pageNumber-1);
+	lastEntry = firstEntry + ENTRY_PERPAGE;
+	//case for the last page
+	if(_pageNumber == numberOfPages && numberOfEntriesOnLastPage != 0){
+		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+	}
+	//prevent abort for number of entries less than 5
+	if(entryVector.size() < ENTRY_PERPAGE){
+		lastEntry = entryVector.size();	
+	}
+	number = (_pageNumber-1) * ENTRY_PERPAGE + 1;
+	_lastPage = numberOfPages;
+}
+
+void DisplayEntries::closingMessage(int numberOfPages, int firstEntry, int lastEntry){
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	if(_pageNumber == numberOfPages && numberOfPages!=1){
+		cout << MESSAGE_ARROWDISPLAYPREV << endl << endl;
+	} else if(_pageNumber == 1 && numberOfPages!=1){
+		cout << MESSAGE_ARROWDISPLAYNEXT << endl << endl;
+	} else if (numberOfPages!=1){
+		cout << MESSAGE_BOTHARROWS << endl << endl;
+	}
+	cout << MESSAGE_PAGE << _pageNumber << MESSAGE_OUTOF << numberOfPages << endl
+		<< MESSAGE_DISPLAYENTRIES << firstEntry+1 << MESSAGE_TO << lastEntry << endl << endl; 
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+void DisplayEntries::displayToday(){
+	_pageNumber = 1;
+	int number = 1;
+	vector<Entry> EventsToday;
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		date entryEndDate = _scheduledList[i].getEndDate().getDate();
+		ptime entryStartTime = _scheduledList[i].getStartTime().getTime();
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate == _today || (entryStartDate < _today && entryEndDate >= _today)){
+			if(entryStartTime >= _now);
+			EventsToday.push_back(_scheduledList[i]);
+		}
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << MESSAGE_DISPLAYINGTODAY << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(EventsToday.empty()) {
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << MESSAGE_NOENTRIESTODAY << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		return;
+	}
+	for (unsigned int i = 0; i < EventsToday.size(); i++) {
+		cout << endl
+			<< BORDER << endl
+			<< (number) << ". "
+			<< EventsToday[i].getShortDisplay() << endl
+			<< BORDER;
+		number++;
+	}
+}
+
+void DisplayEntries::displayTomorrow(){
+	_pageNumber = 1;
+	int number = 1;
+	stringstream intToString;
+	string pageSize;
+	unsigned int lastEntry = 3;
+	vector<Entry> EventsTomorrow;
+	for (unsigned int i = 0; i < _scheduledList.size() ; i++){
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		date entryEndDate = _scheduledList[i].getEndDate().getDate();
+		_scheduledList[i].insertEntryNumber(i + 1);
+		if(entryStartDate == _tomorrow || (entryStartDate < _tomorrow && _tomorrow <= entryEndDate)){
+			EventsTomorrow.push_back(_scheduledList[i]);
+		}
+	}
+	if(lastEntry > EventsTomorrow.size()){
+		lastEntry = EventsTomorrow.size();
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY | FOREGROUND_GREEN));
+	cout << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(EventsTomorrow.empty()){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << MESSAGE_NOENTRIESTOMORROW << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		return;
+	}
+	
+	for (int i = 0; i < lastEntry; i++){
+		cout << endl
+			<< BORDER << endl
+			<< EventsTomorrow[i].getEntryNumber() << ". "
+			<< EventsTomorrow[i].getShortDisplay() << endl
+			<< BORDER;
+		number++;
+	}
+
+	cout << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << MESSAGE_DISPLAYING << lastEntry << MESSAGE_ENTRYFROM << EventsTomorrow.size() 
+		 << " " << MESSAGE_ENTRIESTOMORROW << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << endl << endl;
+}
+
+bool DisplayEntries::isInThePast(ptime entryTime){
+	ptime now(second_clock::local_time());
+	return entryTime < now;
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.h
 	 */
 
 	//Scheduled Entries
 	void execute(string, int&, int&, bool&, bool&, bool&, bool&);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.h
 	 */
 
 	//Floating Entries
@@ -105,14 +713,239 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DisplayEntries.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DisplayEntries.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+	 */
+
+
+//insert Date object as start date. initialise the date value
+void Entry::insertStartDate(Date inputStartDate){
+	_hasDate = inputStartDate.getDateStatus();
+	_startDate = inputStartDate;
+	if (_hasDate){
+		_startDate.initialiseDate();
+	}
+}
+//insert Date object as end date. initialise the date value
+void Entry::insertEndDate(Date inputEndDate){
+	_endDate = inputEndDate;
+	if (_hasDate){
+		_endDate.initialiseDate();
+	}
+}
+
+//return Date object for start date
+Date Entry::getStartDate(){
+	return _startDate;
+}
+
+//return Date object for end date
+Date Entry::getEndDate(){
+	return _endDate;
+}
+
+bool Entry::getDateStatus(){
+	return _hasDate;
+}
+
+//insert Time object as start time. initialise the ptime value
+void Entry::insertStartTime(Time inputStartTime){
+	_hasTime = inputStartTime.getTimeStatus();
+	_startTime = inputStartTime;
+	if (_hasDate && _hasTime) {
+		_startTime.initialiseTime(_startDate.getDate());
+	}
+}
+
+//insert Time object as end time. initialise the ptime value
+void Entry::insertEndTime(Time inputEndTime){
+	_endTime = inputEndTime;
+	if (_hasDate && _hasTime) {
+		_endTime.initialiseTime(_endDate.getDate());
+	}
+}
+
+//return Time object for start time
+Time Entry::getStartTime(){
+	return _startTime;
+}
+
+//return Time object for end time
+Time Entry::getEndTime(){
+	return _endTime;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+	 */
+
+
+//return date_duration object. calculates day from today to start date
+date_duration Entry::calculateDaysFromToday(){
+	date startDate = _startDate.getDate();
+	date today(day_clock::local_day());
+	return startDate - today;
+}
+
+//return date_duration object. calculates length from start to end date
+date_duration Entry::calculateEventDurationInDays(){
+	date startDate = _startDate.getDate();
+	date endDate = _endDate.getDate();
+	date_duration dayDifference = endDate - startDate;
+	return dayDifference;
+}
+
+//return time_duration object. calculates length from start to end time
+time_duration Entry::calculateEventDurationInHours(){
+	ptime startTime = _startTime.getTime();
+	ptime endTime = _endTime.getTime();
+	time_duration timeDifference = endTime - startTime;
+	return timeDifference;
+}
+
+//return a complete list of an entry -
+//name, start date end date, start time end time
+//location, status, tags
+string Entry::getFullDisplay(){
+	ostringstream oss;
+	
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	oss << _name << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY));
+	if (_hasDate){
+		string eventType;
+		if(_startTime.getTime() == _endTime.getTime()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			eventType = "Deadline:\t";
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		} else {
+			eventType = "Start Date & Time: ";
+		}
+		oss	<< eventType;
+		greg_weekday startDateToString = _startDate.getDate().day_of_week();
+		oss << "\t|" << startDateToString.as_long_string()
+			<< " " << _startDate.getDay() << " "
+			<< _startDate.getMonth() << " "
+			<< _startDate.getYear() << FEEDBACK_AT
+			<< _startTime.getHour() << ".";
+		if (_startTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss	<< _startTime.getMinute() << endl;
+		if(_startTime.getTime() != _endTime.getTime()){
+			oss << "End Date & Time: ";
+			greg_weekday endDateToString = _endDate.getDate().day_of_week();
+			oss << "\t|" << endDateToString.as_long_string() 
+			<< " " << _endDate.getDay() << " "
+			<< _endDate.getMonth() << " "
+			<< _endDate.getYear() << FEEDBACK_AT
+			<< _endTime.getHour() << ".";
+			if (_endTime.getMinute() < 10){
+				oss << '0';
+			}
+		oss << _endTime.getMinute() << endl;
+		}
+	}
+	
+	oss << "Location: " << "\t\t|" << _location << endl;
+	
+	if (_hasDate){
+		if(_startTime.getTime() != _endTime.getTime()){
+			oss	<< "Event duration: " << "\t|";
+			if(days(calculateEventDurationInHours().hours()/24) > days(0)){
+				oss << days(calculateEventDurationInHours().hours()/24) << " days and ";
+			} 
+			oss << calculateEventDurationInHours().hours()%24 << " hours and " 
+			<< calculateEventDurationInHours().minutes() << " minutes" << endl;
+		}
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		oss << "Time to event: " << "\t\t|" << calculateDaysFromToday() << " days "<< endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+	
+	oss	<< "Status: " << "\t\t|" << getStatus() << endl
+		<< "Tags: " << "\t\t\t|";
+	vector<string>::iterator tagIter;
+	for(tagIter = _tags.begin(); tagIter != _tags.end(); tagIter++){
+		oss << *tagIter << " ";
+	}
+	oss << endl;
+	
+	return oss.str();
+}
+
+//return a short display of an entry
+//name, start date end date, start time end time
+string Entry::getShortDisplay(){
+	ostringstream oss;
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	oss << _name << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if (_hasDate){
+		string eventType;
+		if(_startTime.getTime() == _endTime.getTime()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			eventType = "Deadline:\t";
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		} else {
+			eventType = "Start Date & Time: ";
+		}
+		oss	<< eventType;
+		greg_weekday startDateToString = _startDate.getDate().day_of_week();
+		oss << "\t|" << startDateToString.as_long_string()
+			<< " " << _startDate.getDay() << " "
+			<< _startDate.getMonth() << " "
+			<< _startDate.getYear() << FEEDBACK_AT
+			<< _startTime.getHour() << ".";
+		if (_startTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss	<< _startTime.getMinute() << endl;
+		if(_startTime.getTime() == _endTime.getTime()){
+			return oss.str();
+		}
+		else{
+			oss << "End Date & Time: ";
+			greg_weekday endDateToString = _endDate.getDate().day_of_week();
+			oss << "\t|" << endDateToString.as_long_string() 
+			<< " " << _endDate.getDay() << " "
+			<< _endDate.getMonth() << " "
+			<< _endDate.getYear() << FEEDBACK_AT
+			<< _endTime.getHour() << ".";
+			if (_endTime.getMinute() < 10){
+			oss << '0';
+		}
+		oss << _endTime.getMinute() << endl;
+		}
+	}
+	return oss.str();
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	//Date
@@ -132,28 +965,28 @@ public:
 	Time getStartTime();
 	Time getEndTime();
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	date_duration calculateDaysFromToday();
 	date_duration calculateEventDurationInDays();
 	time_duration calculateEventDurationInHours();
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 	 */
 
 	string getFullDisplay();
@@ -161,14 +994,33 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Entry.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Entry.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryAdd.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryAdd.cpp
+	 */
+
+void EntryAdd::convertTime(string entryTime, int& entryHour, int& entryMin){
+	StringConvertor parseTime;
+	parseTime.convertTime(entryTime, entryHour, entryMin);
+}
+
+void EntryAdd::convertDate(string entryDate, int& day, int& month, int& year){
+	StringConvertor parseDate;
+	parseDate.convertDate(entryDate, day, month, year);
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryAdd.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryAdd.h
 	 */
 
 	 void convertTime(string, int&, int&);
@@ -176,14 +1028,78 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryAdd.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryAdd.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.cpp
+	 */
+
+Date::Date(){
+	_day = 0;
+	_month = 0;
+	_year = 0;
+	_hasDate = false;
+	_loading = false;
+}
+
+//a different constructor to support the loading of existing entries
+//when bool loading is true, printing of warning for past events will be disabled
+Date::Date(bool loading){
+	_day = 0;
+	_month = 0;
+	_year = 0;
+	_hasDate = false;
+	_loading = loading;
+}
+
+void Date::insertDay(int inputDay){
+	_day = inputDay;
+}
+
+void Date::insertMonth(int inputMonth){
+	_month = inputMonth;
+
+	//an entry with day and month can be considered as having date, year is inconsequential
+	if (_day != 0 && _month != 0){
+		_hasDate = true;
+	}
+}
+
+void Date::insertYear(int inputYear){
+	_year = inputYear;
+}
+
+void Date::initialiseDate(){
+	bool inThePast;
+	date today(day_clock::local_day());
+	date thisDate(_year, _month, _day);
+	inThePast = thisDate < today;
+	//adding dates and times that are in the past will not block the addition of the entry
+	//a warning will be triggered
+	if (inThePast){
+		if(!_loading){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << endl << "Warning! Date is in the past" << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+		}
+	}
+		_entryDate = date(_year, _month, _day);
+}
+	
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.h
 	 */
 
 	//input day, month and year into a Date object
@@ -192,51 +1108,304 @@ public:
 	void insertYear(int);
 	void initialiseDate();
 	
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryDate.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryDate.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+	 */
+
+
+//return new name information
+string EntryEdit::getName(){
+	vector<_NEW_CHANGES>::iterator iter;
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
+		if (iter->_editedField == Name){
+			return iter->_newInformation;
+		}
+	}
+	return "";
+}
+
+//return new date information
+void EntryEdit::getDate(int& newStartDay, int& newStartMonth, int& newStartYear, int& newEndDay, int& newEndMonth, int& newEndYear){
+	string newDate;
+	//store the new date(s) into the string newDate
+	vector<_NEW_CHANGES>::iterator iter;
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
+		if (iter->_editedField == Date){
+			 newDate = iter->_newInformation;
+			 break;
+		}
+	}
+	
+	StringConvertor parseDate;
+	string startDate;
+	string endDate;
+	parseDate.extractStringDate(newDate, startDate);
+	if(newDate.empty()){
+		endDate = startDate;
+	}
+	else{
+		parseDate.extractStringDate(newDate, endDate);
+	}
+	parseDate.convertDate(startDate, newStartDay, newStartMonth, newStartYear);
+	parseDate.convertDate(endDate, newEndDay, newEndMonth, newEndYear);
+}
+
+//return new time information
+void EntryEdit::getTime(int& newStartHour, int& newStartMinute, int& newEndHour, int& newEndMinute){
+	string newTime;
+	//store the new date(s) into the string newDate
+	vector<_NEW_CHANGES>::iterator iter;
+	for (iter = _changesList.begin(); iter < _changesList.end(); iter++){
+		if (iter->_editedField == Time){
+			 newTime = iter->_newInformation;
+			 break;
+		}
+	}
+	
+	StringConvertor parseTime;
+	string newStartTime;
+	string newEndTime;
+	parseTime.extractStringTime(newTime, newStartTime);
+	if(newTime.empty()){
+		newEndTime = newStartTime;
+	}
+	parseTime.extractStringTime(newTime, newEndTime);
+	parseTime.convertTime(newStartTime, newStartHour, newStartMinute);
+	parseTime.convertTime(newEndTime, newEndHour, newEndMinute);
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 	string getName();
 	void getDate(int&, int&, int&, int&, int&, int&);
 	void getTime(int&, int&, int&, int&);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+	 */
+
+EntryLists::EntryLists(){
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+	 */
+
+
+//output feedback after entry add execution
+void EntryLists::showAddFeedback(Entry newEntry, int latestEntryIndex) {
+	string entryName = newEntry.getName();
+	Date entryStartDate = newEntry.getStartDate();
+	Date entryEndDate = newEntry.getEndDate();
+	Time entryStartTime = newEntry.getStartTime();
+	Time entryEndTime = newEntry.getEndTime();
+	string entryLocation = newEntry.getLocation();
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN |  FOREGROUND_INTENSITY));
+	cout << FEEDBACK_ADDED_AT_NUMBER << latestEntryIndex << ". " << entryName;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if (newEntry.getDateStatus()){
+		cout << FEEDBACK_FROM << entryStartDate.getDay() << " " << entryStartDate.getMonth() << " " << entryStartDate.getYear()
+			<< FEEDBACK_AT << entryStartTime.getHour() << ".";
+		if (entryStartTime.getMinute() < 10){
+			cout << '0';
+		}
+		cout << entryStartTime.getMinute()
+			<< FEEDBACK_TO << entryEndDate.getDay() << " " << entryEndDate.getMonth() << " " << entryEndDate.getYear()
+			<< FEEDBACK_AT << entryEndTime.getHour() << ".";
+		if (entryEndTime.getMinute() < 10){
+			cout << '0';
+		}
+		cout << entryEndTime.getMinute();
+	}
+	cout << ". " << entryLocation << endl; 
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+//display either display or floating entry number
+string EntryLists::getEntryDisplay(bool isScheduled, int index){
+	ostringstream oss;
+	oss << endl
+		<< BORDER << endl
+		<< index << ". ";
+	//when viewing scheduled display
+	if (isScheduled){	
+		oss << _scheduledList[index-1].getFullDisplay();
+	}
+	//when viewing floating display
+	else { 
+		oss << _floatingList[index-1].getFullDisplay();
+	}
+	oss << BORDER;
+
+	return oss.str();
+}
+
+//remove a scheduled or floating entry based on entry number
+void EntryLists::removeEntry(bool isScheduled, unsigned int index, string& deleteFeedback){
+	deleteFeedback = "";
+	ostringstream oss;
+
+	//scheduled entry
+	if (isScheduled && !_scheduledList.empty()){
+		if (index > _scheduledList.size()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));	
+			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));	
+		oss << FEEDBACK_DELETED << endl;
+		oss << getEntryDisplay(isScheduled, index);
+		deleteFeedback = oss.str();
+		_counter.counterDelete(true, index, _scheduledList[index-1]);
+		_scheduledList.erase(_scheduledList.begin() + index - 1);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+
+	//floating entry
+	else if (!isScheduled && !_floatingList.empty()){
+		if (index > _floatingList.size()){
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+			cout << FEEDBACK_OUT_OF_BOUND << endl;
+			SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+			return;
+		}
+		
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+		oss << FEEDBACK_DELETED << endl;
+		oss << getEntryDisplay(isScheduled, index);
+		deleteFeedback = oss.str();
+		_counter.counterDelete(false, index, _floatingList[index-1]);
+		_floatingList.erase(_floatingList.begin() + index - 1);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+
+	//no more entry
+	else {
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << FEEDBACK_NO_ENTRIES_LEFT << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	}
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+	 */
+
+
+//sort the scheduled list based on date and time of event
+void EntryLists::sort(int& latestEntryIndex){
+	latestEntryIndex = _scheduledList.size();
+	vector<Entry>::iterator firstIter;
+	vector<Entry>::iterator secondIter;
+	int count = 0;
+	Entry tempEntry;
+
+	//bubble sort
+	for (firstIter = _scheduledList.begin(); firstIter != _scheduledList.end(); firstIter++){
+		for(secondIter = _scheduledList.begin()+1; secondIter != _scheduledList.end() - count; secondIter++){
+			bool isSwapped = false;
+			//if the previous entry is larger than the next entry, swap
+			if((secondIter - 1)->getStartTime().getTime() > (secondIter)->getStartTime().getTime()){
+				tempEntry = *(secondIter-1);
+				*(secondIter-1) = *(secondIter);
+				*(secondIter) = tempEntry;
+				isSwapped = true;
+			}
+
+			//if: 1. it is the last iteration of the inner loop, that is the iteration which
+			//compares the last element of inner loop with the element before it, and
+			//2. a swap occurs in this iteration
+			//decrement latesEntryIndex so it will match the index number of latest Entry
+			if (secondIter == _scheduledList.end() - count - 1 && isSwapped) {
+				latestEntryIndex--;
+			}
+		}
+		count++;
+	}
+}
+
+//return the list of scheduled entries
+vector<Entry> EntryLists::getScheduledList(){
+	vector<Entry> ScheduledEntries = _scheduledList;
+	return ScheduledEntries;
+}
+//return the list of floating entries
+vector<Entry> EntryLists::getFloatingList(){
+	vector<Entry> FloatingEntries = _floatingList;
+	return FloatingEntries;
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 	 */
 
 	EntryLists();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 	 */
 
 	void showAddFeedback(Entry, int);
 	string getEntryDisplay(bool, int);
 	void removeEntry(bool, unsigned int, string&);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 	 */
 
 	void sort(int&);
@@ -247,14 +1416,63 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryLists.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryLists.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryTime.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryTime.cpp
+	 */
+
+Time::Time(){
+	_hour = 99;
+	_minute = 99;
+	_hasTime = false;
+}
+
+void Time::insertHour(int inputHour){
+	_hour = inputHour;
+}
+
+void Time::insertMinute(int inputMinute){
+	_minute = inputMinute;
+	//check for a change to the default values
+	if (_hour != 99 && _minute != 99){
+		_hasTime = true;
+	}
+}
+
+int Time::getHour(){
+	return _entryTime.time_of_day().hours();
+}
+
+int Time::getMinute(){
+	return _entryTime.time_of_day().minutes();
+}
+
+//check whether the entry has time
+bool Time::getTimeStatus(){
+	return _hasTime;
+}
+
+//initialise ptime object with the input values
+void Time::initialiseTime(date _entryDate){
+	_entryTime = ptime(_entryDate, hours(_hour) + minutes(_minute));
+}
+
+ptime Time::getTime(){
+	return _entryTime;
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryTime.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryTime.h
 	 */
 
 	Time();
@@ -272,37 +1490,190 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryTime.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryTime.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+	 */
+
+		//tests on DateTimeInspector
+		TEST_METHOD(DateTimeInspectorTest) {
+			DateTimeInspector aDay;
+			Assert::IsTrue(aDay.dateIsValid(31, 03, 2014));			
+			Assert::IsTrue(aDay.timeIsValid(12,59));
+			Assert::IsFalse(aDay.timeIsValid(25,10));
+			Assert::IsFalse(aDay.timeIsValid(20,61));
+		}
+		
+        TEST_METHOD(StringConvertorTest) {
+            StringConvertor convertor;
+            string dateInput = "14 mar 15";
+            int day;
+            int month;
+            int year;
+            int expectedDay = 14;
+            int expectedMonth = 3;
+            int expectedYear = 2015;
+            int number;
+            int expectedNumber = 12;
+            convertor.convertDate(dateInput, day, month, year);
+            Assert::AreEqual(expectedDay, day);
+            Assert::AreEqual(expectedMonth, month);
+            Assert::AreEqual(expectedYear, year);
+
+            string numberInput = "12";
+            convertor.convertStringToNumber(numberInput, number);
+            Assert::AreEqual(expectedNumber, number);
+            string dateLongInput = "14 mar 15 to 15 mar 15";
+            string expectedStartDate = "14 mar 15";
+            string expectedEndDate = "15 mar 15";
+            string resultStartDate;
+            string resultEndDate;
+            convertor.extractStringDate(dateLongInput, resultStartDate);
+            dateLongInput = dateLongInput.substr(3);
+            convertor.extractStringDate(dateLongInput, resultEndDate);
+            Assert::AreEqual(expectedStartDate, resultStartDate);
+            Assert::AreEqual(expectedEndDate, resultEndDate);
+
+		}
+};
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+//Executes various kinds of display for the entries in the list
+//display allows the user to toggle between 'scheduled', 'floating', 'clashes', and 'past entries' mode
+//bool values are stored in main
+void Main::executeDisplayFunction(string userInput){
+	DisplayEntries display(_newList.getScheduledList(), _newList.getFloatingList());
+	display.execute(userInput, _pageNumber, _lastPage, _viewingScheduledList, _viewingFloatingList, _viewingPastEntries, _viewingClashes);
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+//reset string values for a new operation
+void Main::resetStringValues() {
+	_userInput = "";
+	_entryName = "";
+	_stringStartDate = "";
+	_stringStartTime = "";
+	_stringEndDate = "";
+	_stringEndTime = "";
+	_entryLocation = "";
+	_command = "";
+}
+//reset integer values for a new operation
+void Main::resetIntegerValues(){
+	_intStartDay = 0; _intStartMonth = 0; _intStartYear = 0;
+	_intEndDay = 0; _intEndMonth = 0; _intEndYear = 0;
+	_intStartHour = 0; _intStartMinute = 0;
+	_intEndHour = 0; _intEndMinute = 0;
+}
+
+//insert integer values of day, month and year into the Date object
+void Main::initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear){
+	int day = inputDay;
+	int month = inputMonth;
+	int year = inputYear;
+	
+	inputDate.insertDay(inputDay);
+	inputDate.insertMonth(inputMonth);
+	inputDate.insertYear(inputYear);
+}
+
+//insert integer values of hours and minute into the Time object
+void Main::initialiseTime(Time& inputTime, int inputHour, int inputMinute){
+	inputTime.insertHour(inputHour);
+	inputTime.insertMinute(inputMinute);
+}
+
+//convert a string containing start date and time and end date and time 
+//into their respective integer values
+void Main::convertDateTime(EntryAdd& parse, string stringStartDate, int& intStartDay, int& intStartMonth, int& intStartYear,
+					 string stringStartTime, int& intStartHour, int& intStartMinute,
+					 string stringEndDate, int& intEndDay, int& intEndMonth, int& intEndYear,
+					 string stringEndTime, int& intEndHour, int& intEndMinute){
+	parse.convertDate(stringStartDate, intStartDay, intStartMonth, intStartYear);
+	parse.convertTime(stringStartTime, intStartHour, intStartMinute);
+	parse.convertDate(stringEndDate, intEndDay, intEndMonth, intEndYear);
+	parse.convertTime(stringEndTime, intEndHour, intEndMinute);
+}
+
+//insert integer and string values needed into the new Entry object
+void Main::initialiseEntry(Entry& newEntry, string entryName, Date startDate, Date endDate, Time startTime, Time endTime,
+						   string entryLocation, string entryStatus, vector<string>& tags){
+	newEntry.insertName(entryName);
+	newEntry.insertStartDate(startDate);
+	newEntry.insertEndDate(endDate);
+	newEntry.insertStartTime(startTime);
+	newEntry.insertEndTime(endTime);
+	newEntry.insertLocation(entryLocation);
+	if (entryStatus == DONE) {
+		newEntry.changeStatus();
+	} else if (entryStatus == UNDONE) {
+		newEntry.initialiseStatus();
+	}
+	newEntry.insertTags(tags);
+}
+
+//insert integer values to the respective date and time objects
+void Main::initialiseDateTime(Date& startDate, int intStartDay, int intStartMonth, int intStartYear, Time& startTime, int intStartHour, int intStartMinute,
+						Date& endDate, int intEndDay, int intEndMonth, int intEndYear, Time& endTime, int intEndHour, int intEndMinute){
+	initialiseDate(startDate, intStartDay, intStartMonth, intStartYear);
+	initialiseDate(endDate, intEndDay, intEndMonth, intEndYear);
+	initialiseTime(startTime, intStartHour, intStartMinute);
+	initialiseTime(endTime, intEndHour, intEndMinute);
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void resetStringValues();
 	void resetIntegerValues();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void executeDisplayFunction(string);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void initialiseDate(Date& inputDate, int inputDay, int inputMonth, int inputYear);
@@ -320,27 +1691,416 @@ public:
 
 #endif
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.cpp
+	 */
+
+
+//return all entries which consists of the input date
+void SearchEntries::searchDate(string userInput){
+	initialiseSearchPagingAttributes();
+	DateTimeInitialiser _initialiser;
+	vector<Entry>::iterator iterScheduledEntry;
+	//Date initialisation
+	Date inputDate;
+	int inputDay;
+	int inputMonth;
+	int inputYear;
+	DateTimeInspector inspectDate;
+	_datetimeParser.convertDate(userInput, inputDay, inputMonth, inputYear);
+	if(!inspectDate.dateIsValid(inputDay, inputMonth, inputYear)){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "Date search input is invalid!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		_initialiser.initialiseDate(inputDate, inputDay, inputMonth, inputYear);
+	}
+
+	//initialise search results
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		bool dateFound = false;
+		_scheduledList[i].insertEntryNumber(i+1);
+		Date entryStartDate = _scheduledList[i].getStartDate();
+		Date entryEndDate = _scheduledList[i].getEndDate();
+		if(inputDate.getDate() >= entryStartDate.getDate() && inputDate.getDate() <= entryEndDate.getDate()){
+			dateFound = true;
+			_scheduledSearchResult.push_back(_scheduledList[i]);
+		}
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << "Scheduled Entries on the date " << inputDate.getDay() << " "
+		<< inputDate.getMonth() << " "
+		<< inputDate.getYear() << " "
+		":" << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(_scheduledSearchResult.empty()){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << "Entries are not found" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		loadScheduledSearchResult();
+	}
+}
+
+//return all entries which consists of the input time
+void SearchEntries::searchTime(string userInput){
+	initialiseSearchPagingAttributes();
+	DateTimeInitialiser _initialiser;
+	date today(day_clock::local_day());
+	//initialise inputTime
+	Time inputTime;
+	int inputHour;
+	int inputMinute;
+	int entryStartHour;
+	int entryStartMinute;
+	int entryEndHour;
+	int entryEndMinute;
+	DateTimeInspector inspectTime;
+	_datetimeParser.convertTime(userInput, inputHour, inputMinute);
+	if(!inspectTime.timeIsValid(inputHour, inputMinute)){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "Time search input is invalid!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		_initialiser.initialiseTime(inputTime, inputHour, inputMinute, today);
+	}
+	//initialise scheduled
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		bool timeFound = false;
+		_scheduledList[i].insertEntryNumber(i+1);
+		Time entryStartTime;
+		Time entryEndTime;
+		entryStartHour = _scheduledList[i].getStartTime().getHour();
+		entryStartMinute = _scheduledList[i].getStartTime().getMinute();
+		entryEndHour = _scheduledList[i].getEndTime().getHour();
+		entryEndMinute = _scheduledList[i].getEndTime().getMinute();
+		_initialiser.initialiseTime(entryStartTime, entryStartHour, entryStartMinute, today);
+		_initialiser.initialiseTime(entryEndTime, entryEndHour, entryEndMinute, today);
+		bool isInBetweenStartTimeAndEndTime = entryStartTime.getTime() <= inputTime.getTime() && entryEndTime.getTime() >= inputTime.getTime();
+			if (isInBetweenStartTimeAndEndTime){
+				_scheduledSearchResult.push_back(_scheduledList[i]);
+			}
+	}
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << "Scheduled Entries on the time " << inputTime.getHour() << "."
+		<< inputTime.getMinute()
+		<< " :" << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(_scheduledSearchResult.empty()){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << "Entries are not found" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		loadScheduledSearchResult();
+	}
+}
+
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.cpp
+	 */
+
+//return all entries which occurs on a specific key day
+void SearchEntries::searchDay(string keyDay){
+	initialiseSearchPagingAttributes();
+	int dayOfWeek;
+	string keyDayOfWeek;
+	unsigned int i;
+	for(i = 0; i < 7; i++){
+		if(keyDay == DAYSOFWEEK[i]){
+			dayOfWeek = i;
+		}
+	}
+	keyDayOfWeek = SYSTEMDAYSOFWEEK[dayOfWeek];
+	//initalised search results
+	for(i = 0; i < _scheduledList.size(); i++){
+		_scheduledList[i].insertEntryNumber(i + 1);
+		//start date
+		date entryStartDate = _scheduledList[i].getStartDate().getDate();
+		greg_weekday startDateToString = entryStartDate.day_of_week();
+		string startDayString = startDateToString.as_long_string();
+		//end date
+		date entryEndDate = _scheduledList[i].getEndDate().getDate();
+		greg_weekday endDateToString = entryEndDate.day_of_week();
+		string endDayString = endDateToString.as_long_string();
+		//difference between start date and end date
+		date_duration entryDuration = entryEndDate - entryStartDate;
+		long dayDifference = entryDuration.days();
+		if(dayDifference > 7 || startDayString == keyDayOfWeek || calculateDifferenceBetweenTwoWeekDays(startDayString, keyDayOfWeek) < dayDifference){
+			_scheduledSearchResult.push_back(_scheduledList[i]);
+		}
+	}
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	cout << "Scheduled Entries on the day " << keyDayOfWeek << " "
+		":" << endl << endl;
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	if(_scheduledSearchResult.empty()){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY));
+		cout << "Entries are not found" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	} else {
+		loadScheduledSearchResult();
+	}
+}
+
+//return all the free slots in a day 
+void SearchEntries::searchSlot(string inputDate){
+	StringConvertor convertDate; 
+	DateTimeInitialiser dateInitialiser;
+	Date keyDate;
+	int inputDay;
+	int inputMonth;
+	int inputYear;
+	ptime start;
+	ptime startOfDay;
+	ptime endOfDay;
+	ptime end;
+	vector<Entry> entriesOfDate;
+	convertDate.convertDate(inputDate, inputDay, inputMonth, inputYear);
+	dateInitialiser.initialiseDate(keyDate, inputDay, inputMonth, inputYear);
+	keyDate.initialiseDate();
+	//initialise search result
+	for(unsigned int i = 0; i < _scheduledList.size(); i++){
+		date entryDate = _scheduledList[i].getStartDate().getDate();
+		if(_scheduledList[i].getStartDate().getDate() == keyDate.getDate() 
+			&& _scheduledList[i].getEndDate().getDate() == keyDate.getDate() ){
+			entriesOfDate.push_back(_scheduledList[i]);
+		}
+	}
+	if(entriesOfDate.empty()){
+		cout << "The whole day is available for your new entry!" << endl;
+		return;
+	} else{
+		end = entriesOfDate[0].getStartTime().getTime();
+	}
+	date entryDate = keyDate.getDate();
+	vector<ptime> unoccupiedTimeOfDate;
+	endOfDay = ptime(entryDate, hours(24) + minutes(0));
+	startOfDay = ptime(entryDate, hours(0) + minutes(0));
+	start = startOfDay;
+	unoccupiedTimeOfDate.push_back(startOfDay);
+	//initialise unoccupied
+	for (unsigned int i = 0; i < entriesOfDate.size(); i++){
+		start = entriesOfDate[i].getEndTime().getTime();
+		unoccupiedTimeOfDate.push_back(end);
+		unoccupiedTimeOfDate.push_back(start);
+		if(i + 1 != entriesOfDate.size()){
+			end = entriesOfDate[i + 1].getStartTime().getTime();
+		} else {
+			end = endOfDay;
+		}
+	}
+	unoccupiedTimeOfDate.push_back(end);
+	cout << "Time slots available on the date: " << keyDate.getDay()
+		<< " " << keyDate.getMonth() << " " << keyDate.getYear() << endl << endl;
+	ostringstream oss;
+	for (unsigned int i = 0; i < unoccupiedTimeOfDate.size(); i = i + 2){
+		oss << "from "; 
+		if(unoccupiedTimeOfDate[i] == startOfDay){
+			oss << "midnight";
+		} else{
+			oss << unoccupiedTimeOfDate[i].time_of_day().hours() << "."
+				<< unoccupiedTimeOfDate[i].time_of_day().minutes();
+		}
+		oss << " to ";
+		if(unoccupiedTimeOfDate[i + 1] == endOfDay){
+			oss << "midnight";
+		} else {
+			oss << unoccupiedTimeOfDate[i + 1].time_of_day().hours() << "." 
+				<< unoccupiedTimeOfDate[i + 1].time_of_day().minutes() << endl;
+		}
+	}
+	cout << oss.str();
+}
+
+//initialise parameters related to the paging of the scheduled search results
+void SearchEntries::initialiseScheduledPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
+	//initialise search result parameters
+	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = searchResult.size()%ENTRY_PERPAGE;
+	if(numberOfEntriesOnLastPage > 0){
+		numberOfPages++;
+	}
+	//prevent abort for exceeding page
+	if(_scheduledPageNumber > numberOfPages){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "Page does not exist!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
+		_scheduledPageNumber--;
+	}
+	firstEntry = ENTRY_PERPAGE*(_scheduledPageNumber-1);
+	lastEntry = firstEntry + ENTRY_PERPAGE;
+	//case for the last page
+	if(_scheduledPageNumber == numberOfPages && numberOfEntriesOnLastPage != 0){
+		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+	}
+	//prevent abort for number of entries less than maximum page
+	if(searchResult.size() <= ENTRY_PERPAGE){
+		lastEntry = searchResult.size();	
+	}
+}
+
+//initialise parameters related to the paging of the floating search results
+void SearchEntries::initialiseFloatingPaging(int& numberOfPages, vector<Entry> searchResult, int& firstEntry, int& lastEntry){
+	//initialise search result parameters
+	numberOfPages = searchResult.size()/ENTRY_PERPAGE;
+	int numberOfEntriesOnLastPage = searchResult.size()%ENTRY_PERPAGE;
+	if(numberOfEntriesOnLastPage > 0){
+		numberOfPages++;
+	}
+	//prevent abort for exceeding page
+	if(_floatingPageNumber > numberOfPages){
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_INTENSITY));
+		cout << "Page does not exist!" << endl << endl;
+		SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+
+		_floatingPageNumber--;
+	}
+	firstEntry = ENTRY_PERPAGE*(_floatingPageNumber-1);
+	lastEntry = firstEntry + ENTRY_PERPAGE;
+	//case for the last page
+	if(_floatingPageNumber == numberOfPages && numberOfEntriesOnLastPage != 0){
+		lastEntry = firstEntry + numberOfEntriesOnLastPage;
+	}
+	//prevent abort for number of entries less than maximum page
+	if(searchResult.size() <= ENTRY_PERPAGE){
+		lastEntry = searchResult.size();	
+	}
+}
+
+//output results from a vector of the search results
+void SearchEntries::displaySearchResults(vector<Entry> searchResult, int firstEntry, int lastEntry){
+	for (int i = firstEntry; i < lastEntry; i++){
+			cout << BORDER << endl
+				<< searchResult[i].getEntryNumber() << ". "
+				<< searchResult[i].getShortDisplay() << endl
+				<< BORDER << endl;
+	}
+}
+
+//output closing message to help in the navigation of the scheduled search result
+void SearchEntries::closingScheduledMessage(int numberOfPages, int firstEntry, int lastEntry){
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	if(_scheduledPageNumber == numberOfPages && numberOfPages!=1){
+		cout <<  "<<< search prev"  << endl << endl;
+	} else if(_scheduledPageNumber == 1 && numberOfPages!=1){
+		cout << "\t \t \t \tsearch next >>>" << endl << endl;
+	} else if (numberOfPages!=1){
+		cout << "<<< search prev \t \t search next >>>" << endl << endl;
+	}
+	cout << "Page: " << _scheduledPageNumber << " out of " << numberOfPages << endl
+		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl; 
+	
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+//output closing message to help in the navigation of the floating search result
+void SearchEntries::closingFloatingMessage(int numberOfPages, int firstEntry, int lastEntry){
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	if(_floatingPageNumber == numberOfPages && numberOfPages!=1){
+		cout << "<<< search prev" << endl << endl;
+	} else if(_floatingPageNumber == 1 && numberOfPages!=1){
+		cout << "\t \t \t \tsearch next >>>" << endl << endl;
+	} else if (numberOfPages!=1){
+		cout << "<<< search prev \t \t search next >>>" << endl << endl;
+	}
+	cout << "Page: " << _floatingPageNumber << " out of " << numberOfPages << endl
+		<< "displaying entries " << firstEntry+1 << " to " << lastEntry << endl ; 
+	
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+}
+
+//initialise all variables related to search paging
+void SearchEntries::initialiseSearchPagingAttributes(){
+	_scheduledSearchResult.clear();
+	_floatingSearchResult.clear();
+	_firstScheduledEntry = 1;
+	_lastScheduledEntry = 1;
+	_firstScheduledEntry = 1;
+	_lastScheduledEntry = 1;
+	_numberOfPagesScheduledResult = 1;
+	_numberOfPagesFloatingResult = 1;
+}
+
+//steps taken in presenting the scheduled search results
+void SearchEntries::loadScheduledSearchResult(){
+	initialiseScheduledPaging(_numberOfPagesScheduledResult, _scheduledSearchResult, _firstScheduledEntry, _lastScheduledEntry);
+	displaySearchResults(_scheduledSearchResult, _firstScheduledEntry, _lastScheduledEntry);
+
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	closingScheduledMessage(_numberOfPagesScheduledResult, _firstScheduledEntry, _lastScheduledEntry);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << endl;
+}
+
+//steps taken in presenting the floating search results
+void SearchEntries::loadFloatingSearchResult(){
+	initialiseFloatingPaging(_numberOfPagesFloatingResult, _floatingSearchResult, _firstFloatingEntry, _lastFloatingEntry);
+	displaySearchResults(_floatingSearchResult, _firstFloatingEntry, _lastFloatingEntry);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY));
+	closingFloatingMessage(_numberOfPagesFloatingResult, _firstFloatingEntry, _lastFloatingEntry);
+	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
+	cout << endl;
+}
+
+//returns an integer difference between two names of days e.g. 3 between monday and thursday
+int SearchEntries::calculateDifferenceBetweenTwoWeekDays(string firstDay, string secondDay){
+	int intFirstDay = 0;
+	int intSecondDay = 0;
+	int difference = 0;
+	for(int i = 0; i < 7; i++){
+		if(firstDay == SYSTEMDAYSOFWEEK[i]){
+			intFirstDay = i + 1;
+		}
+		if(secondDay == SYSTEMDAYSOFWEEK[i]){
+			intSecondDay = i + 1;
+		}
+	}
+
+	difference = intSecondDay - intFirstDay;
+	if(difference < 0){
+		difference = difference + 7;
+	}
+	return difference;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.h
 	 */
 
 	void searchDate(string);
 	void searchTime(string);
 	void searchDay(string);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.h
 	 */
 
 	void searchSlot(string);
@@ -360,7 +2120,146 @@ public:
 
 
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\SearchEntries.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\SearchEntries.h
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\StringConvertor.cpp
+	 */
+
+StringConvertor::StringConvertor(){
+}
+
+void StringConvertor::extractStringTime(string& inputString, string& timeString){
+	int endOfTime = inputString.find(BLANK_SPACE);
+	timeString = inputString.substr(0, endOfTime);
+	inputString.erase(0, endOfTime + BLANK_SPACE_COUNT);
+}
+
+void StringConvertor::extractStringDate(string& inputString, string& dateString){
+	int endOfDay = inputString.find(BLANK_SPACE);
+	int endOfMonth = inputString.find(BLANK_SPACE, endOfDay + BLANK_SPACE_COUNT);
+	int endOfYear = inputString.find(BLANK_SPACE, endOfMonth + BLANK_SPACE_COUNT);
+	dateString = inputString.substr(0, endOfYear);
+	inputString.erase(0, endOfYear + BLANK_SPACE_COUNT);
+}
+
+void StringConvertor::convertTime(string entryTime, int& entryHour, int& entryMin){
+	istringstream iss(entryTime);
+	string start;
+	string end;
+	iss >> start >> end;
+
+	size_t startDot = start.find_first_of(FULLSTOP_MARKER);
+	string startHourString = start.substr(0, startDot);
+	istringstream convertStartHour(startHourString);
+	if (!(convertStartHour >> entryHour)) {
+		entryHour = 0;
+	}
+	
+	string startMinString = start.substr(startDot + 1, string::npos);
+	istringstream convertStartMin(startMinString);
+	if (!(convertStartMin >> entryMin)) {
+		entryMin = 0; 
+	}
+}
+
+void StringConvertor::convertDate(string entryDate, int& entryDay, int& entryMonth, int& entryYear){
+	istringstream iss(entryDate);
+	string dayString;
+	string monthString;
+	string yearString;
+
+	iss >> dayString
+		>> monthString
+		>> yearString;
+
+	//day
+	istringstream convertDay(dayString);
+	if (!(convertDay >> entryDay)) {
+		entryDay = 0;  
+	}
+
+	//month
+	bool found = false;
+	int monthCount = 1;
+	while (!found){
+		if (monthString == UPPERCASE_MONTHSHORT_ARRAY[monthCount - 1]||monthString == UPPERCASE_MONTHLONG_ARRAY[monthCount-1]
+		|| monthString == LOWERCASE_MONTHSHORT_ARRAY[monthCount - 1]||monthString == LOWERCASE_MONTHLONG_ARRAY[monthCount-1]){
+			found = true;
+			entryMonth = monthCount;
+		}
+		else{
+			monthCount++;
+		}
+	}
+
+	//year
+	istringstream convertYear(yearString);
+	if (!(convertYear >> entryYear)) {
+		entryYear = 0;  
+	}
+	if(entryYear < 1000){
+		entryYear = entryYear + 2000;
+	}
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\StringConvertor.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
+	 */
+
+		//tests on DateTimeInspector
+		TEST_METHOD(DateTimeInspectorTest) {
+			DateTimeInspector aDay;
+			Assert::IsTrue(aDay.dateIsValid(31, 03, 2014));			
+			Assert::IsTrue(aDay.timeIsValid(12,59));
+			Assert::IsFalse(aDay.timeIsValid(25,10));
+			Assert::IsFalse(aDay.timeIsValid(20,61));
+		}
+		
+        TEST_METHOD(StringConvertorTest) {
+            StringConvertor convertor;
+            string dateInput = "14 mar 15";
+            int day;
+            int month;
+            int year;
+            int expectedDay = 14;
+            int expectedMonth = 3;
+            int expectedYear = 2015;
+            int number;
+            int expectedNumber = 12;
+            convertor.convertDate(dateInput, day, month, year);
+            Assert::AreEqual(expectedDay, day);
+            Assert::AreEqual(expectedMonth, month);
+            Assert::AreEqual(expectedYear, year);
+
+            string numberInput = "12";
+            convertor.convertStringToNumber(numberInput, number);
+            Assert::AreEqual(expectedNumber, number);
+            string dateLongInput = "14 mar 15 to 15 mar 15";
+            string expectedStartDate = "14 mar 15";
+            string expectedEndDate = "15 mar 15";
+            string resultStartDate;
+            string resultEndDate;
+            convertor.extractStringDate(dateLongInput, resultStartDate);
+            dateLongInput = dateLongInput.substr(3);
+            convertor.extractStringDate(dateLongInput, resultEndDate);
+            Assert::AreEqual(expectedStartDate, resultStartDate);
+            Assert::AreEqual(expectedEndDate, resultEndDate);
+
+		}
+};
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
 
 
 

@@ -3,7 +3,42 @@
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInspector.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInspector.cpp
+	 */
+
+#include "DateTimeInspector.h"
+
+DateTimeInspector::DateTimeInspector(){
+}
+
+bool DateTimeInspector::dateIsValid(int day, int month, int year){
+	bool isValid = false;
+	if (day > 0 && month > 0 && year > 0 ){
+		if (day <= 31 && month <= 12){
+			date d (year, month, day);
+			isValid = true;
+		}
+	}
+	return isValid;
+}
+
+bool DateTimeInspector::timeIsValid (int hour, int minute){
+	bool isValid = false;
+	if (hour >= 0 && minute >=0){
+		if (hour < 24 && minute < 60){
+			isValid = true;
+		}
+	}
+	return isValid;
+}
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInspector.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInspector.h
 	 */
 
 #ifndef DATETIMEINSPECTOR_H
@@ -28,61 +63,408 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\DateTimeInspector.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\DateTimeInspector.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+	 */
+
+int EntryEdit::getEntryNumber(string& entryComponents){
+	//remove blank space
+	entryComponents = entryComponents.substr(1);
+	int pos = entryComponents.find_first_of(' ');
+	string numberString = entryComponents.substr(0, pos);
+	entryComponents.erase(0, pos+1);
+	StringConvertor convertor;
+	convertor.convertStringToNumber(numberString, _entryNumber);
+	return _entryNumber;
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 	 */
 
 	int getEntryNumber(string&);
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\EntryEdit.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\EntryEdit.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+	 */
+
+		TEST_METHOD(EntryTest) {
+			Entry testInfo;
+		
+			//test for name
+			testInfo.insertName("dinner with me");
+			string actualAnswer = testInfo.getName();	
+			string expectedAnswer = "dinner with me";
+			Assert::AreEqual(expectedAnswer, actualAnswer);
+			
+			//test for entryNumber
+			testInfo.insertEntryNumber(1);
+			int b=testInfo.getEntryNumber();
+			Assert::AreEqual(1, b);
+
+			//test for location
+			testInfo.insertLocation("utown");
+			actualAnswer=testInfo.getLocation();	
+			expectedAnswer = "utown";
+			Assert::AreEqual(expectedAnswer, actualAnswer);
+		}
+
+		TEST_METHOD(TestUITest) {
+			string testInfo = "edit dinner with me";
+			TextUI line(testInfo);
+			string expectedCommandWord = "edit";
+			string actualCommandWord = line.findCommand(testInfo);
+			Assert::AreEqual(expectedCommandWord, actualCommandWord);
+		}
+		
+		//addEntry for scheduled and floating
+		TEST_METHOD(EntryListAddTest) {
+				
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummy;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummy);
+			
+			vector<Entry> actualResult;
+			actualResult = testInfo.getScheduledList();
+			int size = actualResult.size();
+			Assert::AreEqual(4,size);
+		
+		}		
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+	 */
+
+		//test on editEntry tag for floating tasks
+		TEST_METHOD(EntryListEditNameFloatingTest) {		
+			string expectedAnswer="k";
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+			
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled,dummyNumber);			
+			
+			string dummyString;
+			string userInput = "1 name k";
+			testInfo.editEntry(true, userInput, dummyString);	
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getName();
+					
+			Assert::AreEqual(expectedAnswer,actualResult);
+		}
+
+		//test on editEntry name for scheduled tasks
+		TEST_METHOD(EntryListEditNameTest) {
+			string expectedAnswer="k";
+						
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+			Date startDate;
+			startDate.insertDay(17);
+			startDate.insertMonth(2);
+			startDate.insertYear(2014);
+			startDate.initialiseDate();
+			testScheduled.insertStartDate(startDate);
+
+			Date endDate;
+			endDate.insertDay(26);
+			endDate.insertMonth(2);
+			endDate.insertYear(2014);
+			endDate.initialiseDate();
+			testScheduled.insertEndDate(endDate);
+
+			Time startTime;
+			startTime.insertHour(12);
+			startTime.insertMinute(13);
+			testScheduled.insertStartTime(startTime);
+			
+			Time endTime;
+			startTime.insertHour(14);
+			startTime.insertMinute(16);
+			testScheduled.insertEndTime(endTime);
+	
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled,dummyNumber);			
+			
+			string dummyString;
+			string userInput = "1 name k";
+			testInfo.editEntry(true, userInput, dummyString);	
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getName();
+
+			Assert::AreEqual(expectedAnswer,actualResult);
+		}
+
+		//editEntry tag for floating
+		TEST_METHOD(EntryListEditTagFloatingTest) {		
+			string expectedAnswer="#play ";
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+			
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled, dummyNumber);			
+
+			string dummyString;
+			string userInput = "1 add #play. remove #study";		
+			testInfo.editEntry(true, userInput, dummyString);		
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getTags();		
+
+			Assert::AreEqual(expectedAnswer,actualResult);	
+		}
+		
+		//tests on editEntry loc for floating tasks
+		TEST_METHOD(EntryListEditLocFloatingTest) {		
+			string expectedAnswer = "yih";
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);			
+			
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled,dummyNumber);			
+			
+			string dummyString;
+			string userInput = "1 place yih";			
+			testInfo.editEntry(true, userInput, dummyString);		
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getLocation();	
+
+			Assert::AreEqual(expectedAnswer,actualResult);				
+		}
+
+		//removeEntry for scheduled and floating
+		TEST_METHOD(EntryListsRemoveTest) {
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummyNumber;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			
+			string dummyString;
+			testInfo.removeEntry(false, 1, dummyString);		
+			/*vector<Entry> actualResult;
+			actualResult = testInfo.getScheduledList();
+			int size = actualResult.size();
+			Assert::AreEqual(3,size);*/
+		}	
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\FastAddTest\UnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+void Main::welcomeMessage(){
+	_commandInterface.displayWelcomeMessage();
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+void Main::operateFastAdd(){
+	_loadingEntries = false;
+	while(_running){
+		cout << COMMAND_BORDER << endl << endl
+			<< COMMAND_PROMPT;
+		getline(cin, _userInput);
+		cout << COMMAND_BORDER << endl << endl;
+
+		_command = _commandInterface.findCommand(_userInput);
+		_userInput = _commandInterface.removeCommand(_userInput);
+
+		if(_command == COMMAND_ADD) {
+			executeAddFunction(_userInput);
+		} else if(_command == COMMAND_EDIT) {
+			executeEditFunction(_userInput);
+		} else if(_command == COMMAND_DISPLAY) {
+			executeDisplayFunction(_userInput);
+		} else if(_command == COMMAND_DELETE) {
+			executeDeleteFunction(_userInput);
+		} else if(_command == COMMAND_SEARCH) {
+			executeSearchFunction(_userInput);
+		} else if(_command == COMMAND_HELP) {
+			executeHelpFunction();
+		} else if (_command == COMMAND_UNDO) {
+			executeUndoFunction();
+		} else if (_command == COMMAND_SAVE) {
+			executeSaveFunction();
+		} else if (_command == COMMAND_SAVE_AT) {
+			executeSaveAtFunction();
+		} else if(_command == COMMAND_EXIT) {
+			executeExitFunction();
+		}
+
+		else if(_command == COMMAND_RESIZE){
+			executeResizeFunction();
+		}
+		
+		else{
+			_commandInterface.displayErrorFeedback();
+		}
+		cout << endl;
+	}
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+	 */
+
+void Main::executeHelpFunction() {
+	_commandInterface.displayHelp();
+}
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	Main();
 	void welcomeMessage();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void operateFastAdd();
 	
 	//FastAdd CRUD
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 	 */
 
 	void executeHelpFunction();
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\Main.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\Main.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\StringConvertor.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\StringConvertor.h
 	 */
 
 	StringConvertor();
@@ -94,21 +476,30 @@ public:
 };
 
 #endif
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\StringConvertor.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\StringConvertor.h
 
 
 
 
 
 	/**
-	 * origin: C:\Users\Christian\Desktop\LOCAL REPO\TextUI.h
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\TextUI.h
 	 */
 
 		TextUI();
 		void displayWelcomeMessage();
 		void displayCurrentDateTime();
 		void displayHelp();
-		void displayResizeOptions();
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\TextUI.h
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\TextUI.h
+	 */
+
 		TextUI(string&);	
 		string findCommand(string&);
         string removeCommand(string&);
@@ -119,7 +510,251 @@ public:
 		
 
 
-	// End of segment: C:\Users\Christian\Desktop\LOCAL REPO\TextUI.h
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\TextUI.h
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
+	 */
+
+		TEST_METHOD(EntryTest) {
+			Entry testInfo;
+		
+			//test for name
+			testInfo.insertName("dinner with me");
+			string actualAnswer = testInfo.getName();	
+			string expectedAnswer = "dinner with me";
+			Assert::AreEqual(expectedAnswer, actualAnswer);
+			
+			//test for entryNumber
+			testInfo.insertEntryNumber(1);
+			int b=testInfo.getEntryNumber();
+			Assert::AreEqual(1, b);
+
+			//test for location
+			testInfo.insertLocation("utown");
+			actualAnswer=testInfo.getLocation();	
+			expectedAnswer = "utown";
+			Assert::AreEqual(expectedAnswer, actualAnswer);
+		}
+
+		TEST_METHOD(TestUITest) {
+			string testInfo = "edit dinner with me";
+			TextUI line(testInfo);
+			string expectedCommandWord = "edit";
+			string actualCommandWord = line.findCommand(testInfo);
+			Assert::AreEqual(expectedCommandWord, actualCommandWord);
+		}
+		
+		//addEntry for scheduled and floating
+		TEST_METHOD(EntryListAddTest) {
+				
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummy;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummy);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummy);
+			
+			vector<Entry> actualResult;
+			actualResult = testInfo.getScheduledList();
+			int size = actualResult.size();
+			Assert::AreEqual(4,size);
+		
+		}		
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
+	 */
+
+		//test on editEntry tag for floating tasks
+		TEST_METHOD(EntryListEditNameFloatingTest) {		
+			string expectedAnswer="k";
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+			
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled,dummyNumber);			
+			
+			string dummyString;
+			string userInput = "1 name k";
+			testInfo.editEntry(true, userInput, dummyString);	
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getName();
+					
+			Assert::AreEqual(expectedAnswer,actualResult);
+		}
+
+		//test on editEntry name for scheduled tasks
+		TEST_METHOD(EntryListEditNameTest) {
+			string expectedAnswer="k";
+						
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+			Date startDate;
+			startDate.insertDay(17);
+			startDate.insertMonth(2);
+			startDate.insertYear(2014);
+			startDate.initialiseDate();
+			testScheduled.insertStartDate(startDate);
+
+			Date endDate;
+			endDate.insertDay(26);
+			endDate.insertMonth(2);
+			endDate.insertYear(2014);
+			endDate.initialiseDate();
+			testScheduled.insertEndDate(endDate);
+
+			Time startTime;
+			startTime.insertHour(12);
+			startTime.insertMinute(13);
+			testScheduled.insertStartTime(startTime);
+			
+			Time endTime;
+			startTime.insertHour(14);
+			startTime.insertMinute(16);
+			testScheduled.insertEndTime(endTime);
+	
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled,dummyNumber);			
+			
+			string dummyString;
+			string userInput = "1 name k";
+			testInfo.editEntry(true, userInput, dummyString);	
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getName();
+
+			Assert::AreEqual(expectedAnswer,actualResult);
+		}
+
+		//editEntry tag for floating
+		TEST_METHOD(EntryListEditTagFloatingTest) {		
+			string expectedAnswer="#play ";
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);
+			
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled, dummyNumber);			
+
+			string dummyString;
+			string userInput = "1 add #play. remove #study";		
+			testInfo.editEntry(true, userInput, dummyString);		
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getTags();		
+
+			Assert::AreEqual(expectedAnswer,actualResult);	
+		}
+		
+		//tests on editEntry loc for floating tasks
+		TEST_METHOD(EntryListEditLocFloatingTest) {		
+			string expectedAnswer = "yih";
+			
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+
+			testScheduled.insertName("a");
+			testScheduled.insertEntryNumber(1);			
+			
+			testScheduled.initialiseStatus();
+			testScheduled.insertLocation("utown");
+			vector<string> vectorTag;
+			vectorTag.push_back("#study");
+			testScheduled.insertTags(vectorTag);
+
+			int dummyNumber;
+			testInfo.addEntry(testScheduled,dummyNumber);			
+			
+			string dummyString;
+			string userInput = "1 place yih";			
+			testInfo.editEntry(true, userInput, dummyString);		
+			string actualResult;
+			vector<Entry> dummyEntry = testInfo.getScheduledList();
+			testScheduled = dummyEntry.back();
+			actualResult = testScheduled.getLocation();	
+
+			Assert::AreEqual(expectedAnswer,actualResult);				
+		}
+
+		//removeEntry for scheduled and floating
+		TEST_METHOD(EntryListsRemoveTest) {
+			Entry testScheduled; 
+			Entry testFloating;	
+			EntryLists testInfo;
+	
+			int dummyNumber;
+			testScheduled.insertName("a");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			testScheduled.insertName("b");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			testScheduled.insertName("c");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			testScheduled.insertName("d");
+			testInfo.addEntry(testScheduled, dummyNumber);
+			
+			string dummyString;
+			testInfo.removeEntry(false, 1, dummyString);		
+			/*vector<Entry> actualResult;
+			actualResult = testInfo.getScheduledList();
+			int size = actualResult.size();
+			Assert::AreEqual(3,size);*/
+		}	
+
+	// End of segment: M:\NUS\Semester 4 - 2015\CS2103\Project files\Repository\UnitTest.cpp
 
 
 

@@ -33,7 +33,7 @@ const string SearchEntries::SYSTEMSAT = "Saturday";
 const string SearchEntries::SYSTEMSUN = "Sunday";
 const string SearchEntries::SYSTEMDAYSOFWEEK[7] = {SYSTEMMON, SYSTEMTUE, SYSTEMWED, SYSTEMTHU, SYSTEMFRI, SYSTEMSAT, SYSTEMSUN};
 
-//@author A0116660L
+//@author A0116660L-reused
 //This segment is to make the search case-insensitive
 inline bool caseInsCharCompSingle(char a, char b) {
    return(toupper(a) == b);
@@ -53,6 +53,7 @@ string::const_iterator caseInsFind(string& s, const string& p) {
 
 //Inititialise the SearchEntries object which takes in two vectors containing
 //Scheduled List and Floating List
+//@author A0116660L
 SearchEntries::SearchEntries(vector<Entry> scheduledEntries, vector<Entry> floatingEntries) {
 	_scheduledList = scheduledEntries;
 	_floatingList = floatingEntries;
@@ -162,6 +163,7 @@ void SearchEntries::searchTag(string keyword) {
 	}
 }
 
+//@author A0116660L-reused
 void SearchEntries::searchName(string inputName){
 	initialiseSearchPagingAttributes();
 		//initialise search results
@@ -218,6 +220,7 @@ void SearchEntries::searchName(string inputName){
 		}
 }
 
+//@author A0116660L-reused
 void SearchEntries::searchLocation(string inputLocation) {
 	initialiseSearchPagingAttributes();
 		//initialise search results
@@ -422,7 +425,7 @@ void SearchEntries::searchTime(string userInput){
 }
 
 
-//@author A0116660L
+//@author A0116660L-reused
 void SearchEntries::searchAll(string userInput) {
 	initialiseSearchPagingAttributes();
 	for (unsigned int i = 0; i < _scheduledList.size(); i++) {

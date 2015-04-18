@@ -91,7 +91,7 @@ public:
 	//@author A0115902N
 	//Scheduled Entries
 	void execute(string, int&, int&, bool&, bool&, bool&, bool&);
-	//@author A00116660L
+	//@author A0116660L
 	void displayScheduledEntryShort();
 	void displayOneScheduledEntry(int);
 	

@@ -199,6 +199,7 @@ void TextUI::displayErrorFeedback() {
 	SetConsoleTextAttribute(hConsole, (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN));
 }
 
+//@author A0116660L-reused
 void TextUI::displayResizeOptions() {
 	int resizeChoice;
 	string resizeChoiceInput;
